@@ -14,7 +14,7 @@ struct EntryScreen: View {
             Image("myNest_logo")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 340)
+                .frame(width: 345)
                 .offset(y: -140)
             
             // Buttons stack
