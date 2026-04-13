@@ -123,7 +123,7 @@ struct SignInScreen: View {
             
         }
         .frame(width: 402, height: 874)
-        .background(Color(red: 0.97, green: 0.94, blue: 0.88))
+        .background(Color(red: 0.97, green: 0.94, blue: 0.10))
     }
 }
 
