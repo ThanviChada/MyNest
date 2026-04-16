@@ -7,6 +7,19 @@ struct CreateAccount: View {
     @State private var password = ""
     @State private var confirmPassword = ""
     
+    @State private var showPassword = false
+    @State private var showConfirmPassword = false
+    @State private var showError = false
+    
+    // Button enabled only when all fields have text AND passwords match
+    var formValid: Bool {
+        !fullName.isEmpty &&
+        !username.isEmpty &&
+        !password.isEmpty &&
+        !confirmPassword.isEmpty &&
+        password == confirmPassword
+    }
+    
     var body: some View {
         ZStack {
             // Background
@@ -46,27 +59,51 @@ struct CreateAccount: View {
                     
                     customField(title: "Username*", text: $username, placeholder: "Username")
                     
-                    customSecureField(title: "Password*", text: $password, placeholder: "Password")
+                    passwordField(
+                        title: "Password*",
+                        text: $password,
+                        isVisible: $showPassword,
+                        placeholder: "Password"
+                    )
                     
-                    customSecureField(title: "Re-enter Password*", text: $confirmPassword, placeholder: "Confirm Password")
+                    passwordField(
+                        title: "Re-enter Password*",
+                        text: $confirmPassword,
+                        isVisible: $showConfirmPassword,
+                        placeholder: "Confirm Password"
+                    )
                 }
                 .padding(.horizontal, 25)
+                
+                // Error message if passwords don't match
+                if showError {
+                    Text("Passwords do not match")
+                        .foregroundColor(.red)
+                        .font(.caption)
+                }
                 
                 Spacer()
                 
                 // Create Button
                 Button(action: {
-                    print("Create tapped")
+                    if password != confirmPassword {
+                        showError = true
+                        return
+                    }
+                    
+                    showError = false
+                    print("Account Created")
                 }) {
                     Text("Create")
                         .font(.custom("Instrument Sans", size: 20).weight(.bold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(red: 0.13, green: 0.49, blue: 0.69))
+                        .background(formValid ? Color(red: 0.13, green: 0.49, blue: 0.69) : Color.gray)
                         .cornerRadius(12)
                         .shadow(radius: 4)
                 }
+                .disabled(!formValid)
                 .padding(.horizontal, 25)
                 .padding(.bottom, 20)
             }
@@ -74,7 +111,9 @@ struct CreateAccount: View {
     }
 }
 
+//////////////////////////////////////////////////
 // MARK: - Custom Components
+//////////////////////////////////////////////////
 
 func customField(title: String, text: Binding<String>, placeholder: String) -> some View {
     VStack(alignment: .leading, spacing: 6) {
@@ -90,19 +129,42 @@ func customField(title: String, text: Binding<String>, placeholder: String) -> s
     }
 }
 
-func customSecureField(title: String, text: Binding<String>, placeholder: String) -> some View {
+func passwordField(
+    title: String,
+    text: Binding<String>,
+    isVisible: Binding<Bool>,
+    placeholder: String
+) -> some View {
+    
     VStack(alignment: .leading, spacing: 6) {
         Text(title)
             .font(.custom("Instrument Sans", size: 16).weight(.bold))
             .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
         
-        SecureField(placeholder, text: text)
-            .padding()
-            .background(Color.white)
-            .cornerRadius(10)
-            .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 2)
+        HStack {
+            if isVisible.wrappedValue {
+                TextField(placeholder, text: text)
+            } else {
+                SecureField(placeholder, text: text)
+            }
+            
+            Button(action: {
+                isVisible.wrappedValue.toggle()
+            }) {
+                Image(systemName: isVisible.wrappedValue ? "eye.slash" : "eye")
+                    .foregroundColor(.gray)
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 2)
     }
 }
+
+//////////////////////////////////////////////////
+// Preview
+//////////////////////////////////////////////////
 
 struct CreateAccount_Previews: PreviewProvider {
     static var previews: some View {

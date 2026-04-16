@@ -22,17 +22,17 @@ struct EntryScreen: View {
                 
                 VStack(spacing: 18) {
                     
-                    // Create Account button (we'll build later)
-                    Button("Create Account") {
-                        print("Create tapped")
+                    // GO TO CREATE ACCOUNT
+                    NavigationLink(destination: CreateAccount()) {
+                        Text("Create Account")
+                            .font(Font.custom("Instrument Sans", size: 25).weight(.bold))
+                            .foregroundColor(.white)
+                            .frame(width: 287, height: 67)
+                            .background(Color(red: 0.17, green:0.537, blue: 0.769))
+                            .cornerRadius(15)
                     }
-                    .font(Font.custom("Instrument Sans", size: 25).weight(.bold))
-                    .foregroundColor(.white)
-                    .frame(width: 287, height: 67)
-                    .background(Color(red: 0.17, green:0.537, blue: 0.769))
-                    .cornerRadius(15)
                     
-                    // ✅ NAVIGATES TO SIGN IN SCREEN
+                    //  GO TO SIGN IN
                     NavigationLink(destination: SignInScreen()) {
                         Text("Sign-in")
                             .font(Font.custom("Instrument Sans", size: 25).weight(.bold))

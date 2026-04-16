@@ -25,7 +25,7 @@ struct SignInScreen: View {
                     Button {
                         dismiss()
                     } label: {
-                        Text("← Back")
+                        Text("< Back")
                             .font(Font.custom("Instrument Sans", size: 20).weight(.bold))
                             .foregroundColor(.gray)
                     }
