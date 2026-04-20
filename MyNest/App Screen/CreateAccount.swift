@@ -7,94 +7,164 @@ struct CreateAccount: View {
     @State private var password = ""
     @State private var confirmPassword = ""
     
+    @State private var showPassword = false
+    @State private var showConfirmPassword = false
+    @State private var showError = false
+    
+    // Button enabled only when all fields have text AND passwords match
+    var formValid: Bool {
+        !fullName.isEmpty &&
+        !username.isEmpty &&
+        !password.isEmpty &&
+        !confirmPassword.isEmpty &&
+        password == confirmPassword
+    }
+    
     var body: some View {
-        VStack(spacing: 20) {
-            // Logo
-            Image("myNest_logo")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 340)
-                .offset(x:-10,y: -230)
+        ZStack {
+            // Background
+            Color(red: 0.92, green: 0.94, blue: 0.89)
+                .ignoresSafeArea()
             
-            // Title
-            Text("Create Account")
-                .font(.custom("Instrument Sans", size: 25).weight(.bold))
-                .foregroundColor(Color(red: 0.49, green: 0.22, blue: 0.13))
-            
-            // Form Fields
-            VStack(alignment: .leading, spacing: 15) {
+            VStack(spacing: 25) {
                 
-                Text("Name*")
-                    .font(.custom("Instrument Sans", size: 18).weight(.bold))
-                    .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                // Top Bar
+                HStack {
+                    Button(action: {
+                        print("Back tapped")
+                    }) {
+                        Text("Back")
+                            .font(.custom("Instrument Sans", size: 18).weight(.bold))
+                            .foregroundColor(.gray)
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal, 25)
                 
-                TextField("Full Name", text: $fullName)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(8)
+                // Logo
+                Image("myNest_logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200)
                 
+                // Title
+                Text("Create Account")
+                    .font(.custom("Instrument Sans", size: 26).weight(.bold))
+                    .foregroundColor(Color(red: 0.49, green: 0.22, blue: 0.13))
                 
-                Text("Username*")
-                    .font(.custom("Instrument Sans", size: 18).weight(.bold))
-                    .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                // Input Fields
+                VStack(spacing: 18) {
+                    
+                    customField(title: "Name*", text: $fullName, placeholder: "Full Name")
+                    
+                    customField(title: "Username*", text: $username, placeholder: "Username")
+                    
+                    passwordField(
+                        title: "Password*",
+                        text: $password,
+                        isVisible: $showPassword,
+                        placeholder: "Password"
+                    )
+                    
+                    passwordField(
+                        title: "Re-enter Password*",
+                        text: $confirmPassword,
+                        isVisible: $showConfirmPassword,
+                        placeholder: "Confirm Password"
+                    )
+                }
+                .padding(.horizontal, 25)
                 
-                TextField("Username", text: $username)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(8)
+                // Error message if passwords don't match
+                if showError {
+                    Text("Passwords do not match")
+                        .foregroundColor(.red)
+                        .font(.caption)
+                }
                 
+                Spacer()
                 
-                Text("Password*")
-                    .font(.custom("Instrument Sans", size: 18).weight(.bold))
-                    .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-                
-                SecureField("Password", text: $password)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(8)
-                
-                
-                Text("Re-enter Password*")
-                    .font(.custom("Instrument Sans", size: 18).weight(.bold))
-                    .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-                
-                SecureField("Confirm Password", text: $confirmPassword)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(8)
+                // Create Button
+                Button(action: {
+                    if password != confirmPassword {
+                        showError = true
+                        return
+                    }
+                    
+                    showError = false
+                    print("Account Created")
+                }) {
+                    Text("Create")
+                        .font(.custom("Instrument Sans", size: 20).weight(.bold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(formValid ? Color(red: 0.13, green: 0.49, blue: 0.69) : Color.gray)
+                        .cornerRadius(12)
+                        .shadow(radius: 4)
+                }
+                .disabled(!formValid)
+                .padding(.horizontal, 25)
+                .padding(.bottom, 20)
             }
-            .padding(.horizontal, 30)
-            
-            Spacer()
-            
-            // Create Button
-            Button(action: {
-                print("Create account tapped")
-            }) {
-                Text("Create")
-                    .font(.custom("Instrument Sans", size: 20).weight(.bold))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color(red: 0.13, green: 0.49, blue: 0.69))
-                    .cornerRadius(10)
-            }
-            .padding(.horizontal, 30)
-            
-            // Back Button
-            Button(action: {
-                print("Back tapped")
-            }) {
-                Text("Back")
-                    .font(.custom("Instrument Sans", size: 18).weight(.bold))
-                    .foregroundColor(Color.gray)
-            }
-            .padding(.bottom, 20)
         }
-        .background(Color(red: 0.92, green: 0.94, blue: 0.89))
-        .ignoresSafeArea()
     }
 }
+
+//////////////////////////////////////////////////
+// MARK: - Custom Components
+//////////////////////////////////////////////////
+
+func customField(title: String, text: Binding<String>, placeholder: String) -> some View {
+    VStack(alignment: .leading, spacing: 6) {
+        Text(title)
+            .font(.custom("Instrument Sans", size: 16).weight(.bold))
+            .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+        
+        TextField(placeholder, text: text)
+            .padding()
+            .background(Color.white)
+            .cornerRadius(10)
+            .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 2)
+    }
+}
+
+func passwordField(
+    title: String,
+    text: Binding<String>,
+    isVisible: Binding<Bool>,
+    placeholder: String
+) -> some View {
+    
+    VStack(alignment: .leading, spacing: 6) {
+        Text(title)
+            .font(.custom("Instrument Sans", size: 16).weight(.bold))
+            .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+        
+        HStack {
+            if isVisible.wrappedValue {
+                TextField(placeholder, text: text)
+            } else {
+                SecureField(placeholder, text: text)
+            }
+            
+            Button(action: {
+                isVisible.wrappedValue.toggle()
+            }) {
+                Image(systemName: isVisible.wrappedValue ? "eye.slash" : "eye")
+                    .foregroundColor(.gray)
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 2)
+    }
+}
+
+//////////////////////////////////////////////////
+// Preview
+//////////////////////////////////////////////////
 
 struct CreateAccount_Previews: PreviewProvider {
     static var previews: some View {
