@@ -65,6 +65,11 @@ struct PhoneNumScreen: View {
                 .padding(28)
             }
         }
+            }
+        }
+struct PhoneNumScreen_Previews: PreviewProvider {
+    static var previews: some View {
+        PhoneNumScreen()
     }
 }
 
