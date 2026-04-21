@@ -47,8 +47,10 @@ struct EntryScreen: View {
             .navigationBarHidden(true)
         }
     }
+        }
+     struct EntryScreen_Previews: PreviewProvider {
+     static var previews: some View {
+        EntryScreen()
+    }
 }
 
-#Preview {
-    EntryScreen()
-}

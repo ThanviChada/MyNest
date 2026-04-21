@@ -10,7 +10,11 @@ enum DonationType: String, CaseIterable {
 struct DonateQuiz1: View {
     
     @State private var selectedOption: DonationType? = nil
+    
     @State private var goToFood = false
+    @State private var goToSchool = false
+    @State private var goToClothing = false
+    @State private var goToToys = false
     
     var body: some View {
         NavigationStack {
@@ -25,7 +29,6 @@ struct DonateQuiz1: View {
                     ForEach(DonationType.allCases, id: \.self) { option in
                         HStack {
                             
-                            // Checkbox
                             ZStack {
                                 RoundedRectangle(cornerRadius: 4)
                                     .stroke(Color.gray, lineWidth: 1)
@@ -57,10 +60,17 @@ struct DonateQuiz1: View {
                 Spacer()
                 
                 Button(action: {
-                    if selectedOption == .food {
+                    switch selectedOption {
+                    case .food:
                         goToFood = true
-                    } else {
-                        print("Handle other flows later")
+                    case .school:
+                        goToSchool = true
+                    case .clothing:
+                        goToClothing = true
+                    case .toys:
+                        goToToys = true
+                    case .none:
+                        break
                     }
                 }) {
                     Text("Next")
@@ -68,9 +78,14 @@ struct DonateQuiz1: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(red: 0.13, green: 0.49, blue: 0.69))
+                        .background(
+                            selectedOption == nil
+                            ? Color.gray
+                            : Color(red: 0.13, green: 0.49, blue: 0.69)
+                        )
                         .cornerRadius(12)
                 }
+                .disabled(selectedOption == nil)
                 .padding(.horizontal)
                 .padding(.bottom, 40)
             }
@@ -80,6 +95,21 @@ struct DonateQuiz1: View {
             .navigationDestination(isPresented: $goToFood) {
                 DonateQuizFood()
             }
+            .navigationDestination(isPresented: $goToSchool) {
+                DonateQuizSchool()
+            }
+            .navigationDestination(isPresented: $goToClothing) {
+                DonateQuizClothes()
+            }
+            .navigationDestination(isPresented: $goToToys) {
+                DonateQuizToys()
+            }
         }
+    }
+}
+
+struct DonateQuiz1_Previews: PreviewProvider {
+    static var previews: some View {
+        DonateQuiz1()
     }
 }
