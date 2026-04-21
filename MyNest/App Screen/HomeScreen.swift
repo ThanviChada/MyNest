@@ -22,33 +22,36 @@ struct HomeScreen: View {
 
             Group {
                //order pic
-                Rectangle()
-                    .frame(width: 76, height: 76)
-                    .background(Color(red: 0.50, green: 0.23, blue: 0.27).opacity(0.50))
-                    .offset(x: -142, y: 207)
+                Image("order 1")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150)
+                    .offset(x: -130, y: 200)
                 
                 //discussion pic
-                Rectangle()
-                    .frame(width: 102.55, height: 92.68)
-                    .background(Color(red: 0.50, green: 0.23, blue: 0.27).opacity(0.50))
-                    .offset(x: 129.27, y: 209.34)
+                Image("discussion")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 120)
+                    .offset(x: 130, y: 200)
                 
                 //donate pic
-                Rectangle()
-                    .frame(width: 95, height: 79)
-                    .background(Color(red: 0.50, green: 0.23, blue: 0.27).opacity(0.50))
-                    .offset(x: -5.50, y: 209.50)
+                Image("donate")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100)
+                    .offset(x: 1, y: 200)
 
                 Text("Order")
-                    .font(Font.custom("Abhaya Libre Medium", size: 20))
-                    .offset(x: -136, y: 281.50)
+                    .font(Font.custom("Times New Roman", size: 30))
+                    .offset(x: -130, y: 281.50)
 
-                Text("Discussion Board")
-                    .font(Font.custom("Abhaya Libre Medium", size: 20))
-                    .offset(x: 137.50, y: 281.50)
+                Text("Discuss")
+                    .font(Font.custom("Times New Roman", size: 30))
+                    .offset(x: 130, y: 280)
 
                 Text("Donate")
-                    .font(Font.custom("Abhaya Libre Medium", size: 20))
+                    .font(Font.custom("Times New Roman", size: 30))
                     .offset(x: 0, y: 281.50)
 
                 Ellipse()
@@ -68,7 +71,7 @@ struct HomeScreen: View {
                     .offset(x: 13, y: 30.50)
 
                 Text("What do you want to do today?")
-                    .font(Font.custom("Instrument Sans", size: 17).weight(.bold))
+                    .font(Font.custom("Times New Roman", size: 22).weight(.bold))
                     .foregroundColor(Color.gray)
                     .offset(x: 6.50, y: 69)
             }
