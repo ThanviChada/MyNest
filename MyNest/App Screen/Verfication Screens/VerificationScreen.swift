@@ -92,6 +92,7 @@ func otpBox(text: Binding<String>) -> some View {
         .onChange(of: text.wrappedValue) { newValue in
             if newValue.count > 1 { text.wrappedValue = String(newValue.prefix(1)) }
             text.wrappedValue = text.wrappedValue.filter { $0.isNumber }
+            
         }
 }
 

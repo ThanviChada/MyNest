@@ -1,192 +1,127 @@
 import SwiftUI
 
+// MARK: - Main Screen
 struct ProgressScreen: View {
-  var body: some View {
-    ZStack() {
-      Group {
-        Text("Date")
-          .font(Font.custom("Instrument Sans", size: 15).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: -95.50, y: -210.50)
-        Text("Cancel")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.bold))
-          .foregroundColor(.black)
-          .offset(x: -24.50, y: -207.50)
-        Text("Item")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: -94, y: -176)
-        Text("Location")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: -95.50, y: -127.50)
-        Text("Pick-up time")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: -94, y: -151)
-        Text("Contact")
-          .font(Font.custom("Josefin Sans", size: 12).weight(.bold))
-          .foregroundColor(.black)
-          .offset(x: -37, y: -192)
-        Text("Date")
-          .font(Font.custom("Instrument Sans", size: 15).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: -93.50, y: -67.50)
-        Text("Cancel")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.bold))
-          .foregroundColor(.black)
-          .offset(x: -23, y: -64.50)
-      }
-        Group {
-        Text("Item")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: -92, y: -32)
-        Text("Location")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: -93.50, y: 15.50)
-        Text("Pick-up time")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: -92, y: -8)
-        Text("Contact")
-          .font(Font.custom("Josefin Sans", size: 12).weight(.bold))
-          .foregroundColor(.black)
-          .offset(x: -35, y: -48.50)
-        Text("Date")
-          .font(Font.custom("Instrument Sans", size: 15).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: 81.50, y: -210.50)
-        Text("Cancel")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.bold))
-          .foregroundColor(.black)
-          .offset(x: 152, y: -207.50)
-        Text("Item")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: 82, y: -176)
-        Text("Location")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: 81.50, y: -127.50)
-        Text("Pick-up time")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: 82, y: -151)
-      }
-        Group {
-        Text("Contact")
-          .font(Font.custom("Josefin Sans", size: 12).weight(.bold))
-          .foregroundColor(.black)
-          .offset(x: 141.50, y: -192)
-        Text("Date")
-          .font(Font.custom("Instrument Sans", size: 15).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: -96.50, y: 131.50)
-        Text("Cancel")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.bold))
-          .foregroundColor(.black)
-          .offset(x: -25, y: 134.50)
-        Text("Item")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: -95, y: 166)
-        Text("Location")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: -96.50, y: 214.50)
-        Text("Pick-up time")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: -95, y: 191)
-        Text("Contact")
-          .font(Font.custom("Josefin Sans", size: 12).weight(.bold))
-          .foregroundColor(.black)
-          .offset(x: -38, y: 150.50)
-        Text("Date")
-          .font(Font.custom("Instrument Sans", size: 15).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: 80.50, y: 131.50)
-      }
-        Group {
-        Text("Cancel")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.bold))
-          .foregroundColor(.black)
-          .offset(x: 152, y: 134.50)
-        Text("Item")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: 82, y: 166)
-        Text("Location")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: 80.50, y: 214.50)
-        Text("Pick-up time")
-          .font(Font.custom("Instrument Sans", size: 13).weight(.semibold))
-          .foregroundColor(.black)
-          .offset(x: 82, y: 191)
-        Text("Contact")
-          .font(Font.custom("Josefin Sans", size: 12).weight(.bold))
-          .foregroundColor(.black)
-          .offset(x: 140.50, y: 149.50)
-        Text("Your donations")
-          .font(Font.custom("Kumbh Sans", size: 30).weight(.semibold))
-          .foregroundColor(Color(red: 0.49, green: 0.22, blue: 0.13))
-          .offset(x: -55.50, y: -255)
-        Text("Progress")
-          .font(Font.custom("Kumbh Sans", size: 50).weight(.bold))
-          .foregroundColor(Color(red: 0.49, green: 0.22, blue: 0.13))
-          .offset(x: 0.50, y: -336)
-        Text("Your orders")
-          .font(Font.custom("Kumbh Sans", size: 30).weight(.semibold))
-          .foregroundColor(Color(red: 0.49, green: 0.22, blue: 0.13))
-          .offset(x: -82.50, y: 83)
-        Rectangle()
-          .foregroundColor(.clear)
-          .frame(width: 402, height: 40)
-          .background(.white)
-          .offset(x: 0, y: -417)
-      }
-        Group {
-        Text("Setting")
-          .font(Font.custom("Instrument Sans", size: 22).weight(.bold))
-          .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
-          .offset(x: -120, y: 398.50)
-        Text("Home")
-          .font(Font.custom("Instrument Sans", size: 22).weight(.bold))
-          .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
-          .offset(x: 3, y: 399.50)
-        Text("Progress")
-          .font(Font.custom("Instrument Sans", size: 20).weight(.bold))
-          .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
-          .offset(x: 130, y: 399.50)
-        Rectangle()
-          .foregroundColor(.clear)
-          .frame(width: 59, height: 0)
-          .overlay(
-            Rectangle()
-              .stroke(Color(red: 0.70, green: 0.70, blue: 0.70), lineWidth: 0.50)
-          )
-          .offset(x: -39.67, y: 428)
-        Rectangle()
-          .foregroundColor(.clear)
-          .frame(width: 59, height: 0)
-          .overlay(
-            Rectangle()
-              .stroke(Color(red: 0.70, green: 0.70, blue: 0.70), lineWidth: 0.50)
-          )
-          .offset(x: 101.06, y: 428)
-      }
+    
+    private let columns = [
+        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 16)
+    ]
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            
+            // Top white bar (status area)
+            Color.white
+                .frame(height: 40)
+                .ignoresSafeArea(edges: .top)
+            
+            ScrollView {
+                VStack(alignment: .leading, spacing: 22) {
+                    
+                    // TITLE
+                    Text("Progress")
+                        .font(.custom("Kumbh Sans", size: 48).weight(.bold))
+                        .foregroundColor(Color(red: 0.49, green: 0.22, blue: 0.13))
+                        .padding(.top, 10)
+                    
+                    // MARK: Donations Section
+                    Text("Your donations")
+                        .font(.custom("Kumbh Sans", size: 28).weight(.semibold))
+                        .foregroundColor(Color(red: 0.49, green: 0.22, blue: 0.13))
+                    
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        ProgressCard()
+                        ProgressCard()
+                        ProgressCard()
+                    }
+                    
+                    // MARK: Orders Section
+                    Text("Your orders")
+                        .font(.custom("Kumbh Sans", size: 28).weight(.semibold))
+                        .foregroundColor(Color(red: 0.49, green: 0.22, blue: 0.13))
+                        .padding(.top, 6)
+                    
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        ProgressCard()
+                        ProgressCard()
+                    }
+                    
+                    Spacer(minLength: 80)
+                }
+                .padding(.horizontal, 20)
+            }
+            
+            BottomNavBar()
+        }
+        .background(Color(red: 0.92, green: 0.94, blue: 0.89))
     }
-    .frame(width: 402, height: 874)
-    .background(Color(red: 0.92, green: 0.94, blue: 0.89));
-  }
 }
 
+//
+// MARK: - Reusable Card
+//
+struct ProgressCard: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            
+            HStack(alignment: .top) {
+                Text("Date")
+                    .font(.custom("Instrument Sans", size: 15).weight(.semibold))
+                
+                Spacer()
+                
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text("Cancel")
+                        .font(.custom("Instrument Sans", size: 13).weight(.bold))
+                    Text("Contact")
+                        .font(.custom("Josefin Sans", size: 12).weight(.bold))
+                }
+            }
+            
+            Text("Item")
+            Text("Pick-up time")
+            Text("Location")
+        }
+        .font(.custom("Instrument Sans", size: 13).weight(.semibold))
+        .padding()
+        .frame(maxWidth: .infinity, minHeight: 130, alignment: .topLeading)
+        .background(Color.white)
+        .cornerRadius(20)
+        .shadow(color: .black.opacity(0.12), radius: 6, x: 0, y: 4)
+    }
+}
+
+//
+// MARK: - Bottom Navigation Bar
+//
+struct BottomNavBar: View {
+    var body: some View {
+        HStack {
+            Spacer()
+            Text("Setting")
+            Spacer()
+            Text("Home")
+            Spacer()
+            Text("Progress")
+            Spacer()
+        }
+        .font(.custom("Instrument Sans", size: 22).weight(.bold))
+        .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
+        .padding()
+        .background(Color.white)
+        .cornerRadius(20)
+        .padding(.horizontal)
+        .padding(.bottom, 10)
+        .shadow(radius: 5)
+    }
+}
+
+//
+// MARK: - Preview
+//
 struct ProgressScreen_Previews: PreviewProvider {
-  static var previews: some View {
-    ProgressScreen()
-  }
+    static var previews: some View {
+        ProgressScreen()
+    }
 }
-
