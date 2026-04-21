@@ -1,21 +1,28 @@
 import SwiftUI
 
-struct DonateQuizFood: View {
+struct DonateQuizSchool: View {
     
-    @State private var selectedFoods: Set<String> = []
+    @State private var selectedItems: Set<String> = []
     
-    let options = ["Dairy", "Protein", "Grains", "Vegetables", "Fruit", "Snacks"]
+    let options = [
+        "Notebooks",
+        "Pencils",
+        "Pens",
+        "Backpacks",
+        "Folders",
+        "Art Supplies"
+    ]
     
     var body: some View {
         VStack(spacing: 25) {
             
             // Title
-            Text("What food?")
+            Text("What school supplies?")
                 .font(.system(size: 28, weight: .bold))
                 .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
                 .padding(.top, 40)
             
-            // Progress bar
+            // Progress bar (same style as food)
             ProgressView(value: 0.5)
                 .tint(Color(red: 0.47, green: 0.69, blue: 0.19))
                 .padding(.horizontal)
@@ -31,7 +38,7 @@ struct DonateQuizFood: View {
                                 .stroke(Color.gray, lineWidth: 1)
                                 .frame(width: 20, height: 20)
                             
-                            if selectedFoods.contains(option) {
+                            if selectedItems.contains(option) {
                                 RoundedRectangle(cornerRadius: 4)
                                     .fill(Color(red: 0.47, green: 0.69, blue: 0.19))
                                     .frame(width: 20, height: 20)
@@ -48,10 +55,10 @@ struct DonateQuizFood: View {
                     .background(Color.white)
                     .cornerRadius(10)
                     .onTapGesture {
-                        if selectedFoods.contains(option) {
-                            selectedFoods.remove(option)
+                        if selectedItems.contains(option) {
+                            selectedItems.remove(option)
                         } else {
-                            selectedFoods.insert(option)
+                            selectedItems.insert(option)
                         }
                     }
                 }
@@ -60,21 +67,32 @@ struct DonateQuizFood: View {
             
             Spacer()
             
-            // Next button
+            // Next / Submit Button
             Button(action: {
-                print(selectedFoods)
+                print("Selected school supplies: \(selectedItems)")
             }) {
                 Text("Next")
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color(red: 0.13, green: 0.49, blue: 0.69))
+                    .background(
+                        selectedItems.isEmpty
+                        ? Color.gray
+                        : Color(red: 0.13, green: 0.49, blue: 0.69)
+                    )
                     .cornerRadius(12)
             }
+            .disabled(selectedItems.isEmpty)
             .padding(.horizontal)
             .padding(.bottom, 40)
         }
         .background(Color(red: 0.97, green: 0.94, blue: 0.88))
+    }
+}
+
+struct DonateQuizSchool_Previews: PreviewProvider {
+    static var previews: some View {
+        DonateQuizSchool()
     }
 }

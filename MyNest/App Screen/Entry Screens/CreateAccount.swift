@@ -162,10 +162,6 @@ func passwordField(
     }
 }
 
-//////////////////////////////////////////////////
-// Preview
-//////////////////////////////////////////////////
-
 struct CreateAccount_Previews: PreviewProvider {
     static var previews: some View {
         CreateAccount()
