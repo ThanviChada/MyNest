@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		794818972F97C0DE00F7B95E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 794818942F97C0DE00F7B95E /* Assets.xcassets */; };
+		794818A22F97C0DE00F7B95E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794818952F97C0DE00F7B95E /* ContentView.swift */; };
+		794818A32F97C0DE00F7B95E /* MyNestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794818962F97C0DE00F7B95E /* MyNestApp.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		25A98A3A2F854AB500A154C9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +33,9 @@
 		25A98A2C2F854AB200A154C9 /* MyNest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyNest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25A98A392F854AB500A154C9 /* MyNestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyNestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		25A98A432F854AB500A154C9 /* MyNestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyNestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		794818942F97C0DE00F7B95E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		794818952F97C0DE00F7B95E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		794818962F97C0DE00F7B95E /* MyNestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNestApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +84,9 @@
 		25A98A232F854AB200A154C9 = {
 			isa = PBXGroup;
 			children = (
+				794818952F97C0DE00F7B95E /* ContentView.swift */,
+				794818962F97C0DE00F7B95E /* MyNestApp.swift */,
+				794818942F97C0DE00F7B95E /* Assets.xcassets */,
 				25A98A2E2F854AB200A154C9 /* MyNest */,
 				25A98A3C2F854AB500A154C9 /* MyNestTests */,
 				25A98A462F854AB500A154C9 /* MyNestUITests */,
@@ -212,6 +224,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				794818972F97C0DE00F7B95E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +249,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				794818A22F97C0DE00F7B95E /* ContentView.swift in Sources */,
+				794818A32F97C0DE00F7B95E /* MyNestApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
