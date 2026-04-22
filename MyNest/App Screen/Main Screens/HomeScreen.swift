@@ -2,85 +2,92 @@ import SwiftUI
 
 struct HomeScreen: View {
     var body: some View {
-        ZStack {
-            Group {
-                Text("Setting")
-                    .font(Font.custom("Instrument Sans", size: 22).weight(.bold))
-                    .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
-                    .offset(x: -120, y: 396.50)
-
-                Text("Home")
-                    .font(Font.custom("Instrument Sans", size: 22).weight(.bold))
-                    .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
-                    .offset(x: 8.50, y: 397.50)
-
-                Text("Progress")
-                    .font(Font.custom("Instrument Sans", size: 22).weight(.bold))
-                    .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
-                    .offset(x: 138, y: 397.50)
+        VStack(spacing: 0) {
+            
+            Spacer().frame(height: 40)
+            
+            ScrollView {
+                VStack(spacing: 20) {
+                    
+                    // MARK: Logo Circle
+                    ZStack {
+                        Circle()
+                            .fill(Color(.systemGray6))
+                            .frame(width: 300, height: 300)
+                        
+                        Image("myNest_logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 260)
+                    }
+                    .padding(.top, 10)
+                    
+                    // Greeting Text
+                    Text("Hello, (name)!")
+                        .font(.custom("Kumbh Sans", size: 34).weight(.semibold))
+                    
+                    Text("What do you want to do today?")
+                        .font(.custom("Times New Roman", size: 22).weight(.bold))
+                        .foregroundColor(.gray)
+                    
+                    Spacer().frame(height: 40)
+                    
+                    // MARK: Action Buttons
+                    HStack(alignment: .top, spacing: 18) {
+                        HomeActionButton(
+                            imageName: "order",
+                            title: "Order",
+                            bgColor: Color(red: 0.97, green: 0.94, blue: 0.88)
+                        )
+                        
+                        HomeActionButton(
+                            imageName: "donate",
+                            title: "Donate",
+                            bgColor: Color(red: 0.92, green: 0.94, blue: 0.89)
+                        )
+                        
+                        HomeActionButton(
+                            imageName: "discuss",
+                            title: "Discuss",
+                            bgColor: Color(red: 0.90, green: 0.94, blue: 0.95)
+                        )
+                    }
+                    
+                    Spacer(minLength: 87)
+                }
+                .padding(.horizontal, 25)
             }
-
-            Group {
-               //order pic
-                Image("order 1")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 150)
-                    .offset(x: -130, y: 200)
-                
-                //discussion pic
-                Image("discussion")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 120)
-                    .offset(x: 130, y: 200)
-                
-                //donate pic
-                Image("donate")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100)
-                    .offset(x: 1, y: 200)
-
-                Text("Order")
-                    .font(Font.custom("Times New Roman", size: 30))
-                    .offset(x: -130, y: 281.50)
-
-                Text("Discuss")
-                    .font(Font.custom("Times New Roman", size: 30))
-                    .offset(x: 130, y: 280)
-
-                Text("Donate")
-                    .font(Font.custom("Times New Roman", size: 30))
-                    .offset(x: 0, y: 281.50)
-
-                Ellipse()
-                    .frame(width: 330, height: 315)
-                    .foregroundColor(Color(.systemGray6))
-                    .offset(x: 1, y: -190)
-
-                //logo pic
-                Image("myNest_logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 345)
-                    .offset(x: -7, y: -190)
-
-                Text("Hello, (name)!")
-                    .font(Font.custom("Kumbh Sans", size: 35).weight(.semibold))
-                    .offset(x: 13, y: 30.50)
-
-                Text("What do you want to do today?")
-                    .font(Font.custom("Times New Roman", size: 22).weight(.bold))
-                    .foregroundColor(Color.gray)
-                    .offset(x: 6.50, y: 69)
-            }
+            
+            BottomNavBar()
         }
-        .frame(width: 402, height: 874)
         .background(Color.white)
     }
 }
 
+// MARK: Reusable Action Button
+struct HomeActionButton: View {
+    let imageName: String
+    let title: String
+    let bgColor: Color
+
+    var body: some View {
+        VStack(spacing: 6) {
+            Image(imageName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 95, height: 95)
+
+            Text(title)
+                .font(.custom("Times New Roman", size: 24))
+        }
+        .frame(width: 105, height: 115)
+        .background(bgColor)
+        .cornerRadius(20)
+        .shadow(color: Color.black.opacity(0.12), radius: 5, x: 0, y: 3)
+    }
+}
+
+// MARK: Preview
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         HomeScreen()
