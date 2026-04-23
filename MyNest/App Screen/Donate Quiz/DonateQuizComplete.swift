@@ -6,74 +6,86 @@ struct DonateQuizComplete: View {
     var selectedItems: [String]
     
     var body: some View {
-        VStack {
+        ZStack {
             
-            VStack(spacing: 25) {
+            // Background color
+            Color(red: 0.90, green: 0.96, blue: 0.99)
+                .ignoresSafeArea()
+            
+            VStack {
                 
-                Text("Completed!")
-                    .font(.system(size: 32, weight: .bold))
-                    .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-                    .padding(.top, 40)
-                
-                Text("Your donation has been submitted!")
-                    .font(.system(size: 40, weight: .semibold))
-                    .foregroundColor(Color.orange)
-                
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(spacing: 25) {
                     
-                    Text("Order Summary")
-                        .font(.system(size: 40, weight: .bold))
-                        .foregroundColor(Color(red: 0.47, green: 0.69, blue: 0.19))
+                    Text("Completed!")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                        .padding(.top, 40)
                     
-                    Text("Category: \(donationType)")
-                        .font(.system(size: 18, weight: .semibold))
+                    Text("Your donation has been submitted!")
+                        .font(.system(size: 40, weight: .semibold))
+                        .foregroundColor(.orange)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
                     
-                    Text("Items:")
-                        .font(.system(size: 18, weight: .semibold))
-                    
-                    ForEach(selectedItems, id: \.self) { item in
-                        Text("• \(item)")
-                            .font(.system(size: 16))
+                    VStack(alignment: .leading, spacing: 12) {
+                        
+                        Text("Order Summary")
+                            .font(.system(size: 40, weight: .bold))
+                            .foregroundColor(Color(red: 0.47, green: 0.69, blue: 0.19))
+                        
+                        Text("Category: \(donationType)")
+                            .font(.system(size: 18, weight: .semibold))
+                        
+                        Text("Items:")
+                            .font(.system(size: 18, weight: .semibold))
+                        
+                        ForEach(selectedItems, id: \.self) { item in
+                            Text("• \(item)")
+                                .font(.system(size: 16))
+                        }
                     }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+                    
+                    Spacer()
+                    
+                    Text("Stay tuned for updates!")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
                 }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(12)
-                .padding(.horizontal)
                 
-                Spacer()
-                
-                Text("Stay tuned for updates!")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                DonateCompleteBottomNavBar()
             }
-            
-            // Bottom Bar
-            HStack {
-                VStack {
-                    Image(systemName: "gearshape")
-                    Text("Settings")
-                }
-                Spacer()
-                VStack {
-                    Image(systemName: "house")
-                    Text("Home")
-                }
-                Spacer()
-                VStack {
-                    Image(systemName: "chart.bar")
-                    Text("Progress")
-                }
-            }
-            .font(.system(size: 12, weight: .semibold))
-            .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
-            .padding()
-            .background(Color.white)
         }
-        .background(Color(red: 0.90, green: 0.94, blue: 0.95))
     }
 }
 
+// Bottom Nav Bar (renamed to avoid errors)
+struct DonateCompleteBottomNavBar: View {
+    var body: some View {
+        HStack {
+            Spacer()
+            Text("Setting")
+            Spacer()
+            Text("Home")
+            Spacer()
+            Text("Progress")
+            Spacer()
+        }
+        .font(.custom("Instrument Sans", size: 22).weight(.bold))
+        .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
+        .padding()
+        .background(Color.white)
+        .cornerRadius(20)
+        .padding(.horizontal)
+        .padding(.bottom, 10)
+        .shadow(radius: 5)
+    }
+}
+
+// Preview
 struct DonateQuizComplete_Previews: PreviewProvider {
     static var previews: some View {
         DonateQuizComplete(
