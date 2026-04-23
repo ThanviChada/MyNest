@@ -1,26 +1,26 @@
 import SwiftUI
 
-enum DonationType: String, CaseIterable {
+enum RequestType: String, CaseIterable {
     case food = "Food"
     case school = "School Supplies"
     case clothing = "Clothing"
     case toys = "Toys"
 }
 
-struct DonateQuiz1: View {
+struct FindQuiz1: View {
     
-    @State private var selectedOption: DonationType? = nil
+    @State private var selectedOption: RequestType? = nil
     
-    @State private var goToFood = false
-    @State private var goToSchool = false
-    @State private var goToClothing = false
-    @State private var goToToys = false
+    @State private var goFood = false
+    @State private var goSchool = false
+    @State private var goClothing = false
+    @State private var goToys = false
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 30) {
+            VStack(spacing: 25) {
                 
-                Text("What are you donating?")
+                Text("What are you looking for?")
                     .font(.system(size: 28, weight: .bold))
                     .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
                     .padding(.top, 40)
@@ -30,10 +30,10 @@ struct DonateQuiz1: View {
                     .tint(Color(red: 0.47, green: 0.69, blue: 0.19))
                     .padding(.horizontal)
                 
-                VStack(spacing: 20) {
-                    ForEach(DonationType.allCases, id: \.self) { option in
+                VStack(spacing: 15) {
+                    ForEach(RequestType.allCases, id: \.self) { option in
+                        
                         HStack {
-                            
                             ZStack {
                                 RoundedRectangle(cornerRadius: 4)
                                     .stroke(Color.gray, lineWidth: 1)
@@ -64,57 +64,37 @@ struct DonateQuiz1: View {
                 
                 Spacer()
                 
-                Button(action: {
+                Button("Next") {
                     switch selectedOption {
-                    case .food:
-                        goToFood = true
-                    case .school:
-                        goToSchool = true
-                    case .clothing:
-                        goToClothing = true
-                    case .toys:
-                        goToToys = true
-                    case .none:
-                        break
+                    case .food: goFood = true
+                    case .school: goSchool = true
+                    case .clothing: goClothing = true
+                    case .toys: goToys = true
+                    default: break
                     }
-                }) {
-                    Text("Next")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(
-                            selectedOption == nil
-                            ? Color.gray
-                            : Color(red: 0.13, green: 0.49, blue: 0.69)
-                        )
-                        .cornerRadius(12)
                 }
                 .disabled(selectedOption == nil)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(selectedOption == nil ? Color.gray : Color(red: 0.13, green: 0.49, blue: 0.69))
+                .cornerRadius(12)
                 .padding(.horizontal)
                 .padding(.bottom, 40)
             }
             .background(Color(red: 0.92, green: 0.94, blue: 0.89))
             
-            // Navigation
-            .navigationDestination(isPresented: $goToFood) {
-                DonateQuizFood()
-            }
-            .navigationDestination(isPresented: $goToSchool) {
-                DonateQuizSchool()
-            }
-            .navigationDestination(isPresented: $goToClothing) {
-                DonateQuizClothes()
-            }
-            .navigationDestination(isPresented: $goToToys) {
-                DonateQuizToys()
-            }
+            .navigationDestination(isPresented: $goFood) { FindQuizFood() }
+            .navigationDestination(isPresented: $goSchool) { FindQuizSS() }
+            .navigationDestination(isPresented: $goClothing) { FindQuizClothes() }
+            .navigationDestination(isPresented: $goToys) { FindQuizToys() }
         }
     }
 }
 
-struct DonateQuiz1_Previews: PreviewProvider {
+struct FindQuiz1_Previews: PreviewProvider {
     static var previews: some View {
-        DonateQuiz1()
+        FindQuiz1()
     }
 }
+

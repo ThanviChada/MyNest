@@ -22,7 +22,7 @@ struct DonateQuizSchool: View {
                 .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
                 .padding(.top, 40)
             
-            // Progress bar (same style as food)
+            // Progress bar
             ProgressView(value: 0.5)
                 .tint(Color(red: 0.47, green: 0.69, blue: 0.19))
                 .padding(.horizontal)
