@@ -5,6 +5,9 @@ struct DonateQuizComplete: View {
     var donationType: String
     var selectedItems: [String]
     
+    // ✅ ADDED (only change needed)
+    @State private var goHome = false
+    
     var body: some View {
         ZStack {
             
@@ -56,41 +59,45 @@ struct DonateQuizComplete: View {
                         .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
                 }
                 
-                DonateCompleteBottomNavBar()
+                // Bottom Nav Bar (UI unchanged)
+                HStack {
+                    Spacer()
+                    
+                    Text("Setting")
+                    
+                    Spacer()
+                    
+                    Text("Home")
+                        .onTapGesture {
+                            goHome = true   // ✅ FIXED NAVIGATION
+                        }
+                    
+                    Spacer()
+                    
+                    Text("Progress")
+                    
+                    Spacer()
+                }
+                .font(.custom("Instrument Sans", size: 22).weight(.bold))
+                .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
+                .padding()
+                .background(Color.white)
+                .cornerRadius(20)
+                .padding(.horizontal)
+                .padding(.bottom, 10)
+                .shadow(radius: 5)
             }
         }
-    }
-}
-
-// Bottom Nav Bar (renamed to avoid errors)
-struct DonateCompleteBottomNavBar: View {
-    var body: some View {
-        HStack {
-            Spacer()
-            Text("Setting")
-            Spacer()
-            Text("Home")
-            Spacer()
-            Text("Progress")
-            Spacer()
+        // ✅ FORCES HOME SCREEN NAVIGATION
+        .navigationDestination(isPresented: $goHome) {
+            HomeScreen()
         }
-        .font(.custom("Instrument Sans", size: 22).weight(.bold))
-        .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
-        .padding()
-        .background(Color.white)
-        .cornerRadius(20)
-        .padding(.horizontal)
-        .padding(.bottom, 10)
-        .shadow(radius: 5)
     }
 }
 
-// Preview
-struct DonateQuizComplete_Previews: PreviewProvider {
-    static var previews: some View {
-        DonateQuizComplete(
-            donationType: "Food",
-            selectedItems: ["Protein", "Fruit"]
-        )
-    }
+#Preview {
+    DonateQuizComplete(
+        donationType: "Food",
+        selectedItems: ["Protein", "Fruit"]
+    )
 }
