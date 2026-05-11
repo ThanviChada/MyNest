@@ -10,155 +10,292 @@ struct CreateAccount: View {
     @State private var showPassword = false
     @State private var showConfirmPassword = false
     @State private var showError = false
+    @State private var goToHome = false
     
-    // Button enabled only when all fields have text AND passwords match
+    // MARK: - Password Validation
+    
+    var passwordValid: Bool {
+        let uppercase = NSPredicate(format: "SELF MATCHES %@", ".*[A-Z]+.*")
+        let lowercase = NSPredicate(format: "SELF MATCHES %@", ".*[a-z]+.*")
+        let number = NSPredicate(format: "SELF MATCHES %@", ".*[0-9]+.*")
+        let symbol = NSPredicate(format: "SELF MATCHES %@", ".*[^A-Za-z0-9]+.*")
+        
+        return password.count >= 8 &&
+        uppercase.evaluate(with: password) &&
+        lowercase.evaluate(with: password) &&
+        number.evaluate(with: password) &&
+        symbol.evaluate(with: password)
+    }
+    
+    // MARK: - Form Validation
+    
     var formValid: Bool {
         !fullName.isEmpty &&
         !username.isEmpty &&
         !password.isEmpty &&
         !confirmPassword.isEmpty &&
-        password == confirmPassword
+        password == confirmPassword &&
+        passwordValid
     }
     
     var body: some View {
-        ZStack {
-            // Background
-            Color(red: 0.92, green: 0.94, blue: 0.89)
+        
+        NavigationStack {
+            
+            ZStack {
+                
+                // Background
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.94, green: 0.96, blue: 0.92),
+                        Color.white
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
                 .ignoresSafeArea()
-            
-            VStack(spacing: 25) {
                 
-                // Top Bar
-                HStack {
-                    Button(action: {
-                        print("Back tapped")
-                    }) {
-                        Text("Back")
-                            .font(.custom("Instrument Sans", size: 18).weight(.bold))
+                VStack(spacing: 22) {
+                    
+                    // Back Button
+                    HStack {
+                        
+                        Button(action: {
+                            print("Back tapped")
+                        }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "chevron.left")
+                                Text("Back")
+                            }
+                            .font(.custom("Instrument Sans", size: 17).weight(.semibold))
                             .foregroundColor(.gray)
+                        }
+                        
+                        Spacer()
                     }
+                    .padding(.horizontal, 28)
+                    
+                    Spacer(minLength: 10)
+                    
+                    // Bigger Logo
+                    Image("myNest_logo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200)
+                        .shadow(color: .black.opacity(0.08), radius: 10, x: 0, y: 4)
+                    
+                    // Title
+                    VStack(spacing: 6) {
+                        
+                        Text("Create Account")
+                            .font(.custom("Instrument Sans", size: 30).weight(.bold))
+                            .foregroundColor(Color(red: 0.35, green: 0.20, blue: 0.12))
+                    }
+                    
+                    // Input Fields
+                    VStack(spacing: 24) {
+                        
+                        lineField(
+                            title: "Name",
+                            text: $fullName,
+                            placeholder: "Full Name"
+                        )
+                        
+                        lineField(
+                            title: "Username",
+                            text: $username,
+                            placeholder: "Username"
+                        )
+                        
+                        passwordField(
+                            title: "Password",
+                            text: $password,
+                            isVisible: $showPassword,
+                            placeholder: "Password"
+                        )
+                        
+                        passwordField(
+                            title: "Confirm Password",
+                            text: $confirmPassword,
+                            isVisible: $showConfirmPassword,
+                            placeholder: "Re-enter Password"
+                        )
+                        
+                        // Smaller Password Requirements
+                        VStack(alignment: .leading, spacing: 5) {
+                            
+                            requirementRow(
+                                text: "8+ chars",
+                                valid: password.count >= 8
+                            )
+                            
+                            requirementRow(
+                                text: "Uppercase",
+                                valid: password.range(of: "[A-Z]", options: .regularExpression) != nil
+                            )
+                            
+                            requirementRow(
+                                text: "Lowercase",
+                                valid: password.range(of: "[a-z]", options: .regularExpression) != nil
+                            )
+                            
+                            requirementRow(
+                                text: "Number",
+                                valid: password.range(of: "[0-9]", options: .regularExpression) != nil
+                            )
+                            
+                            requirementRow(
+                                text: "Symbol",
+                                valid: password.range(of: "[^A-Za-z0-9]", options: .regularExpression) != nil
+                            )
+                        }
+                        .font(.caption2)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.top, -8)
+                    }
+                    .padding(.horizontal, 30)
+                    
+                    if showError {
+                        Text("Passwords do not match")
+                            .font(.caption)
+                            .foregroundColor(.red)
+                    }
+                    
                     Spacer()
-                }
-                .padding(.horizontal, 25)
-                
-                // Logo
-                Image("myNest_logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200)
-                
-                // Title
-                Text("Create Account")
-                    .font(.custom("Instrument Sans", size: 26).weight(.bold))
-                    .foregroundColor(Color(red: 0.49, green: 0.22, blue: 0.13))
-                
-                // Input Fields
-                VStack(spacing: 18) {
                     
-                    customField(title: "Name*", text: $fullName, placeholder: "Full Name")
-                    
-                    customField(title: "Username*", text: $username, placeholder: "Username")
-                    
-                    passwordField(
-                        title: "Password*",
-                        text: $password,
-                        isVisible: $showPassword,
-                        placeholder: "Password"
-                    )
-                    
-                    passwordField(
-                        title: "Re-enter Password*",
-                        text: $confirmPassword,
-                        isVisible: $showConfirmPassword,
-                        placeholder: "Confirm Password"
-                    )
-                }
-                .padding(.horizontal, 25)
-                
-                // Error message if passwords don't match
-                if showError {
-                    Text("Passwords do not match")
-                        .foregroundColor(.red)
-                        .font(.caption)
-                }
-                
-                Spacer()
-                
-                // Create Button
-                Button(action: {
-                    if password != confirmPassword {
-                        showError = true
-                        return
+                    // Create Button
+                    Button(action: {
+                        
+                        if password != confirmPassword {
+                            showError = true
+                            return
+                        }
+                        
+                        if !passwordValid {
+                            showError = true
+                            return
+                        }
+                        
+                        showError = false
+                        goToHome = true
+                    }) {
+                        
+                        Text("Create Account")
+                            .font(.custom("Instrument Sans", size: 19).weight(.bold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(
+                                formValid
+                                ? Color(red: 0.13, green: 0.49, blue: 0.69)
+                                : Color.gray.opacity(0.5)
+                            )
+                            .cornerRadius(16)
+                            .shadow(
+                                color: .black.opacity(0.12),
+                                radius: 8,
+                                x: 0,
+                                y: 4
+                            )
                     }
-                    
-                    showError = false
-                    print("Account Created")
-                }) {
-                    Text("Create")
-                        .font(.custom("Instrument Sans", size: 20).weight(.bold))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(formValid ? Color(red: 0.13, green: 0.49, blue: 0.69) : Color.gray)
-                        .cornerRadius(12)
-                        .shadow(radius: 4)
+                    .disabled(!formValid)
+                    .padding(.horizontal, 30)
+                    .padding(.bottom, 30)
                 }
-                .disabled(!formValid)
-                .padding(.horizontal, 25)
-                .padding(.bottom, 20)
+            }
+            .navigationDestination(isPresented: $goToHome) {
+                HomeScreen()
             }
         }
     }
-}
-
-//////////////////////////////////////////////////
-// MARK: - Custom Components
-//////////////////////////////////////////////////
-
-func customField(title: String, text: Binding<String>, placeholder: String) -> some View {
-    VStack(alignment: .leading, spacing: 6) {
-        Text(title)
-            .font(.custom("Instrument Sans", size: 16).weight(.bold))
-            .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-        
-        TextField(placeholder, text: text)
-            .padding()
-            .background(Color.white)
-            .cornerRadius(10)
-            .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 2)
-    }
-}
-
-func passwordField(
-    title: String,
-    text: Binding<String>,
-    isVisible: Binding<Bool>,
-    placeholder: String
-) -> some View {
     
-    VStack(alignment: .leading, spacing: 6) {
-        Text(title)
-            .font(.custom("Instrument Sans", size: 16).weight(.bold))
-            .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+    // MARK: - Line Field
+    
+    func lineField(
+        title: String,
+        text: Binding<String>,
+        placeholder: String
+    ) -> some View {
         
-        HStack {
-            if isVisible.wrappedValue {
-                TextField(placeholder, text: text)
-            } else {
-                SecureField(placeholder, text: text)
-            }
+        VStack(alignment: .leading, spacing: 8) {
             
-            Button(action: {
-                isVisible.wrappedValue.toggle()
-            }) {
-                Image(systemName: isVisible.wrappedValue ? "eye.slash" : "eye")
-                    .foregroundColor(.gray)
-            }
+            Text(title)
+                .font(.custom("Instrument Sans", size: 15).weight(.semibold))
+                .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+            
+            TextField(placeholder, text: text)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled(true)
+                .padding(.bottom, 8)
+                .overlay(
+                    Rectangle()
+                        .frame(height: 1.2)
+                        .foregroundColor(Color.gray.opacity(0.4)),
+                    alignment: .bottom
+                )
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(10)
-        .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 2)
+    }
+    
+    // MARK: - Password Field
+    
+    func passwordField(
+        title: String,
+        text: Binding<String>,
+        isVisible: Binding<Bool>,
+        placeholder: String
+    ) -> some View {
+        
+        VStack(alignment: .leading, spacing: 8) {
+            
+            Text(title)
+                .font(.custom("Instrument Sans", size: 15).weight(.semibold))
+                .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+            
+            HStack {
+                
+                if isVisible.wrappedValue {
+                    
+                    TextField(placeholder, text: text)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled(true)
+                    
+                } else {
+                    
+                    SecureField(placeholder, text: text)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled(true)
+                }
+                
+                Button(action: {
+                    isVisible.wrappedValue.toggle()
+                }) {
+                    Image(systemName: isVisible.wrappedValue ? "eye.slash.fill" : "eye.fill")
+                        .foregroundColor(.gray)
+                }
+            }
+            .padding(.bottom, 8)
+            .overlay(
+                Rectangle()
+                    .frame(height: 1.2)
+                    .foregroundColor(Color.gray.opacity(0.4)),
+                alignment: .bottom
+            )
+        }
+    }
+    
+    // MARK: - Requirement Row
+    
+    func requirementRow(text: String, valid: Bool) -> some View {
+        
+        HStack(spacing: 6) {
+            
+            Image(systemName: valid ? "checkmark.circle.fill" : "circle")
+                .font(.system(size: 10))
+                .foregroundColor(valid ? .green : .gray.opacity(0.5))
+            
+            Text(text)
+                .foregroundColor(valid ? .green : .gray)
+        }
     }
 }
 
