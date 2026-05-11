@@ -10,7 +10,7 @@ struct CreateAccount: View {
     @State private var showPassword = false
     @State private var showConfirmPassword = false
     @State private var showError = false
-    @State private var goToHome = false   // ✅ already added (kept)
+    @State private var goToHome = false
 
     var formValid: Bool {
         !fullName.isEmpty &&
@@ -21,7 +21,7 @@ struct CreateAccount: View {
     }
     
     var body: some View {
-        NavigationStack {   // ✅ keep NavigationStack
+        NavigationStack {
             ZStack {
                 
                 // Background
@@ -96,7 +96,7 @@ struct CreateAccount: View {
                         showError = false
                         print("Account Created")
                         
-                        goToHome = true   // ✅ NAVIGATE TRIGGER
+                        goToHome = true   // NAVIGATE TRIGGER
                         
                     }) {
                         Text("Create")
@@ -113,16 +113,14 @@ struct CreateAccount: View {
                     .padding(.bottom, 20)
                 }
             }
-            // ✅ NAVIGATION (THIS WAS THE ISSUE)
+            // NAVIGATION
             .navigationDestination(isPresented: $goToHome) {
                 HomeScreen()
             }
         }
     }
     
-    //////////////////////////////////////////////////
     // MARK: - Custom Components
-    //////////////////////////////////////////////////
     
     func customField(title: String, text: Binding<String>, placeholder: String) -> some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -177,4 +175,5 @@ struct CreateAccount_Previews: PreviewProvider {
         CreateAccount()
     }
 }
+
 
