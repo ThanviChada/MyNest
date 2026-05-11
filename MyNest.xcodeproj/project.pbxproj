@@ -90,6 +90,7 @@
 				25A98A2E2F854AB200A154C9 /* MyNest */,
 				25A98A3C2F854AB500A154C9 /* MyNestTests */,
 				25A98A462F854AB500A154C9 /* MyNestUITests */,
+				37566C1B2FB2254B0051599F /* Frameworks */,
 				25A98A2D2F854AB200A154C9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -102,6 +103,13 @@
 				25A98A432F854AB500A154C9 /* MyNestUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		37566C1B2FB2254B0051599F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -207,6 +215,9 @@
 			);
 			mainGroup = 25A98A232F854AB200A154C9;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				37566C1A2FB220FE0051599F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 25A98A2D2F854AB200A154C9 /* Products */;
 			projectDirPath = "";
@@ -410,6 +421,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 883DK65VTV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -438,6 +450,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 883DK65VTV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -567,6 +580,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		37566C1A2FB220FE0051599F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.13.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 25A98A242F854AB200A154C9 /* Project object */;
 }
