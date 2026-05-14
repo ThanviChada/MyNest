@@ -12,7 +12,6 @@ struct CreateAccount: View {
     @State private var showError = false
     @State private var goToHome = false
     
-    // MARK: - Password Validation
     
     var passwordValid: Bool {
         let uppercase = NSPredicate(format: "SELF MATCHES %@", ".*[A-Z]+.*")
@@ -27,8 +26,7 @@ struct CreateAccount: View {
         symbol.evaluate(with: password)
     }
     
-    // MARK: - Form Validation
-    
+
     var formValid: Bool {
         !fullName.isEmpty &&
         !username.isEmpty &&
@@ -67,7 +65,7 @@ struct CreateAccount: View {
                                 Image(systemName: "chevron.left")
                                 Text("Back")
                             }
-                            .font(.custom("Instrument Sans", size: 17).weight(.semibold))
+                            .font(.system(size: 17, weight: .semibold))
                             .foregroundColor(.gray)
                         }
                         
@@ -88,7 +86,7 @@ struct CreateAccount: View {
                     VStack(spacing: 6) {
                         
                         Text("Create Account")
-                            .font(.custom("Instrument Sans", size: 30).weight(.bold))
+                            .font(.system(size: 30, weight: .bold))
                             .foregroundColor(Color(red: 0.35, green: 0.20, blue: 0.12))
                     }
                     
@@ -181,7 +179,7 @@ struct CreateAccount: View {
                     }) {
                         
                         Text("Create Account")
-                            .font(.custom("Instrument Sans", size: 19).weight(.bold))
+                            .font(.system(size: 19, weight: .bold))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding()
@@ -209,7 +207,6 @@ struct CreateAccount: View {
         }
     }
     
-    // MARK: - Line Field
     
     func lineField(
         title: String,
@@ -220,23 +217,33 @@ struct CreateAccount: View {
         VStack(alignment: .leading, spacing: 8) {
             
             Text(title)
-                .font(.custom("Instrument Sans", size: 15).weight(.semibold))
+                .font(.system(size: 15, weight: .semibold))
                 .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
             
-            TextField(placeholder, text: text)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled(true)
-                .padding(.bottom, 8)
-                .overlay(
-                    Rectangle()
-                        .frame(height: 1.2)
-                        .foregroundColor(Color.gray.opacity(0.4)),
-                    alignment: .bottom
-                )
+            ZStack(alignment: .leading) {
+                
+                if text.wrappedValue.isEmpty {
+                    Text(placeholder)
+                        .foregroundColor(.gray.opacity(0.75))
+                        .font(.system(size: 16))
+                }
+                
+                TextField("", text: text)
+                    .foregroundColor(.black)
+                    .font(.system(size: 16))
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled(true)
+            }
+            .padding(.bottom, 8)
+            .overlay(
+                Rectangle()
+                    .frame(height: 1.2)
+                    .foregroundColor(Color.gray.opacity(0.4)),
+                alignment: .bottom
+            )
         }
     }
-    
-    // MARK: - Password Field
+
     
     func passwordField(
         title: String,
@@ -248,22 +255,35 @@ struct CreateAccount: View {
         VStack(alignment: .leading, spacing: 8) {
             
             Text(title)
-                .font(.custom("Instrument Sans", size: 15).weight(.semibold))
+                .font(.system(size: 15, weight: .semibold))
                 .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
             
             HStack {
                 
-                if isVisible.wrappedValue {
+                ZStack(alignment: .leading) {
                     
-                    TextField(placeholder, text: text)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled(true)
+                    if text.wrappedValue.isEmpty {
+                        Text(placeholder)
+                            .foregroundColor(.gray.opacity(0.75))
+                            .font(.system(size: 16))
+                    }
                     
-                } else {
-                    
-                    SecureField(placeholder, text: text)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled(true)
+                    if isVisible.wrappedValue {
+                        
+                        TextField("", text: text)
+                            .foregroundColor(.black)
+                            .font(.system(size: 16))
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled(true)
+                        
+                    } else {
+                        
+                        SecureField("", text: text)
+                            .foregroundColor(.black)
+                            .font(.system(size: 16))
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled(true)
+                    }
                 }
                 
                 Button(action: {
@@ -282,8 +302,6 @@ struct CreateAccount: View {
             )
         }
     }
-    
-    // MARK: - Requirement Row
     
     func requirementRow(text: String, valid: Bool) -> some View {
         

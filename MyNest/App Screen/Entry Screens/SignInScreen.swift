@@ -9,12 +9,11 @@ struct SignInScreen: View {
     @State private var showPassword = false
     @State private var rememberMe = false
     
-    // ✅ ADD THIS
     @State private var goToHome = false
     
     var body: some View {
         
-        NavigationStack {   // ✅ ADD THIS WRAP
+        NavigationStack {
             
             ZStack {
                 Color(red: 0.87, green: 0.9, blue: 0.9)
@@ -105,7 +104,6 @@ struct SignInScreen: View {
                     Button("Login") {
                         print(username, password, rememberMe)
                         
-                        // ✅ ADD THIS LINE
                         goToHome = true
                     }
                     .font(Font.custom("Instrument Sans", size: 25).weight(.bold))
@@ -121,7 +119,7 @@ struct SignInScreen: View {
             }
             .navigationBarBackButtonHidden(true)
             
-            // ✅ ADD THIS AT THE VERY BOTTOM OF NavigationStack
+            //NavigationStack
             .navigationDestination(isPresented: $goToHome) {
                 HomeScreen()
             }
@@ -132,3 +130,4 @@ struct SignInScreen: View {
 #Preview {
     SignInScreen()
 }
+
