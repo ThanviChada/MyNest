@@ -27,7 +27,7 @@ struct SignInScreen: View {
                 
                 VStack(spacing: 22) {
                     
-                    // ✅ small back button slightly lower
+                    // Back button
                     HStack {
                         Button(action: {
                             dismiss()
@@ -48,44 +48,83 @@ struct SignInScreen: View {
                     
                     Spacer().frame(height: 5)
                     
+                    // USERNAME (LINE STYLE like CreateAccount)
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Username")
                             .font(Font.custom("Instrument Sans", size: 25).weight(.bold))
-                            .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-                        
-                        TextField("Enter username", text: $username)
-                            .padding()
-                            .frame(height: 60)
-                            .background(Color(red: 1, green: 0.98, blue: 0.98).opacity(0.44))
-                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray))
+                            .foregroundColor(.black)   // ✅ FIXED
+                    
+                        ZStack(alignment: .leading) {
+                            if username.isEmpty {
+                                Text("Enter username")
+                                    .foregroundColor(.gray.opacity(0.6))
+                                    .font(.system(size: 16))
+                            }
+                            
+                            TextField("", text: $username)
+                                .foregroundColor(.black)
+                                .font(.system(size: 16))
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled(true)
+                        }
+                        .padding(.bottom, 8)
+                        .overlay(
+                            Rectangle()
+                                .frame(height: 1.2)
+                                .foregroundColor(Color.gray.opacity(0.4)),
+                            alignment: .bottom
+                        )
                     }
                     .padding(.horizontal, 25)
                     
+                    // PASSWORD (LINE STYLE like CreateAccount)
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Password")
                             .font(Font.custom("Instrument Sans", size: 25).weight(.bold))
-                            .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-                        
+                            .foregroundColor(.black)   // ✅ FIXED
+                    
                         ZStack(alignment: .trailing) {
-                            if showPassword {
-                                TextField("Enter password", text: $password)
-                                    .padding()
-                            } else {
-                                SecureField("Enter password", text: $password)
-                                    .padding()
+                            
+                            ZStack(alignment: .leading) {
+                                
+                                if password.isEmpty {
+                                    Text("Enter password")
+                                        .foregroundColor(.gray.opacity(0.6))
+                                        .font(.system(size: 16))
+                                }
+                                
+                                if showPassword {
+                                    TextField("", text: $password)
+                                        .foregroundColor(.black)
+                                        .font(.system(size: 16))
+                                        .textInputAutocapitalization(.never)
+                                        .autocorrectionDisabled(true)
+                                } else {
+                                    SecureField("", text: $password)
+                                        .foregroundColor(.black)
+                                        .font(.system(size: 16))
+                                        .textInputAutocapitalization(.never)
+                                        .autocorrectionDisabled(true)
+                                }
                             }
                             
                             Button(showPassword ? "Hide" : "Show") {
                                 showPassword.toggle()
                             }
-                            .padding(.trailing, 15)
+                            .padding(.trailing, 5)
+                            .foregroundColor(.gray)
                         }
-                        .frame(height: 60)
-                        .background(Color(red: 1, green: 0.98, blue: 0.98).opacity(0.44))
-                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray))
+                        .padding(.bottom, 8)
+                        .overlay(
+                            Rectangle()
+                                .frame(height: 1.2)
+                                .foregroundColor(Color.gray.opacity(0.4)),
+                            alignment: .bottom
+                        )
                     }
                     .padding(.horizontal, 25)
                     
+                    // Remember Me + Forgot
                     HStack {
                         Button {
                             rememberMe.toggle()
@@ -101,7 +140,7 @@ struct SignInScreen: View {
                                 
                                 Text("Remember Me")
                                     .font(Font.custom("Instrument Sans", size: 15).weight(.bold))
-                                    .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                                    .foregroundColor(.black) // ✅ FIXED
                             }
                         }
                         .buttonStyle(.plain)
@@ -110,7 +149,7 @@ struct SignInScreen: View {
                         
                         Text("Forgot Password?")
                             .font(Font.custom("Instrument Sans", size: 15).weight(.bold))
-                            .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                            .foregroundColor(.black) // ✅ FIXED
                     }
                     .padding(.horizontal, 25)
                     

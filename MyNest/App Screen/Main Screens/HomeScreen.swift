@@ -9,14 +9,13 @@ struct HomeScreen: View {
     @State private var goHome = false
     @State private var goProgress = false
 
-    // ✅ NEW USER FLAG (from CreateAccount)
+    // NEW USER FLAG
     let isNewUser: Bool
 
     // welcome UI
     @State private var showWelcome = false
     @State private var confetti: [Confetti] = []
 
-    // MARK: - Confetti Model
     struct Confetti: Identifiable {
         let id = UUID()
         var x: CGFloat
@@ -29,6 +28,10 @@ struct HomeScreen: View {
         NavigationStack {
             ZStack {
 
+                // ✅ FIXED BACKGROUND (THIS IS THE IMPORTANT PART)
+                Color(red: 0.94, green: 0.96, blue: 0.92)
+                    .ignoresSafeArea()
+
                 VStack(spacing: 30) {
 
                     Spacer().frame(height: 30)
@@ -38,7 +41,7 @@ struct HomeScreen: View {
 
                             ZStack {
                                 Circle()
-                                    .fill(Color(red: 0.94, green: 0.94, blue: 0.96)) // ✅ FIXED
+                                    .fill(Color(red: 0.94, green: 0.94, blue: 0.96))
                                     .frame(width: 270, height: 270)
 
                                 Image("myNest_logo")
@@ -46,11 +49,11 @@ struct HomeScreen: View {
                                     .scaledToFit()
                                     .frame(width: 235)
                             }
-                            .padding(.top, 5)
+                            .padding(.top, 4)
 
                             Text("Hello, Nestie!")
                                 .font(.custom("Kumbh Sans", size: 34).weight(.semibold))
-                                .padding(.top, 6)
+                                .padding(.top, 4)
 
                             Text("What do you want to do today?")
                                 .font(.custom("Times New Roman", size: 22).weight(.bold))
@@ -58,28 +61,18 @@ struct HomeScreen: View {
 
                             Spacer().frame(height: 40)
 
-                            // ✅ YOUR ORIGINAL BUTTONS (UNCHANGED)
                             HStack(spacing: 15) {
-                                HomeActionButton(
-                                    imageName: "order",
-                                    title: "Order",
-                                    bgColor: Color(red: 0.97, green: 0.94, blue: 0.88)
-                                )
-                                .onTapGesture { goFindQuiz = true }
+                                HomeActionButton(imageName: "order", title: "Order",
+                                    bgColor: Color(red: 0.97, green: 0.94, blue: 0.88))
+                                    .onTapGesture { goFindQuiz = true }
 
-                                HomeActionButton(
-                                    imageName: "donate",
-                                    title: "Donate",
-                                    bgColor: Color(red: 0.92, green: 0.94, blue: 0.89)
-                                )
-                                .onTapGesture { goDonateQuiz = true }
+                                HomeActionButton(imageName: "donate", title: "Donate",
+                                    bgColor: Color(red: 0.92, green: 0.94, blue: 0.89))
+                                    .onTapGesture { goDonateQuiz = true }
 
-                                HomeActionButton(
-                                    imageName: "discuss",
-                                    title: "Discuss",
-                                    bgColor: Color(red: 0.90, green: 0.94, blue: 0.95)
-                                )
-                                .onTapGesture { goDiscuss = true }
+                                HomeActionButton(imageName: "discuss", title: "Discuss",
+                                    bgColor: Color(red: 0.90, green: 0.94, blue: 0.95))
+                                    .onTapGesture { goDiscuss = true }
                             }
 
                             Spacer().frame(height: 120)
@@ -106,7 +99,6 @@ struct HomeScreen: View {
                     .shadow(radius: 5)
                 }
 
-                // 🎉 POPUP
                 if showWelcome {
                     ZStack {
                         Color.black.opacity(0.2)
@@ -119,7 +111,6 @@ struct HomeScreen: View {
                     }
                 }
 
-                // 🎊 CONFETTI
                 ForEach(confetti) { piece in
                     Circle()
                         .fill(piece.color)
@@ -128,14 +119,12 @@ struct HomeScreen: View {
                 }
             }
 
-            // NAVIGATION (FIXED)
             .navigationDestination(isPresented: $goFindQuiz) { FindQuiz1() }
             .navigationDestination(isPresented: $goDonateQuiz) { DonateQuiz1() }
             .navigationDestination(isPresented: $goDiscuss) { DiscussionScreen() }
             .navigationDestination(isPresented: $goHome) { HomeScreen(isNewUser: false) }
             .navigationDestination(isPresented: $goProgress) { ProgressScreen() }
 
-            // TRIGGER ONLY FOR NEW USER
             .onAppear {
                 if isNewUser {
                     triggerWelcome()
@@ -144,7 +133,6 @@ struct HomeScreen: View {
         }
     }
 
-    // MARK: - ANIMATION
     func triggerWelcome() {
         showWelcome = true
         spawnConfetti()
@@ -199,9 +187,9 @@ struct HomeActionButton: View {
         .shadow(color: .black.opacity(0.12), radius: 5, x: 0, y: 1)
     }
 }
-
 struct HomeScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeScreen(isNewUser: false)
-    }
+static var previews: some View {
+   HomeScreen(isNewUser: false)
+  }
 }
+

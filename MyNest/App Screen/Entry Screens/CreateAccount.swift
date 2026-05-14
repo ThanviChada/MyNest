@@ -141,6 +141,7 @@ struct CreateAccount: View {
             .navigationDestination(isPresented: $goToHome) {
                 HomeScreen(isNewUser: isNewUser)
             }
+            .navigationBarBackButtonHidden(true) // ✅ FIX ADDED HERE
         }
     }
     
