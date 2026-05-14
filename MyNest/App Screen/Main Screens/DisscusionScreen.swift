@@ -209,7 +209,7 @@ struct DiscussionScreen: View {
                 .shadow(radius: 3)
             }
             .background(Color(red: 0.90, green: 0.94, blue: 0.95))
-            .navigationDestination(isPresented: $goHome) { HomeScreen() }
+            .navigationDestination(isPresented: $goHome) { HomeScreen(isNewUser: false) }
             .navigationDestination(isPresented: $goProgress) { ProgressScreen() }
         }
     }

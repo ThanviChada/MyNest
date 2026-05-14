@@ -109,7 +109,7 @@ struct FindQuizComplete: View {
             
             // ✅ NAVIGATION ADDED
             .navigationDestination(isPresented: $goHome) {
-                HomeScreen()
+                HomeScreen(isNewUser: false)
             }
             
             .navigationDestination(isPresented: $goProgress) {

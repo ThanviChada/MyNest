@@ -90,7 +90,7 @@ struct DonateQuizComplete: View {
         }
         // ✅ FORCES HOME SCREEN NAVIGATION
         .navigationDestination(isPresented: $goHome) {
-            HomeScreen()
+            HomeScreen(isNewUser: false)
         }
     }
 }
