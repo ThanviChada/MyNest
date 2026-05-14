@@ -11,6 +11,12 @@ struct SignInScreen: View {
     
     @State private var goToHome = false
     
+    // validation
+    var canLogin: Bool {
+        !username.trimmingCharacters(in: .whitespaces).isEmpty &&
+        !password.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+    
     var body: some View {
         
         NavigationStack {
@@ -19,22 +25,28 @@ struct SignInScreen: View {
                 Color(red: 0.87, green: 0.9, blue: 0.9)
                     .ignoresSafeArea()
                 
-                VStack(spacing: 25) {
+                VStack(spacing: 22) {
                     
+                    // ✅ small back button slightly lower
                     HStack {
-                        Button {
+                        Button(action: {
                             dismiss()
-                        } label: {
-                            Text("< Back")
-                                .font(Font.custom("Instrument Sans", size: 20).weight(.bold))
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(.gray)
+                            
+                            Text("Back")
+                                .font(Font.custom("Instrument Sans", size: 16).weight(.bold))
                                 .foregroundColor(.gray)
                         }
+                        
                         Spacer()
                     }
                     .padding(.horizontal, 25)
-                    .padding(.top, 10)
+                    .padding(.top, 20)
                     
-                    Spacer()
+                    Spacer().frame(height: 5)
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Username")
@@ -56,9 +68,11 @@ struct SignInScreen: View {
                         
                         ZStack(alignment: .trailing) {
                             if showPassword {
-                                TextField("Enter password", text: $password).padding()
+                                TextField("Enter password", text: $password)
+                                    .padding()
                             } else {
-                                SecureField("Enter password", text: $password).padding()
+                                SecureField("Enter password", text: $password)
+                                    .padding()
                             }
                             
                             Button(showPassword ? "Hide" : "Show") {
@@ -101,17 +115,24 @@ struct SignInScreen: View {
                     .padding(.horizontal, 25)
                     
                     // LOGIN BUTTON
-                    Button("Login") {
-                        print(username, password, rememberMe)
-                        
-                        goToHome = true
+                    Button(action: {
+                        if canLogin {
+                            goToHome = true
+                        }
+                    }) {
+                        Text("Login")
+                            .font(Font.custom("Instrument Sans", size: 25).weight(.bold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 60)
+                            .background(
+                                canLogin
+                                ? Color(red: 0.459, green: 0.694, blue: 0.184)
+                                : Color.gray.opacity(0.5)
+                            )
+                            .cornerRadius(15)
                     }
-                    .font(Font.custom("Instrument Sans", size: 25).weight(.bold))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 60)
-                    .background(Color(red: 0.459, green: 0.694, blue: 0.184))
-                    .cornerRadius(15)
+                    .disabled(!canLogin)
                     .padding(.horizontal, 60)
                     
                     Spacer()
@@ -119,7 +140,6 @@ struct SignInScreen: View {
             }
             .navigationBarBackButtonHidden(true)
             
-            //NavigationStack
             .navigationDestination(isPresented: $goToHome) {
                 HomeScreen(isNewUser: false)
             }

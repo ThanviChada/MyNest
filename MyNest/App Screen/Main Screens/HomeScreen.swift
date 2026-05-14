@@ -38,7 +38,7 @@ struct HomeScreen: View {
 
                             ZStack {
                                 Circle()
-                                    .fill(Color(.systemGray6))
+                                    .fill(Color(red: 0.94, green: 0.94, blue: 0.96)) // ✅ FIXED
                                     .frame(width: 270, height: 270)
 
                                 Image("myNest_logo")
@@ -176,6 +176,7 @@ struct HomeScreen: View {
         }
     }
 }
+
 struct HomeActionButton: View {
     let imageName: String
     let title: String
@@ -198,6 +199,7 @@ struct HomeActionButton: View {
         .shadow(color: .black.opacity(0.12), radius: 5, x: 0, y: 1)
     }
 }
+
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         HomeScreen(isNewUser: false)
