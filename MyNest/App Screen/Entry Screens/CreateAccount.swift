@@ -18,7 +18,7 @@ struct CreateAccount: View {
         let lowercase = NSPredicate(format: "SELF MATCHES %@", ".*[a-z]+.*")
         let number = NSPredicate(format: "SELF MATCHES %@", ".*[0-9]+.*")
         let symbol = NSPredicate(format: "SELF MATCHES %@", ".*[^A-Za-z0-9]+.*")
-        
+
         return password.count >= 8 &&
         uppercase.evaluate(with: password) &&
         lowercase.evaluate(with: password) &&
@@ -27,6 +27,7 @@ struct CreateAccount: View {
     }
     
 
+    // MARK: - Form Validation
     var formValid: Bool {
         !fullName.isEmpty &&
         !username.isEmpty &&
@@ -35,11 +36,9 @@ struct CreateAccount: View {
         password == confirmPassword &&
         passwordValid
     }
-    
+
     var body: some View {
-        
         NavigationStack {
-            
             ZStack {
                 
                 // Background
@@ -52,12 +51,11 @@ struct CreateAccount: View {
                     endPoint: .bottom
                 )
                 .ignoresSafeArea()
-                
+
                 VStack(spacing: 22) {
-                    
-                    // Back Button
+
+                    // Back button
                     HStack {
-                        
                         Button(action: {
                             print("Back tapped")
                         }) {
@@ -68,20 +66,19 @@ struct CreateAccount: View {
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundColor(.gray)
                         }
-                        
                         Spacer()
                     }
                     .padding(.horizontal, 28)
-                    
+
                     Spacer(minLength: 10)
-                    
-                    // Bigger Logo
+
+                    // Logo
                     Image("myNest_logo")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 200)
                         .shadow(color: .black.opacity(0.08), radius: 10, x: 0, y: 4)
-                    
+
                     // Title
                     VStack(spacing: 6) {
                         
@@ -92,92 +89,51 @@ struct CreateAccount: View {
                     
                     // Input Fields
                     VStack(spacing: 24) {
-                        
-                        lineField(
-                            title: "Name",
-                            text: $fullName,
-                            placeholder: "Full Name"
-                        )
-                        
-                        lineField(
-                            title: "Username",
-                            text: $username,
-                            placeholder: "Username"
-                        )
-                        
-                        passwordField(
-                            title: "Password",
-                            text: $password,
-                            isVisible: $showPassword,
-                            placeholder: "Password"
-                        )
-                        
-                        passwordField(
-                            title: "Confirm Password",
-                            text: $confirmPassword,
-                            isVisible: $showConfirmPassword,
-                            placeholder: "Re-enter Password"
-                        )
-                        
-                        // Smaller Password Requirements
+
+                        lineField(title: "Name", text: $fullName, placeholder: "Full Name")
+
+                        lineField(title: "Username", text: $username, placeholder: "Username")
+
+                        passwordField(title: "Password", text: $password, isVisible: $showPassword, placeholder: "Password")
+
+                        passwordField(title: "Confirm Password", text: $confirmPassword, isVisible: $showConfirmPassword, placeholder: "Re-enter Password")
+
+                        // Requirements
                         VStack(alignment: .leading, spacing: 5) {
-                            
-                            requirementRow(
-                                text: "8+ chars",
-                                valid: password.count >= 8
-                            )
-                            
-                            requirementRow(
-                                text: "Uppercase",
-                                valid: password.range(of: "[A-Z]", options: .regularExpression) != nil
-                            )
-                            
-                            requirementRow(
-                                text: "Lowercase",
-                                valid: password.range(of: "[a-z]", options: .regularExpression) != nil
-                            )
-                            
-                            requirementRow(
-                                text: "Number",
-                                valid: password.range(of: "[0-9]", options: .regularExpression) != nil
-                            )
-                            
-                            requirementRow(
-                                text: "Symbol",
-                                valid: password.range(of: "[^A-Za-z0-9]", options: .regularExpression) != nil
-                            )
+                            requirementRow(text: "8+ chars", valid: password.count >= 8)
+                            requirementRow(text: "Uppercase", valid: password.range(of: "[A-Z]", options: .regularExpression) != nil)
+                            requirementRow(text: "Lowercase", valid: password.range(of: "[a-z]", options: .regularExpression) != nil)
+                            requirementRow(text: "Number", valid: password.range(of: "[0-9]", options: .regularExpression) != nil)
+                            requirementRow(text: "Symbol", valid: password.range(of: "[^A-Za-z0-9]", options: .regularExpression) != nil)
                         }
                         .font(.caption2)
                         .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.top, -8)
                     }
                     .padding(.horizontal, 30)
-                    
+
+                    // Error message
                     if showError {
                         Text("Passwords do not match")
                             .font(.caption)
                             .foregroundColor(.red)
                     }
-                    
+
                     Spacer()
-                    
-                    // Create Button
+
+                    // Create account button
                     Button(action: {
-                        
-                        if password != confirmPassword {
+                        if password != confirmPassword || !passwordValid {
                             showError = true
                             return
                         }
-                        
-                        if !passwordValid {
-                            showError = true
-                            return
-                        }
-                        
+
                         showError = false
+
+                        // ✅ ONLY ADDITION
+                        isNewUser = true
+
                         goToHome = true
                     }) {
-                        
                         Text("Create Account")
                             .font(.system(size: 19, weight: .bold))
                             .foregroundColor(.white)
@@ -189,12 +145,7 @@ struct CreateAccount: View {
                                 : Color.gray.opacity(0.5)
                             )
                             .cornerRadius(16)
-                            .shadow(
-                                color: .black.opacity(0.12),
-                                radius: 8,
-                                x: 0,
-                                y: 4
-                            )
+                            .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 4)
                     }
                     .disabled(!formValid)
                     .padding(.horizontal, 30)
@@ -293,6 +244,29 @@ struct CreateAccount: View {
                         .foregroundColor(.gray)
                 }
             }
+
+            // ✅ NAVIGATION (with new user flag)
+            .navigationDestination(isPresented: $goToHome) {
+                HomeScreen(isNewUser: isNewUser)
+            }
+        }
+    }
+}
+
+
+func lineField(
+    title: String,
+    text: Binding<String>,
+    placeholder: String
+) -> some View {
+    VStack(alignment: .leading, spacing: 8) {
+        Text(title)
+            .font(.custom("Instrument Sans", size: 15).weight(.semibold))
+            .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+
+        TextField(placeholder, text: text)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled(true)
             .padding(.bottom, 8)
             .overlay(
                 Rectangle()
@@ -317,8 +291,12 @@ struct CreateAccount: View {
     }
 }
 
-struct CreateAccount_Previews: PreviewProvider {
-    static var previews: some View {
-        CreateAccount()
+        Text(text)
+            .foregroundColor(valid ? .green : .gray)
     }
+}
+struct CreateAccount_Previews: PreviewProvider {
+static var previews: some View {
+    CreateAccount()
+}
 }

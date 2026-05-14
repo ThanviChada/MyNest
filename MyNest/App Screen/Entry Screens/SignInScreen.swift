@@ -121,7 +121,7 @@ struct SignInScreen: View {
             
             //NavigationStack
             .navigationDestination(isPresented: $goToHome) {
-                HomeScreen()
+                HomeScreen(isNewUser: false)
             }
         }
     }
