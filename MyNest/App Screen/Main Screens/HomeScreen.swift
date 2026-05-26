@@ -28,9 +28,16 @@ struct HomeScreen: View {
         NavigationStack {
             ZStack {
 
-                // ✅ FIXED BACKGROUND (THIS IS THE IMPORTANT PART)
-                Color(red: 0.94, green: 0.96, blue: 0.92)
-                    .ignoresSafeArea()
+                // ✅ FIXED BACKGROUND (better contrast, not washed out)
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.90, green: 0.93, blue: 0.88),
+                        Color(red: 0.85, green: 0.90, blue: 0.84)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
 
                 VStack(spacing: 30) {
 
@@ -61,23 +68,32 @@ struct HomeScreen: View {
 
                             Spacer().frame(height: 40)
 
-                            HStack(spacing: 15) {
-                                HomeActionButton(imageName: "order", title: "Order",
-                                    bgColor: Color(red: 0.97, green: 0.94, blue: 0.88))
-                                    .onTapGesture { goFindQuiz = true }
+                            HStack(spacing: 10) {
+                                HomeActionButton(
+                                    imageName: "order",
+                                    title: "Order",
+                                    bgColor: Color(red: 0.97, green: 0.94, blue: 0.88)
+                                )
+                                .onTapGesture { goFindQuiz = true }
 
-                                HomeActionButton(imageName: "donate", title: "Donate",
-                                    bgColor: Color(red: 0.92, green: 0.94, blue: 0.89))
-                                    .onTapGesture { goDonateQuiz = true }
+                                HomeActionButton(
+                                    imageName: "donate",
+                                    title: "Donate",
+                                    bgColor: Color(red: 0.92, green: 0.94, blue: 0.89)
+                                )
+                                .onTapGesture { goDonateQuiz = true }
 
-                                HomeActionButton(imageName: "discuss", title: "Discuss",
-                                    bgColor: Color(red: 0.90, green: 0.94, blue: 0.95))
-                                    .onTapGesture { goDiscuss = true }
+                                HomeActionButton(
+                                    imageName: "discuss",
+                                    title: "Discuss",
+                                    bgColor: Color(red: 0.90, green: 0.94, blue: 0.95)
+                                )
+                                .onTapGesture { goDiscuss = true }
                             }
 
                             Spacer().frame(height: 120)
                         }
-                        .padding(.horizontal, 25)
+                        .padding(.horizontal, 20)
                     }
 
                     HStack {
@@ -187,9 +203,10 @@ struct HomeActionButton: View {
         .shadow(color: .black.opacity(0.12), radius: 5, x: 0, y: 1)
     }
 }
+
 struct HomeScreen_Previews: PreviewProvider {
-static var previews: some View {
-   HomeScreen(isNewUser: false)
-  }
+    static var previews: some View {
+        HomeScreen(isNewUser: false)
+    }
 }
 

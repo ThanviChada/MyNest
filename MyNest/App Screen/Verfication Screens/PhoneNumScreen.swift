@@ -4,10 +4,16 @@ import SwiftUI
 
 struct PhoneNumScreen: View {
     
+    let fullName: String
+    let username: String
+    let password: String
+    
+    @EnvironmentObject var authManager: AuthManager
+    
     @State private var phoneNumber = ""
     @State private var goToVerification = false
     @StateObject var otpManager = OTPManager()
-    
+   
     var digitsOnly: String {
         phoneNumber.filter { $0.isNumber }
     }
@@ -69,7 +75,11 @@ struct PhoneNumScreen: View {
         }
 struct PhoneNumScreen_Previews: PreviewProvider {
     static var previews: some View {
-        PhoneNumScreen()
+        PhoneNumScreen(
+            fullName: "",
+            username: "",
+            password: ""
+        )
     }
 }
 

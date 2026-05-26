@@ -38,9 +38,30 @@
 		794818962F97C0DE00F7B95E /* MyNestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNestApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		37FC4D2C2FC5EC4200EA0460 /* Exceptions for "MyNest" folder in "MyNestTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GoogleService-Info.plist",
+			);
+			target = 25A98A382F854AB500A154C9 /* MyNestTests */;
+		};
+		37FC4D2D2FC5EC4200EA0460 /* Exceptions for "MyNest" folder in "MyNestUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GoogleService-Info.plist",
+			);
+			target = 25A98A422F854AB500A154C9 /* MyNestUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		25A98A2E2F854AB200A154C9 /* MyNest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				37FC4D2C2FC5EC4200EA0460 /* Exceptions for "MyNest" folder in "MyNestTests" target */,
+				37FC4D2D2FC5EC4200EA0460 /* Exceptions for "MyNest" folder in "MyNestUITests" target */,
+			);
 			path = MyNest;
 			sourceTree = "<group>";
 		};
