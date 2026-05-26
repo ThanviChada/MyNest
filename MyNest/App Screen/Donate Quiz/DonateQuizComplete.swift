@@ -3,7 +3,7 @@ import SwiftUI
 struct DonateQuizComplete: View {
     
     var donationType: String
-    var selectedItems: [DonationItem]
+    var selectedItems: [String]
     
     @State private var goHome = false
     @State private var goProgress = false
@@ -14,91 +14,86 @@ struct DonateQuizComplete: View {
             
             ZStack {
                 
+                // Background
                 Color(red: 0.92, green: 0.94, blue: 0.89)
                     .ignoresSafeArea()
                 
                 VStack(spacing: 20) {
                     
-                    // TOP CARD
+                    // Top card
                     ZStack {
                         Rectangle()
                             .foregroundColor(.white)
                             .frame(height: 200)
-                            .cornerRadius(12)
+                            .cornerRadius(10)
                         
                         VStack(spacing: 10) {
                             
                             Text("Donation Submitted!")
                                 .font(.system(size: 28, weight: .bold))
-                                .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                                .foregroundColor(
+                                    Color(red: 0.13, green: 0.49, blue: 0.69)
+                                )
                             
                             Text("Thank you for your donation")
                                 .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(Color(red: 1, green: 0.68, blue: 0.15))
+                                .foregroundColor(
+                                    Color(red: 1, green: 0.68, blue: 0.15)
+                                )
                         }
                     }
                     .padding(.top, 40)
                     .padding(.horizontal)
                     
-                    // SUMMARY CARD
+                    // Donation summary
                     VStack(alignment: .leading, spacing: 12) {
                         
-                        Text("Donation Summary")
+                        Text("Donate Summary")
                             .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(Color(red: 0.47, green: 0.69, blue: 0.19))
+                            .foregroundColor(
+                                Color(red: 0.47, green: 0.69, blue: 0.19)
+                            )
                         
+                        // FIXED
                         Text("Category: \(donationType)")
                             .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                            .foregroundColor(
+                                Color(red: 0.13, green: 0.49, blue: 0.69)
+                            )
                         
-                        Divider()
+                        Text("Items:")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(
+                                Color(red: 0.13, green: 0.49, blue: 0.69)
+                            )
                         
                         if selectedItems.isEmpty {
                             Text("No items selected")
                                 .foregroundColor(.gray)
                         } else {
-                            
-                            ScrollView {
-                                VStack(alignment: .leading, spacing: 14) {
-                                    
-                                    ForEach(selectedItems) { item in
-                                        
-                                        VStack(alignment: .leading, spacing: 6) {
-                                            
-                                            Text("• \(item.name)")
-                                                .font(.system(size: 18, weight: .semibold))
-                                                .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-                                            
-                                            Text("Quantity: \(item.quantity)")
-                                                .font(.system(size: 14, weight: .medium))
-                                                .foregroundColor(.gray)
-                                            
-                                            if let details = item.details, !details.isEmpty {
-                                                Text("Details: \(details)")
-                                                    .font(.system(size: 14, weight: .medium))
-                                                    .foregroundColor(.gray)
-                                            }
-                                        }
-                                        .padding(.bottom, 6)
-                                    }
-                                }
+                            ForEach(selectedItems, id: \.self) { item in
+                                Text("• \(item)")
+                                    .foregroundColor(
+                                        Color(red: 0.13, green: 0.49, blue: 0.69)
+                                    )
                             }
-                            .frame(maxHeight: 220)
                         }
                     }
                     .padding()
                     .background(Color.white)
-                    .cornerRadius(12)
+                    .cornerRadius(10)
                     .padding(.horizontal)
                     
                     Spacer()
                     
                     Text("Stay tuned for updates!")
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-                        .padding(.bottom, 10)
+                        .foregroundColor(
+                            Color(red: 0.13, green: 0.49, blue: 0.69)
+                        )
+                        .padding(.bottom, 30)
                     
-                    // BOTTOM NAV BAR (UNCHANGED STYLE)
+                    // Navigation bar
                     HStack {
                         Spacer()
                         
@@ -120,8 +115,10 @@ struct DonateQuizComplete: View {
                         
                         Spacer()
                     }
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
+                    .font(.custom("Instrument Sans", size: 22).weight(.bold))
+                    .foregroundColor(
+                        Color(red: 0.17, green: 0.60, blue: 0.80)
+                    )
                     .padding()
                     .background(Color.white)
                     .cornerRadius(20)
@@ -143,9 +140,6 @@ struct DonateQuizComplete: View {
 #Preview {
     DonateQuizComplete(
         donationType: "Food",
-        selectedItems: [
-            DonationItem(name: "Protein", quantity: 2, details: "Chicken / Beans"),
-            DonationItem(name: "Fruit", quantity: 3, details: "Apples")
-        ]
+        selectedItems: ["Protein", "Fruit"]
     )
 }

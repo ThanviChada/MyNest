@@ -25,6 +25,7 @@ struct DonateQuiz1: View {
                     .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
                     .padding(.top, 40)
                 
+                // Progress bar
                 ProgressView(value: 0.1)
                     .tint(Color(red: 0.47, green: 0.69, blue: 0.19))
                     .padding(.horizontal)
@@ -32,17 +33,27 @@ struct DonateQuiz1: View {
                 VStack(spacing: 20) {
                     ForEach(DonationType.allCases, id: \.self) { option in
                         
-                        Button {
+                        Button(action: {
                             selectedOption = option
-                        } label: {
+                        }) {
                             HStack {
-                                Circle()
-                                    .stroke(selectedOption == option ? .green : .gray, lineWidth: 2)
-                                    .frame(width: 22, height: 22)
-                                    .overlay(
-                                        Circle().fill(selectedOption == option ? .green : .clear)
+                                
+                                ZStack {
+                                    Circle()
+                                        .stroke(
+                                            selectedOption == option
+                                            ? Color(red: 0.47, green: 0.69, blue: 0.19)
+                                            : Color.gray,
+                                            lineWidth: 2
+                                        )
+                                        .frame(width: 24, height: 24)
+                                    
+                                    if selectedOption == option {
+                                        Circle()
+                                            .fill(Color(red: 0.47, green: 0.69, blue: 0.19))
                                             .frame(width: 12, height: 12)
-                                    )
+                                    }
+                                }
                                 
                                 Text(option.rawValue)
                                     .font(.system(size: 20, weight: .semibold))
@@ -51,38 +62,75 @@ struct DonateQuiz1: View {
                                 Spacer()
                             }
                             .padding()
-                            .background(selectedOption == option ? Color.green.opacity(0.2) : Color.white)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                selectedOption == option
+                                ? Color(red: 0.87, green: 0.94, blue: 0.84)
+                                : Color.white
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(
+                                        selectedOption == option
+                                        ? Color(red: 0.47, green: 0.69, blue: 0.19)
+                                        : Color.clear,
+                                        lineWidth: 2
+                                    )
+                            )
                             .cornerRadius(12)
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .padding(.horizontal)
                 
                 Spacer()
                 
-                Button {
+                Button(action: {
                     switch selectedOption {
-                    case .food: goToFood = true
-                    case .school: goToSchool = true
-                    case .clothing: goToClothing = true
-                    case .toys: goToToys = true
-                    case .none: break
+                    case .food:
+                        goToFood = true
+                    case .school:
+                        goToSchool = true
+                    case .clothing:
+                        goToClothing = true
+                    case .toys:
+                        goToToys = true
+                    case .none:
+                        break
                     }
-                } label: {
+                }) {
                     Text("Next")
+                        .font(.system(size: 20, weight: .bold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(selectedOption == nil ? .gray : .blue)
+                        .background(
+                            selectedOption == nil
+                            ? Color.gray
+                            : Color(red: 0.13, green: 0.49, blue: 0.69)
+                        )
                         .cornerRadius(12)
                 }
                 .disabled(selectedOption == nil)
-                .padding()
+                .padding(.horizontal)
+                .padding(.bottom, 40)
             }
-            .navigationDestination(isPresented: $goToFood) { DonateQuizFood() }
-            .navigationDestination(isPresented: $goToSchool) { DonateQuizSchool() }
-            .navigationDestination(isPresented: $goToClothing) { DonateQuizClothes() }
-            .navigationDestination(isPresented: $goToToys) { DonateQuizToys() }
+            .background(Color(red: 0.92, green: 0.94, blue: 0.89))
+            
+            // Navigation
+            .navigationDestination(isPresented: $goToFood) {
+                DonateQuizFood()
+            }
+            .navigationDestination(isPresented: $goToSchool) {
+                DonateQuizSS()
+            }
+            .navigationDestination(isPresented: $goToClothing) {
+                DonateQuizClothes()
+            }
+            .navigationDestination(isPresented: $goToToys) {
+                DonateQuizToys()
+            }
         }
     }
 }

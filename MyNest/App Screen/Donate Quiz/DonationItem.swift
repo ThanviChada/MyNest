@@ -1,4 +1,4 @@
-import Foundation
+/* import Foundation
 
 struct DonationItem: Identifiable {
     let id = UUID()
@@ -6,3 +6,4 @@ struct DonationItem: Identifiable {
     let quantity: Int
     let details: String?
 }
+*/
