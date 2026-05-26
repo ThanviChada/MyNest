@@ -3,94 +3,84 @@ import SwiftUI
 struct DonateQuizToys: View {
     
     var donationType: String = "Toys"
-    @State private var selectedItems: Set<String> = []
     
-    let options = [
-        "Educational",
-        "Art",
-        "Action Figures",
-        "Outdoor",
-        "Games"
-    ]
+    @State private var selected: Set<String> = []
+    @State private var quantities: [String: Int] = [:]
+    @State private var details: [String: String] = [:]
+    
+    let options = ["Educational","Art","Action Figures","Outdoor","Games"]
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 25) {
+            VStack {
                 
-                // Title
-                Text("What toys?")
-                    .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-                    .padding(.top, 40)
+                Text("Toys")
+                    .font(.title.bold())
+                    .padding()
                 
-                // Progress bar
-                ProgressView(value: 0.5)
-                    .tint(Color(red: 0.47, green: 0.69, blue: 0.19))
-                    .padding(.horizontal)
-                
-                // Options
-                VStack(spacing: 15) {
-                    ForEach(options, id: \.self) { option in
-                        HStack {
+                ScrollView {
+                    VStack(spacing: 12) {
+                        ForEach(options, id: \.self) { option in
                             
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(Color.gray, lineWidth: 1)
-                                    .frame(width: 20, height: 20)
+                            VStack {
+                                Text(option)
                                 
-                                if selectedItems.contains(option) {
-                                    RoundedRectangle(cornerRadius: 4)
-                                        .fill(Color(red: 0.47, green: 0.69, blue: 0.19))
-                                        .frame(width: 20, height: 20)
+                                if selected.contains(option) {
+                                    
+                                    TextField("Specify...", text: Binding(
+                                        get: { details[option] ?? "" },
+                                        set: { details[option] = $0 }
+                                    ))
+                                    .textFieldStyle(.roundedBorder)
+                                    
+                                    HStack {
+                                        Button("-") {
+                                            quantities[option, default: 1] = max(1, quantities[option, default: 1] - 1)
+                                        }
+                                        Text("\(quantities[option, default: 1])")
+                                        Button("+") {
+                                            quantities[option, default: 1] += 1
+                                        }
+                                        Spacer()
+                                    }
                                 }
                             }
-                            
-                            Text(option)
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-                            
-                            Spacer()
-                        }
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .onTapGesture {
-                            if selectedItems.contains(option) {
-                                selectedItems.remove(option)
-                            } else {
-                                selectedItems.insert(option)
+                            .padding()
+                            .background(selected.contains(option) ? Color.green.opacity(0.2) : .white)
+                            .onTapGesture {
+                                if selected.contains(option) {
+                                    selected.remove(option)
+                                } else {
+                                    selected.insert(option)
+                                    quantities[option] = 1
+                                }
                             }
                         }
                     }
+                    .padding()
                 }
-                .padding(.horizontal)
                 
-                Spacer()
-                
-                // NEXT → FINAL SCREEN
-                NavigationLink(
-                    destination: DonateQuizComplete(
+                NavigationLink {
+                    DonateQuizComplete(
                         donationType: donationType,
-                        selectedItems: Array(selectedItems)
+                        selectedItems: selected.map {
+                            DonationItem(
+                                name: $0,
+                                quantity: quantities[$0] ?? 1,
+                                details: details[$0]
+                            )
+                        }
                     )
-                ) {
+                } label: {
                     Text("Next")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
                         .padding()
-                        .background(
-                            selectedItems.isEmpty
-                            ? Color.gray
-                            : Color(red: 0.13, green: 0.49, blue: 0.69)
-                        )
+                        .frame(maxWidth: .infinity)
+                        .background(selected.isEmpty ? .gray : .blue)
+                        .foregroundColor(.white)
                         .cornerRadius(12)
                 }
-                .disabled(selectedItems.isEmpty)
-                .padding(.horizontal)
-                .padding(.bottom, 40)
+                .padding()
             }
-            .background(Color(red: 0.97, green: 0.94, blue: 0.88))
         }
     }
 }

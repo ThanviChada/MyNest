@@ -73,15 +73,15 @@ struct CreateAccount: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 200)
-                        .shadow(color: .black.opacity(0.08), radius: 10, x: 7, y: 12)
+                        .shadow(color: .black.opacity(0.08), radius: 20, x: 20, y: 12)
 
-                    VStack(spacing: 6) {
+                    VStack(spacing: 5) {
                         Text("Create Account")
                             .font(.system(size: 30, weight: .bold))
                             .foregroundColor(Color(red: 0.35, green: 0.20, blue: 0.12))
                     }
                     
-                    VStack(spacing: 24) {
+                    VStack(spacing: 15) {
 
                         lineField(title: "Name", text: $fullName, placeholder: "Full Name")
                         lineField(title: "Username", text: $username, placeholder: "Username")
@@ -141,7 +141,7 @@ struct CreateAccount: View {
             .navigationDestination(isPresented: $goToHome) {
                 HomeScreen(isNewUser: isNewUser)
             }
-            .navigationBarBackButtonHidden(true) // ✅ FIX ADDED HERE
+            .navigationBarBackButtonHidden(true)
         }
     }
     
