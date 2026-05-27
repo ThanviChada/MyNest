@@ -32,7 +32,9 @@ struct PickUpLoco: View {
                     .padding(.top, 40)
                 
                 ProgressView(value: 0.66)
-                    .tint(Color(red: 0.47, green: 0.69, blue: 0.19))
+                    .tint(
+                        Color(red: 0.47, green: 0.69, blue: 0.19)
+                    )
                     .padding(.horizontal)
                 
                 VStack(spacing: 15) {
@@ -53,6 +55,7 @@ struct PickUpLoco: View {
                                     .frame(width: 20, height: 20)
                                 
                                 if selectedLocation == option {
+                                    
                                     RoundedRectangle(cornerRadius: 4)
                                         .fill(Color.green)
                                         .frame(width: 20, height: 20)
@@ -60,9 +63,18 @@ struct PickUpLoco: View {
                             }
                             
                             Text(option)
-                                .font(.system(size: 20, weight: .semibold))
+                                .font(
+                                    .system(
+                                        size: 20,
+                                        weight: .semibold
+                                    )
+                                )
                                 .foregroundColor(
-                                    Color(red: 0.13, green: 0.49, blue: 0.69)
+                                    Color(
+                                        red: 0.13,
+                                        green: 0.49,
+                                        blue: 0.69
+                                    )
                                 )
                             
                             Spacer()

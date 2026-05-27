@@ -7,6 +7,8 @@ struct DonateQuizClothes: View {
     var donationType: String = "Clothes"
     
     @State private var selectedItems: Set<String> = []
+    @State private var quantities: [String: Int] = [:]
+    @State private var itemDetails: [String: String] = [:]
     
     let options = [
         "Shirts",
@@ -16,6 +18,23 @@ struct DonateQuizClothes: View {
         "Sweatshirts",
         "Winter Clothes"
     ]
+    
+    // FORMATTED DATA
+    var formattedItems: [String] {
+        
+        options.compactMap { option in
+            
+            if selectedItems.contains(option) {
+                
+                let detail = itemDetails[option] ?? ""
+                let quantity = quantities[option] ?? 1
+                
+                return "\(option) - \(detail) (Qty: \(quantity))"
+            }
+            
+            return nil
+        }
+    }
     
     var body: some View {
         
@@ -31,7 +50,9 @@ struct DonateQuizClothes: View {
                     .padding(.top, 40)
                 
                 ProgressView(value: 0.33)
-                    .tint(Color(red: 0.47, green: 0.69, blue: 0.19))
+                    .tint(
+                        Color(red: 0.47, green: 0.69, blue: 0.19)
+                    )
                     .padding(.horizontal)
                 
                 ScrollView {
@@ -40,47 +61,140 @@ struct DonateQuizClothes: View {
                         
                         ForEach(options, id: \.self) { option in
                             
-                            HStack {
+                            VStack(spacing: 12) {
                                 
-                                ZStack {
+                                HStack {
                                     
-                                    RoundedRectangle(cornerRadius: 4)
-                                        .stroke(
-                                            selectedItems.contains(option)
-                                            ? Color.green
-                                            : Color.gray,
-                                            lineWidth: 1
-                                        )
-                                        .frame(width: 20, height: 20)
-                                    
-                                    if selectedItems.contains(option) {
+                                    ZStack {
+                                        
                                         RoundedRectangle(cornerRadius: 4)
-                                            .fill(Color.green)
+                                            .stroke(
+                                                selectedItems.contains(option)
+                                                ? Color.green
+                                                : Color.gray,
+                                                lineWidth: 1
+                                            )
                                             .frame(width: 20, height: 20)
+                                        
+                                        if selectedItems.contains(option) {
+                                            
+                                            RoundedRectangle(cornerRadius: 4)
+                                                .fill(Color.green)
+                                                .frame(width: 20, height: 20)
+                                        }
                                     }
+                                    
+                                    Text(option)
+                                        .font(
+                                            .system(
+                                                size: 20,
+                                                weight: .semibold
+                                            )
+                                        )
+                                        .foregroundColor(
+                                            Color(
+                                                red: 0.13,
+                                                green: 0.49,
+                                                blue: 0.69
+                                            )
+                                        )
+                                    
+                                    Spacer()
                                 }
                                 
-                                Text(option)
-                                    .font(.system(size: 20, weight: .semibold))
-                                    .foregroundColor(
-                                        Color(red: 0.13, green: 0.49, blue: 0.69)
-                                    )
                                 
-                                Spacer()
+                                if selectedItems.contains(option) {
+                                    
+                                    TextField(
+                                        "Specify clothing item...",
+                                        text: Binding(
+                                            get: {
+                                                itemDetails[option] ?? ""
+                                            },
+                                            set: {
+                                                itemDetails[option] = $0
+                                            }
+                                        )
+                                    )
+                                    .padding()
+                                    .background(Color.white)
+                                    .cornerRadius(10)
+                                    
+                                    
+                                    HStack {
+                                        
+                                        Text("Quantity")
+                                            .foregroundColor(.gray)
+                                        
+                                        Spacer()
+                                        
+                                        Button {
+                                            
+                                            if let qty = quantities[option],
+                                               qty > 1 {
+                                                quantities[option] = qty - 1
+                                            }
+                                            
+                                        } label: {
+                                            
+                                            Image(
+                                                systemName:
+                                                    "minus.circle.fill"
+                                            )
+                                            .font(.system(size: 24))
+                                            .foregroundColor(.blue)
+                                        }
+                                        
+                                        
+                                        Text(
+                                            "\(quantities[option] ?? 1)"
+                                        )
+                                        .frame(width: 30)
+                                        .bold()
+                                        
+                                        
+                                        Button {
+                                            
+                                            quantities[
+                                                option,
+                                                default: 1
+                                            ] += 1
+                                            
+                                        } label: {
+                                            
+                                            Image(
+                                                systemName:
+                                                    "plus.circle.fill"
+                                            )
+                                            .font(.system(size: 24))
+                                            .foregroundColor(.green)
+                                        }
+                                    }
+                                }
                             }
                             .padding()
                             .background(
                                 selectedItems.contains(option)
-                                ? Color(red: 0.87, green: 0.94, blue: 0.84)
+                                ? Color(
+                                    red: 0.87,
+                                    green: 0.94,
+                                    blue: 0.84
+                                )
                                 : Color.white
                             )
                             .cornerRadius(12)
                             .onTapGesture {
                                 
                                 if selectedItems.contains(option) {
+                                    
                                     selectedItems.remove(option)
+                                    quantities.removeValue(forKey: option)
+                                    itemDetails.removeValue(forKey: option)
+                                    
                                 } else {
+                                    
                                     selectedItems.insert(option)
+                                    quantities[option] = 1
                                 }
                             }
                         }
@@ -93,7 +207,7 @@ struct DonateQuizClothes: View {
                 NavigationLink(
                     destination: PickUpLoco(
                         donationType: donationType,
-                        selectedItems: Array(selectedItems)
+                        selectedItems: formattedItems
                     )
                 ) {
                     
@@ -117,6 +231,7 @@ struct DonateQuizClothes: View {
             )
         }
     }
+    
 }
 
 #Preview {
