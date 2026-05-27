@@ -18,8 +18,12 @@ struct DonateQuizComplete: View {
             
             ZStack {
                 
-                Color(red: 0.92, green: 0.94, blue: 0.89)
-                    .ignoresSafeArea()
+                Color(
+                    red: 0.92,
+                    green: 0.94,
+                    blue: 0.89
+                )
+                .ignoresSafeArea()
                 
                 VStack(spacing: 20) {
                     
@@ -28,18 +32,35 @@ struct DonateQuizComplete: View {
                         Image(systemName: "checkmark.circle.fill")
                             .font(.system(size: 60))
                             .foregroundColor(
-                                Color(red: 0.47, green: 0.69, blue: 0.19)
+                                Color(
+                                    red: 0.47,
+                                    green: 0.69,
+                                    blue: 0.19
+                                )
                             )
                         
                         Text("Donation Submitted!")
-                            .font(.system(size: 28, weight: .bold))
+                            .font(
+                                .system(
+                                    size: 28,
+                                    weight: .bold
+                                )
+                            )
                             .foregroundColor(
-                                Color(red: 0.13, green: 0.49, blue: 0.69)
+                                Color(
+                                    red: 0.13,
+                                    green: 0.49,
+                                    blue: 0.69
+                                )
                             )
                         
                         Text("Thank you for your donation")
                             .foregroundColor(
-                                Color(red: 1, green: 0.68, blue: 0.15)
+                                Color(
+                                    red: 1,
+                                    green: 0.68,
+                                    blue: 0.15
+                                )
                             )
                     }
                     .frame(maxWidth: .infinity)
@@ -49,45 +70,94 @@ struct DonateQuizComplete: View {
                     .padding(.horizontal)
                     .padding(.top, 30)
                     
+                    
                     VStack(alignment: .leading, spacing: 18) {
                         
                         Text("Donation Summary")
-                            .font(.system(size: 24, weight: .bold))
+                            .font(
+                                .system(
+                                    size: 24,
+                                    weight: .bold
+                                )
+                            )
                             .foregroundColor(
-                                Color(red: 0.47, green: 0.69, blue: 0.19)
+                                Color(
+                                    red: 0.47,
+                                    green: 0.69,
+                                    blue: 0.19
+                                )
                             )
                         
-                        Group {
+                        
+                        VStack(alignment: .leading, spacing: 6) {
                             
                             Text("Category")
                                 .font(.headline)
                                 .foregroundColor(.gray)
                             
                             Text(donationType)
+                                .foregroundColor(
+                                    Color(
+                                        red: 0.13,
+                                        green: 0.49,
+                                        blue: 0.69
+                                    )
+                                )
+                        }
+                        
+                        
+                        VStack(alignment: .leading, spacing: 10) {
                             
                             Text("Items")
                                 .font(.headline)
                                 .foregroundColor(.gray)
                             
                             ForEach(selectedItems, id: \.self) { item in
+                                
                                 Text("• \(item)")
+                                    .foregroundColor(
+                                        Color(
+                                            red: 0.13,
+                                            green: 0.49,
+                                            blue: 0.69
+                                        )
+                                    )
                             }
+                        }
+                        
+                        
+                        VStack(alignment: .leading, spacing: 6) {
                             
                             Text("Pickup Location")
                                 .font(.headline)
                                 .foregroundColor(.gray)
                             
                             Text(pickupLocation)
+                                .foregroundColor(
+                                    Color(
+                                        red: 0.13,
+                                        green: 0.49,
+                                        blue: 0.69
+                                    )
+                                )
+                        }
+                        
+                        
+                        VStack(alignment: .leading, spacing: 6) {
                             
                             Text("Pickup Time")
                                 .font(.headline)
                                 .foregroundColor(.gray)
                             
                             Text(pickupTime)
+                                .foregroundColor(
+                                    Color(
+                                        red: 0.13,
+                                        green: 0.49,
+                                        blue: 0.69
+                                    )
+                                )
                         }
-                        .foregroundColor(
-                            Color(red: 0.13, green: 0.49, blue: 0.69)
-                        )
                     }
                     .padding()
                     .background(Color.white)
@@ -100,6 +170,18 @@ struct DonateQuizComplete: View {
             .navigationBarBackButtonHidden(true)
         }
     }
+}
+
+#Preview {
+    DonateQuizComplete(
+        donationType: "Food",
+        selectedItems: [
+            "Dairy - Milk (Qty: 2)",
+            "Fruit - Apples (Qty: 5)"
+        ],
+        pickupLocation: "Community Center",
+        pickupTime: "4:00 PM"
+    )
 }
 
 #Preview {
