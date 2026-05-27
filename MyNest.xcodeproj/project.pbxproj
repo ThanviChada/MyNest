@@ -30,7 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		25A98A2C2F854AB200A154C9 /* MyNest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyNest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		25A98A2C2F854AB200A154C9 /* \\\\\\\\\\\.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "\\\\\\\\\\\\\\\\\\\\\\.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		25A98A392F854AB500A154C9 /* MyNestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyNestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		25A98A432F854AB500A154C9 /* MyNestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyNestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		794818942F97C0DE00F7B95E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -118,7 +118,7 @@
 		25A98A2D2F854AB200A154C9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				25A98A2C2F854AB200A154C9 /* MyNest.app */,
+				25A98A2C2F854AB200A154C9 /* \\\\\\\\\\\.app */,
 				25A98A392F854AB500A154C9 /* MyNestTests.xctest */,
 				25A98A432F854AB500A154C9 /* MyNestUITests.xctest */,
 			);
@@ -128,9 +128,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		25A98A2B2F854AB200A154C9 /* MyNest */ = {
+		25A98A2B2F854AB200A154C9 /* \\\\\\\\\\\ */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 25A98A4D2F854AB500A154C9 /* Build configuration list for PBXNativeTarget "MyNest" */;
+			buildConfigurationList = 25A98A4D2F854AB500A154C9 /* Build configuration list for PBXNativeTarget "\\\\\\\\\\\" */;
 			buildPhases = (
 				25A98A282F854AB200A154C9 /* Sources */,
 				25A98A292F854AB200A154C9 /* Frameworks */,
@@ -143,11 +143,11 @@
 			fileSystemSynchronizedGroups = (
 				25A98A2E2F854AB200A154C9 /* MyNest */,
 			);
-			name = MyNest;
+			name = "\\\\\\\\\\\\\\\\\\\\\\";
 			packageProductDependencies = (
 			);
 			productName = MyNest;
-			productReference = 25A98A2C2F854AB200A154C9 /* MyNest.app */;
+			productReference = 25A98A2C2F854AB200A154C9 /* \\\\\\\\\\\.app */;
 			productType = "com.apple.product-type.application";
 		};
 		25A98A382F854AB500A154C9 /* MyNestTests */ = {
@@ -233,7 +233,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				25A98A2B2F854AB200A154C9 /* MyNest */,
+				25A98A2B2F854AB200A154C9 /* \\\\\\\\\\\ */,
 				25A98A382F854AB500A154C9 /* MyNestTests */,
 				25A98A422F854AB500A154C9 /* MyNestUITests */,
 			);
@@ -294,12 +294,12 @@
 /* Begin PBXTargetDependency section */
 		25A98A3B2F854AB500A154C9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 25A98A2B2F854AB200A154C9 /* MyNest */;
+			target = 25A98A2B2F854AB200A154C9 /* \\\\\\\\\\\ */;
 			targetProxy = 25A98A3A2F854AB500A154C9 /* PBXContainerItemProxy */;
 		};
 		25A98A452F854AB500A154C9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 25A98A2B2F854AB200A154C9 /* MyNest */;
+			target = 25A98A2B2F854AB200A154C9 /* \\\\\\\\\\\ */;
 			targetProxy = 25A98A442F854AB500A154C9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -564,7 +564,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		25A98A4D2F854AB500A154C9 /* Build configuration list for PBXNativeTarget "MyNest" */ = {
+		25A98A4D2F854AB500A154C9 /* Build configuration list for PBXNativeTarget "\\\\\\\\\\\" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				25A98A4E2F854AB500A154C9 /* Debug */,

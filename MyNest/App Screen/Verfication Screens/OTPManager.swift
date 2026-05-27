@@ -2,24 +2,30 @@ import Foundation
 
 class OTPManager: ObservableObject {
     
-    @Published var generatedCode: String = ""
-    @Published var phoneNumber: String = ""
+    @Published var phoneNumber = ""
     
-    // generate 4 digit code
+    private var generatedCode = ""
+    
+    // SEND OTP
+    
     func sendOTP(to number: String) {
+        
         phoneNumber = number
+        
         generatedCode = String(Int.random(in: 1000...9999))
         
-        // simulate sending SMS
-        print("📲 OTP sent to \(number):", generatedCode)
+        print("✅ OTP CODE: \(generatedCode)")
     }
+    
+    // VERIFY OTP
     
     func verify(code: String) -> Bool {
         return code == generatedCode
     }
     
+    // RESEND
+    
     func resend() {
         sendOTP(to: phoneNumber)
     }
 }
-
