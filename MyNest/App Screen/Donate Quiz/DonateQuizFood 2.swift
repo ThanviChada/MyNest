@@ -17,6 +17,26 @@ struct DonateQuizFood: View {
         "Snacks"
     ]
     
+    // ✅ FIX: formatted data sent to next screen
+    var formattedItems: [String] {
+        selectedFoods.compactMap { option in
+            
+            let detail = itemDetails[option]?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            let quantity = quantities[option] ?? 1
+            
+            return "\(option) - \(detail) (Qty: \(quantity))"
+        }
+    }
+    
+    // Validation (must type something for each selected item)
+    var canProceed: Bool {
+        !selectedFoods.isEmpty &&
+        selectedFoods.allSatisfy { option in
+            let text = itemDetails[option]?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            return !text.isEmpty
+        }
+    }
+    
     var body: some View {
         
         NavigationStack {
@@ -46,140 +66,80 @@ struct DonateQuizFood: View {
                             
                             VStack(spacing: 12) {
                                 
-                                // Main Row
                                 HStack {
                                     
-                                    // Checkbox
                                     ZStack {
-                                        
                                         RoundedRectangle(cornerRadius: 4)
                                             .stroke(
                                                 selectedFoods.contains(option)
-                                                ? Color(
-                                                    red: 0.47,
-                                                    green: 0.69,
-                                                    blue: 0.19
-                                                )
+                                                ? Color(red: 0.47, green: 0.69, blue: 0.19)
                                                 : Color.gray,
                                                 lineWidth: 1
                                             )
                                             .frame(width: 20, height: 20)
                                         
                                         if selectedFoods.contains(option) {
-                                            
                                             RoundedRectangle(cornerRadius: 4)
-                                                .fill(
-                                                    Color(
-                                                        red: 0.47,
-                                                        green: 0.69,
-                                                        blue: 0.19
-                                                    )
-                                                )
+                                                .fill(Color(red: 0.47, green: 0.69, blue: 0.19))
                                                 .frame(width: 20, height: 20)
                                         }
                                     }
                                     
                                     Text(option)
-                                        .font(
-                                            .system(
-                                                size: 20,
-                                                weight: .semibold
-                                            )
-                                        )
+                                        .font(.system(size: 20, weight: .semibold))
                                         .foregroundColor(
-                                            Color(
-                                                red: 0.13,
-                                                green: 0.49,
-                                                blue: 0.69
-                                            )
+                                            Color(red: 0.13, green: 0.49, blue: 0.69)
                                         )
                                     
                                     Spacer()
                                 }
                                 
-                                
-                                // Dropdown Section
+                                // Expanded section
                                 if selectedFoods.contains(option) {
                                     
                                     VStack(spacing: 12) {
                                         
-                                        // Item Description
                                         TextField(
                                             "Specify item type...",
                                             text: Binding(
-                                                get: {
-                                                    itemDetails[option] ?? ""
-                                                },
-                                                set: {
-                                                    itemDetails[option] = $0
-                                                }
+                                                get: { itemDetails[option] ?? "" },
+                                                set: { itemDetails[option] = $0 }
                                             )
                                         )
                                         .padding()
                                         .background(Color.white)
                                         .cornerRadius(10)
                                         
-                                        
-                                        // Quantity
                                         HStack {
-                                            
                                             Text("Quantity")
                                                 .foregroundColor(.gray)
                                             
                                             Spacer()
                                             
                                             Button {
-                                                
-                                                if let qty = quantities[option],
-                                                   qty > 1 {
+                                                if let qty = quantities[option], qty > 1 {
                                                     quantities[option] = qty - 1
                                                 }
-                                                
                                             } label: {
-                                                
-                                                Image(
-                                                    systemName:
-                                                        "minus.circle.fill"
-                                                )
-                                                .font(.system(size: 24))
-                                                .foregroundColor(
-                                                    Color(
-                                                        red: 0.13,
-                                                        green: 0.49,
-                                                        blue: 0.69
+                                                Image(systemName: "minus.circle.fill")
+                                                    .font(.system(size: 24))
+                                                    .foregroundColor(
+                                                        Color(red: 0.13, green: 0.49, blue: 0.69)
                                                     )
-                                                )
                                             }
                                             
-                                            
-                                            Text(
-                                                "\(quantities[option] ?? 1)"
-                                            )
-                                            .frame(width: 30)
-                                            .bold()
-                                            
+                                            Text("\(quantities[option] ?? 1)")
+                                                .frame(width: 30)
+                                                .bold()
                                             
                                             Button {
-                                                
-                                                quantities[
-                                                    option,
-                                                    default: 1
-                                                ] += 1
-                                                
+                                                quantities[option, default: 1] += 1
                                             } label: {
-                                                
-                                                Image(
-                                                    systemName:
-                                                        "plus.circle.fill"
-                                                )
-                                                .font(.system(size: 24))
-                                                .foregroundColor(
-                                                    Color(
-                                                        red: 0.47,
-                                                        green: 0.69,
-                                                        blue: 0.19
+                                                Image(systemName: "plus.circle.fill")
+                                                    .font(.system(size: 24))
+                                                    .foregroundColor(
+                                                        Color(red: 0.47, green: 0.69, blue: 0.19)
                                                     )
-                                                )
                                             }
                                         }
                                     }
@@ -188,24 +148,17 @@ struct DonateQuizFood: View {
                             .padding()
                             .background(
                                 selectedFoods.contains(option)
-                                ? Color(
-                                    red: 0.87,
-                                    green: 0.94,
-                                    blue: 0.84
-                                )
+                                ? Color(red: 0.87, green: 0.94, blue: 0.84)
                                 : Color.white
                             )
                             .cornerRadius(12)
                             .onTapGesture {
                                 
                                 if selectedFoods.contains(option) {
-                                    
                                     selectedFoods.remove(option)
                                     quantities.removeValue(forKey: option)
                                     itemDetails.removeValue(forKey: option)
-                                    
                                 } else {
-                                    
                                     selectedFoods.insert(option)
                                     quantities[option] = 1
                                 }
@@ -217,27 +170,24 @@ struct DonateQuizFood: View {
                 
                 Spacer()
                 
-                // Next Button
+                // Next Button (FIXED)
                 NavigationLink(
                     destination: PickUpLoco(
                         donationType: donationType,
-                        selectedItems: Array(selectedFoods)
+                        selectedItems: formattedItems   // ✅ FIXED HERE
                     )
                 ) {
-                    
                     Text("Next")
                         .font(.system(size: 20, weight: .bold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(
-                            selectedFoods.isEmpty
-                            ? Color.gray
-                            : Color.blue
+                            canProceed ? Color.blue : Color.gray
                         )
                         .cornerRadius(12)
                 }
-                .disabled(selectedFoods.isEmpty)
+                .disabled(!canProceed)
                 .padding()
             }
             .background(

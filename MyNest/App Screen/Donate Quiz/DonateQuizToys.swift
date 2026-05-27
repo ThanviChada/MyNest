@@ -1,5 +1,3 @@
-// MARK: - DonateQuizToys.swift
-
 import SwiftUI
 
 struct DonateQuizToys: View {
@@ -18,19 +16,23 @@ struct DonateQuizToys: View {
         "Games"
     ]
     
+    // ✅ formatted output for next screen
     var formattedItems: [String] {
-        
-        options.compactMap { option in
+        selectedItems.compactMap { option in
             
-            if selectedItems.contains(option) {
-                
-                let detail = itemDetails[option] ?? ""
-                let quantity = quantities[option] ?? 1
-                
-                return "\(option) - \(detail) (Qty: \(quantity))"
-            }
+            let detail = itemDetails[option]?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            let quantity = quantities[option] ?? 1
             
-            return nil
+            return "\(option) - \(detail) (Qty: \(quantity))"
+        }
+    }
+    
+    // ✅ must type something for EVERY selected item
+    var canProceed: Bool {
+        !selectedItems.isEmpty &&
+        selectedItems.allSatisfy { option in
+            let text = itemDetails[option]?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            return !text.isEmpty
         }
     }
     
@@ -64,7 +66,6 @@ struct DonateQuizToys: View {
                                 HStack {
                                     
                                     ZStack {
-                                        
                                         RoundedRectangle(cornerRadius: 4)
                                             .stroke(
                                                 selectedItems.contains(option)
@@ -75,7 +76,6 @@ struct DonateQuizToys: View {
                                             .frame(width: 20, height: 20)
                                         
                                         if selectedItems.contains(option) {
-                                            
                                             RoundedRectangle(cornerRadius: 4)
                                                 .fill(Color.green)
                                                 .frame(width: 20, height: 20)
@@ -83,89 +83,57 @@ struct DonateQuizToys: View {
                                     }
                                     
                                     Text(option)
-                                        .font(
-                                            .system(
-                                                size: 20,
-                                                weight: .semibold
-                                            )
-                                        )
+                                        .font(.system(size: 20, weight: .semibold))
                                         .foregroundColor(
-                                            Color(
-                                                red: 0.13,
-                                                green: 0.49,
-                                                blue: 0.69
-                                            )
+                                            Color(red: 0.13, green: 0.49, blue: 0.69)
                                         )
                                     
                                     Spacer()
                                 }
                                 
-                                
+                                // Expanded section
                                 if selectedItems.contains(option) {
                                     
-                                    TextField(
-                                        "Specify toy type...",
-                                        text: Binding(
-                                            get: {
-                                                itemDetails[option] ?? ""
-                                            },
-                                            set: {
-                                                itemDetails[option] = $0
-                                            }
-                                        )
-                                    )
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(10)
-                                    
-                                    
-                                    HStack {
+                                    VStack(spacing: 12) {
                                         
-                                        Text("Quantity")
-                                            .foregroundColor(.gray)
-                                        
-                                        Spacer()
-                                        
-                                        Button {
-                                            
-                                            if let qty = quantities[option],
-                                               qty > 1 {
-                                                quantities[option] = qty - 1
-                                            }
-                                            
-                                        } label: {
-                                            
-                                            Image(
-                                                systemName:
-                                                    "minus.circle.fill"
+                                        TextField(
+                                            "Specify toy type...",
+                                            text: Binding(
+                                                get: { itemDetails[option] ?? "" },
+                                                set: { itemDetails[option] = $0 }
                                             )
-                                            .font(.system(size: 24))
-                                            .foregroundColor(.blue)
-                                        }
-                                        
-                                        
-                                        Text(
-                                            "\(quantities[option] ?? 1)"
                                         )
-                                        .frame(width: 30)
-                                        .bold()
+                                        .padding()
+                                        .background(Color.white)
+                                        .cornerRadius(10)
                                         
-                                        
-                                        Button {
+                                        HStack {
+                                            Text("Quantity")
+                                                .foregroundColor(.gray)
                                             
-                                            quantities[
-                                                option,
-                                                default: 1
-                                            ] += 1
+                                            Spacer()
                                             
-                                        } label: {
+                                            Button {
+                                                if let qty = quantities[option], qty > 1 {
+                                                    quantities[option] = qty - 1
+                                                }
+                                            } label: {
+                                                Image(systemName: "minus.circle.fill")
+                                                    .font(.system(size: 24))
+                                                    .foregroundColor(.blue)
+                                            }
                                             
-                                            Image(
-                                                systemName:
-                                                    "plus.circle.fill"
-                                            )
-                                            .font(.system(size: 24))
-                                            .foregroundColor(.green)
+                                            Text("\(quantities[option] ?? 1)")
+                                                .frame(width: 30)
+                                                .bold()
+                                            
+                                            Button {
+                                                quantities[option, default: 1] += 1
+                                            } label: {
+                                                Image(systemName: "plus.circle.fill")
+                                                    .font(.system(size: 24))
+                                                    .foregroundColor(.green)
+                                            }
                                         }
                                     }
                                 }
@@ -173,24 +141,17 @@ struct DonateQuizToys: View {
                             .padding()
                             .background(
                                 selectedItems.contains(option)
-                                ? Color(
-                                    red: 0.87,
-                                    green: 0.94,
-                                    blue: 0.84
-                                )
+                                ? Color(red: 0.87, green: 0.94, blue: 0.84)
                                 : Color.white
                             )
                             .cornerRadius(12)
                             .onTapGesture {
                                 
                                 if selectedItems.contains(option) {
-                                    
                                     selectedItems.remove(option)
                                     quantities.removeValue(forKey: option)
                                     itemDetails.removeValue(forKey: option)
-                                    
                                 } else {
-                                    
                                     selectedItems.insert(option)
                                     quantities[option] = 1
                                 }
@@ -202,6 +163,7 @@ struct DonateQuizToys: View {
                 
                 Spacer()
                 
+                // Next Button (FIXED)
                 NavigationLink(
                     destination: PickUpLoco(
                         donationType: donationType,
@@ -215,13 +177,11 @@ struct DonateQuizToys: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(
-                            selectedItems.isEmpty
-                            ? Color.gray
-                            : Color.blue
+                            canProceed ? Color.blue : Color.gray
                         )
                         .cornerRadius(12)
                 }
-                .disabled(selectedItems.isEmpty)
+                .disabled(!canProceed)
                 .padding()
             }
             .background(
@@ -230,7 +190,6 @@ struct DonateQuizToys: View {
         }
     }
 }
-
 
 #Preview {
     DonateQuizToys()

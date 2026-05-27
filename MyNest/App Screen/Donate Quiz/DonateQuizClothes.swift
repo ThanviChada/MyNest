@@ -36,6 +36,15 @@ struct DonateQuizClothes: View {
         }
     }
     
+    // ✅ NEW: validation rule
+    var canProceed: Bool {
+        !selectedItems.isEmpty &&
+        selectedItems.allSatisfy { option in
+            let text = itemDetails[option]?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            return !text.isEmpty
+        }
+    }
+    
     var body: some View {
         
         NavigationStack {
@@ -85,41 +94,26 @@ struct DonateQuizClothes: View {
                                     }
                                     
                                     Text(option)
-                                        .font(
-                                            .system(
-                                                size: 20,
-                                                weight: .semibold
-                                            )
-                                        )
+                                        .font(.system(size: 20, weight: .semibold))
                                         .foregroundColor(
-                                            Color(
-                                                red: 0.13,
-                                                green: 0.49,
-                                                blue: 0.69
-                                            )
+                                            Color(red: 0.13, green: 0.49, blue: 0.69)
                                         )
                                     
                                     Spacer()
                                 }
-                                
                                 
                                 if selectedItems.contains(option) {
                                     
                                     TextField(
                                         "Specify clothing item...",
                                         text: Binding(
-                                            get: {
-                                                itemDetails[option] ?? ""
-                                            },
-                                            set: {
-                                                itemDetails[option] = $0
-                                            }
+                                            get: { itemDetails[option] ?? "" },
+                                            set: { itemDetails[option] = $0 }
                                         )
                                     )
                                     .padding()
                                     .background(Color.white)
                                     .cornerRadius(10)
-                                    
                                     
                                     HStack {
                                         
@@ -129,45 +123,25 @@ struct DonateQuizClothes: View {
                                         Spacer()
                                         
                                         Button {
-                                            
-                                            if let qty = quantities[option],
-                                               qty > 1 {
+                                            if let qty = quantities[option], qty > 1 {
                                                 quantities[option] = qty - 1
                                             }
-                                            
                                         } label: {
-                                            
-                                            Image(
-                                                systemName:
-                                                    "minus.circle.fill"
-                                            )
-                                            .font(.system(size: 24))
-                                            .foregroundColor(.blue)
+                                            Image(systemName: "minus.circle.fill")
+                                                .font(.system(size: 24))
+                                                .foregroundColor(.blue)
                                         }
                                         
-                                        
-                                        Text(
-                                            "\(quantities[option] ?? 1)"
-                                        )
-                                        .frame(width: 30)
-                                        .bold()
-                                        
+                                        Text("\(quantities[option] ?? 1)")
+                                            .frame(width: 30)
+                                            .bold()
                                         
                                         Button {
-                                            
-                                            quantities[
-                                                option,
-                                                default: 1
-                                            ] += 1
-                                            
+                                            quantities[option, default: 1] += 1
                                         } label: {
-                                            
-                                            Image(
-                                                systemName:
-                                                    "plus.circle.fill"
-                                            )
-                                            .font(.system(size: 24))
-                                            .foregroundColor(.green)
+                                            Image(systemName: "plus.circle.fill")
+                                                .font(.system(size: 24))
+                                                .foregroundColor(.green)
                                         }
                                     }
                                 }
@@ -175,11 +149,7 @@ struct DonateQuizClothes: View {
                             .padding()
                             .background(
                                 selectedItems.contains(option)
-                                ? Color(
-                                    red: 0.87,
-                                    green: 0.94,
-                                    blue: 0.84
-                                )
+                                ? Color(red: 0.87, green: 0.94, blue: 0.84)
                                 : Color.white
                             )
                             .cornerRadius(12)
@@ -217,13 +187,11 @@ struct DonateQuizClothes: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(
-                            selectedItems.isEmpty
-                            ? Color.gray
-                            : Color.blue
+                            canProceed ? Color.blue : Color.gray
                         )
                         .cornerRadius(12)
                 }
-                .disabled(selectedItems.isEmpty)
+                .disabled(!canProceed)
                 .padding()
             }
             .background(
@@ -231,7 +199,6 @@ struct DonateQuizClothes: View {
             )
         }
     }
-    
 }
 
 #Preview {
