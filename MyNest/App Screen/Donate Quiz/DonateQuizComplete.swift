@@ -2,8 +2,11 @@ import SwiftUI
 
 struct DonateQuizComplete: View {
     
+    // Data passed from quiz
     var donationType: String
     var selectedItems: [String]
+    var pickupLocation: String
+    var pickupTime: String
     
     @State private var goHome = false
     @State private var goProgress = false
@@ -20,81 +23,129 @@ struct DonateQuizComplete: View {
                 
                 VStack(spacing: 20) {
                     
-                    // Top card
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(.white)
-                            .frame(height: 200)
-                            .cornerRadius(10)
+                    // Success Card
+                    VStack(spacing: 12) {
                         
-                        VStack(spacing: 10) {
-                            
-                            Text("Donation Submitted!")
-                                .font(.system(size: 28, weight: .bold))
-                                .foregroundColor(
-                                    Color(red: 0.13, green: 0.49, blue: 0.69)
-                                )
-                            
-                            Text("Thank you for your donation")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(
-                                    Color(red: 1, green: 0.68, blue: 0.15)
-                                )
-                        }
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 60))
+                            .foregroundColor(
+                                Color(red: 0.47, green: 0.69, blue: 0.19)
+                            )
+                        
+                        Text("Donation Submitted!")
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundColor(
+                                Color(red: 0.13, green: 0.49, blue: 0.69)
+                            )
+                        
+                        Text("Thank you for your donation")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(
+                                Color(red: 1, green: 0.68, blue: 0.15)
+                            )
                     }
-                    .padding(.top, 40)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 35)
+                    .background(Color.white)
+                    .cornerRadius(20)
+                    .shadow(radius: 4)
                     .padding(.horizontal)
+                    .padding(.top, 30)
                     
-                    // Donation summary
-                    VStack(alignment: .leading, spacing: 12) {
+                    
+                    // Donation Summary Card
+                    VStack(alignment: .leading, spacing: 18) {
                         
-                        Text("Donate Summary")
+                        Text("Donation Summary")
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(
                                 Color(red: 0.47, green: 0.69, blue: 0.19)
                             )
                         
-                        // FIXED
-                        Text("Category: \(donationType)")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(
-                                Color(red: 0.13, green: 0.49, blue: 0.69)
-                            )
                         
-                        Text("Items:")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(
-                                Color(red: 0.13, green: 0.49, blue: 0.69)
-                            )
-                        
-                        if selectedItems.isEmpty {
-                            Text("No items selected")
+                        // Category
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Category")
+                                .font(.headline)
                                 .foregroundColor(.gray)
-                        } else {
-                            ForEach(selectedItems, id: \.self) { item in
-                                Text("• \(item)")
+                            
+                            Text(donationType)
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundColor(
+                                    Color(red: 0.13, green: 0.49, blue: 0.69)
+                                )
+                        }
+                        
+                        
+                        // Items
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Items")
+                                .font(.headline)
+                                .foregroundColor(.gray)
+                            
+                            if selectedItems.isEmpty {
+                                Text("No items selected")
+                                    .foregroundColor(.gray)
+                            } else {
+                                ForEach(selectedItems, id: \.self) { item in
+                                    HStack {
+                                        Image(systemName: "circle.fill")
+                                            .font(.system(size: 7))
+                                        
+                                        Text(item)
+                                    }
                                     .foregroundColor(
                                         Color(red: 0.13, green: 0.49, blue: 0.69)
                                     )
+                                }
                             }
+                        }
+                        
+                        
+                        // Pickup Location
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Pickup Location")
+                                .font(.headline)
+                                .foregroundColor(.gray)
+                            
+                            Text(pickupLocation)
+                                .foregroundColor(
+                                    Color(red: 0.13, green: 0.49, blue: 0.69)
+                                )
+                        }
+                        
+                        
+                        // Pickup Time
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Pickup Time")
+                                .font(.headline)
+                                .foregroundColor(.gray)
+                            
+                            Text(pickupTime)
+                                .foregroundColor(
+                                    Color(red: 0.13, green: 0.49, blue: 0.69)
+                                )
                         }
                     }
                     .padding()
                     .background(Color.white)
-                    .cornerRadius(10)
+                    .cornerRadius(20)
+                    .shadow(radius: 4)
                     .padding(.horizontal)
                     
                     Spacer()
+                    
                     
                     Text("Stay tuned for updates!")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(
                             Color(red: 0.13, green: 0.49, blue: 0.69)
                         )
-                        .padding(.bottom, 30)
                     
-                    // Navigation bar
+                    
+                    // Bottom Navigation
                     HStack {
+                        
                         Spacer()
                         
                         Text("Settings")
@@ -127,6 +178,7 @@ struct DonateQuizComplete: View {
                     .shadow(radius: 5)
                 }
             }
+            .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $goHome) {
                 HomeScreen(isNewUser: false)
             }
@@ -140,6 +192,8 @@ struct DonateQuizComplete: View {
 #Preview {
     DonateQuizComplete(
         donationType: "Food",
-        selectedItems: ["Protein", "Fruit"]
+        selectedItems: ["Dairy", "Fruit"],
+        pickupLocation: "Eden Prairie Community Center",
+        pickupTime: "May 30 • 4:00 PM"
     )
 }
