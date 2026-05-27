@@ -99,7 +99,9 @@ struct PhoneNumScreen: View {
 }
 
 struct PhoneNumScreen_Previews: PreviewProvider {
-     static var previews: some View {
+    
+    static var previews: some View {
+        
         PhoneNumScreen(
             fullName: "",
             username: "",
