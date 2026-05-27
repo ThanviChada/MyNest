@@ -2,46 +2,205 @@ import SwiftUI
 
 struct SettingScreen: View {
     
+    @State private var goHome = false
+    @State private var goProgress = false
+    
+    @State private var goAccount = false
+    @State private var goAbout = false
+    
     var body: some View {
+        
         NavigationStack {
             
-            VStack(spacing: 0) {
+            ZStack {
                 
-                // Search bar
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
-                    Text("Search for Setting")
-                        .foregroundColor(.gray)
-                    Spacer()
-                }
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(12)
-                .padding(.horizontal)
-                .padding(.top, 10)
+                // Background
+                Color(red: 0.92, green: 0.94, blue: 0.89)
+                    .ignoresSafeArea()
                 
-                // Settings list
                 VStack(spacing: 0) {
                     
-                    SettingRow(icon: "person", title: "Account")
-                    SettingRow(icon: "bell", title: "Notifications")
-                    SettingRow(icon: "lock", title: "Privacy and Security")
-                    SettingRow(icon: "headphones", title: "Help and Support")
-                    SettingRow(icon: "book", title: "About")
-                    SettingRow(icon: "arrow.right.square", title: "Logout")
+                    // Title
+                    HStack {
+                        Text("Settings")
+                            .font(.system(size: 34, weight: .bold))
+                            .foregroundColor(
+                                Color(red: 0.13, green: 0.49, blue: 0.69)
+                            )
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 20)
                     
+                    // Settings Cards
+                    VStack(spacing: 15) {
+                        
+                        SettingRow(
+                            icon: "person.fill",
+                            title: "Account"
+                        )
+                        .onTapGesture {
+                            goAccount = true
+                        }
+                        
+                        SettingRow(
+                            icon: "heart.text.square.fill",
+                            title: "About DonateConnect"
+                        )
+                        .onTapGesture {
+                            goAbout = true
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 25)
+                    
+                    // About App Card
+                    VStack(alignment: .leading, spacing: 14) {
+                        
+                        Text("About DonateConnect")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(
+                                Color(red: 0.47, green: 0.69, blue: 0.19)
+                            )
+                        
+                        Text("DonateConnect helps connect donors with people in need through a simple and organized platform.")
+                            .font(.system(size: 17, weight: .medium))
+                            .foregroundColor(
+                                Color(red: 0.13, green: 0.49, blue: 0.69)
+                            )
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            
+                            Label(
+                                "Donate food, clothing, toys, and school supplies",
+                                systemImage: "heart.fill"
+                            )
+                            
+                            Label(
+                                "Track donations and requests through the progress screen",
+                                systemImage: "chart.bar.fill"
+                            )
+                            
+                            Label(
+                                "Quick matching system for donors and recipients",
+                                systemImage: "person.2.fill"
+                            )
+                            
+                            Label(
+                                "Easy-to-use quizzes to organize requests",
+                                systemImage: "checkmark.circle.fill"
+                            )
+                        }
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(
+                            Color(red: 0.13, green: 0.49, blue: 0.69)
+                        )
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(18)
+                    .padding(.horizontal)
+                    .padding(.top, 30)
+                    .shadow(
+                        color: Color.black.opacity(0.05),
+                        radius: 4,
+                        x: 0,
+                        y: 3
+                    )
+                    
+                    Spacer()
+                    
+                    // Bottom Navigation Bar
+                    HStack {
+                        
+                        Spacer()
+                        
+                        VStack(spacing: 4) {
+                            Image(systemName: "gearshape.fill")
+                            
+                            Text("Settings")
+                                .font(
+                                    .custom(
+                                        "Instrument Sans",
+                                        size: 14
+                                    )
+                                    .weight(.bold)
+                                )
+                        }
+                        .foregroundColor(
+                            Color(red: 0.17, green: 0.60, blue: 0.80)
+                        )
+                        
+                        Spacer()
+                        
+                        VStack(spacing: 4) {
+                            Image(systemName: "house.fill")
+                            
+                            Text("Home")
+                                .font(
+                                    .custom(
+                                        "Instrument Sans",
+                                        size: 14
+                                    )
+                                    .weight(.bold)
+                                )
+                        }
+                        .foregroundColor(
+                            Color(red: 0.17, green: 0.60, blue: 0.80)
+                        )
+                        .onTapGesture {
+                            goHome = true
+                        }
+                        
+                        Spacer()
+                        
+                        VStack(spacing: 4) {
+                            Image(systemName: "chart.bar.fill")
+                            
+                            Text("Progress")
+                                .font(
+                                    .custom(
+                                        "Instrument Sans",
+                                        size: 14
+                                    )
+                                    .weight(.bold)
+                                )
+                        }
+                        .foregroundColor(
+                            Color(red: 0.17, green: 0.60, blue: 0.80)
+                        )
+                        .onTapGesture {
+                            goProgress = true
+                        }
+                        
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(20)
+                    .padding(.horizontal)
+                    .padding(.bottom, 10)
+                    .shadow(radius: 5)
                 }
-                .padding(.top, 10)
-                
-                Spacer()
-                
-                // Bottom Tab Bar
-                BottomTabBar()
             }
-            .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.large)
-            .background(Color(.systemGray6))
+            
+            // Navigation
+            .navigationDestination(isPresented: $goHome) {
+                HomeScreen(isNewUser: false)
+            }
+            
+            .navigationDestination(isPresented: $goProgress) {
+                ProgressScreen()
+            }
+            
+            .navigationDestination(isPresented: $goAccount) {
+                Text("Account Screen")
+            }
+            
+            .navigationDestination(isPresented: $goAbout) {
+                Text("About DonateConnect")
+            }
         }
     }
 }
@@ -50,66 +209,43 @@ struct SettingScreen: View {
     SettingScreen()
 }
 
+// MARK: - Setting Row
+
 struct SettingRow: View {
+    
     var icon: String
     var title: String
     
     var body: some View {
-        Button {
-            // action later
-        } label: {
-            HStack(spacing: 18) {
-                
-                Image(systemName: icon)
-                    .font(.system(size: 22))
-                    .frame(width: 28)
-                    .foregroundColor(.black)
-                
-                Text(title)
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(.black)
-                
-                Spacer()
-                
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.gray)
-            }
-            .padding()
-            .background(Color.white)
-        }
-        Divider()
-    }
-}
-struct BottomTabBar: View {
-    var body: some View {
-        HStack {
-            Spacer()
-            TabItem(icon: "gearshape.fill", title: "Setting")
-            Spacer()
-            TabItem(icon: "house.fill", title: "Home")
-            Spacer()
-            TabItem(icon: "chart.bar.fill", title: "Progress")
-            Spacer()
-        }
-        .padding(.vertical, 14)
-        .background(Color.white)
-        .cornerRadius(18)
-        .padding()
-        .shadow(radius: 5)
-    }
-}
-
-struct TabItem: View {
-    var icon: String
-    var title: String
-    
-    var body: some View {
-        VStack(spacing: 4) {
+        
+        HStack(spacing: 18) {
+            
             Image(systemName: icon)
+                .font(.system(size: 22))
+                .frame(width: 28)
+                .foregroundColor(
+                    Color(red: 0.13, green: 0.49, blue: 0.69)
+                )
+            
             Text(title)
-                .font(.system(size: 14, weight: .bold))
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundColor(
+                    Color(red: 0.13, green: 0.49, blue: 0.69)
+                )
+            
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+                .foregroundColor(.gray)
         }
-        .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
+        .padding()
+        .background(Color.white)
+        .cornerRadius(14)
+        .shadow(
+            color: Color.black.opacity(0.04),
+            radius: 3,
+            x: 0,
+            y: 2
+        )
     }
 }
-
