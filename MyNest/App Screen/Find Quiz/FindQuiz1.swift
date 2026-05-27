@@ -22,18 +22,25 @@ struct FindQuiz1: View {
                 
                 Text("What are you looking for?")
                     .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                    .foregroundColor(
+                        Color(red: 0.13, green: 0.49, blue: 0.69)
+                    )
                     .padding(.top, 40)
                 
-                // Progress bar
+                // Progress Bar
                 ProgressView(value: 0.1)
-                    .tint(Color(red: 0.47, green: 0.69, blue: 0.19))
+                    .tint(
+                        Color(red: 0.47, green: 0.69, blue: 0.19)
+                    )
                     .padding(.horizontal)
                 
                 VStack(spacing: 15) {
+                    
                     ForEach(RequestType.allCases, id: \.self) { option in
                         
                         HStack {
+                            
+                            // Checkbox
                             ZStack {
                                 RoundedRectangle(cornerRadius: 4)
                                     .stroke(Color.gray, lineWidth: 1)
@@ -41,20 +48,53 @@ struct FindQuiz1: View {
                                 
                                 if selectedOption == option {
                                     RoundedRectangle(cornerRadius: 4)
-                                        .fill(Color(red: 0.47, green: 0.69, blue: 0.19))
+                                        .fill(
+                                            Color(
+                                                red: 0.47,
+                                                green: 0.69,
+                                                blue: 0.19
+                                            )
+                                        )
                                         .frame(width: 20, height: 20)
                                 }
                             }
                             
                             Text(option.rawValue)
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                                .font(
+                                    .system(
+                                        size: 20,
+                                        weight: .semibold
+                                    )
+                                )
+                                .foregroundColor(
+                                    selectedOption == option
+                                    ? .white
+                                    : Color(
+                                        red: 0.13,
+                                        green: 0.49,
+                                        blue: 0.69
+                                    )
+                                )
                             
                             Spacer()
                         }
                         .padding()
-                        .background(Color.white)
+                        .background(
+                            selectedOption == option
+                            ? Color(
+                                red: 0.47,
+                                green: 0.69,
+                                blue: 0.19
+                            )
+                            : Color.white
+                        )
                         .cornerRadius(10)
+                        .shadow(
+                            color: Color.black.opacity(0.05),
+                            radius: 3,
+                            x: 0,
+                            y: 2
+                        )
                         .onTapGesture {
                             selectedOption = option
                         }
@@ -66,28 +106,60 @@ struct FindQuiz1: View {
                 
                 Button("Next") {
                     switch selectedOption {
-                    case .food: goFood = true
-                    case .school: goSchool = true
-                    case .clothing: goClothing = true
-                    case .toys: goToys = true
-                    default: break
+                    case .food:
+                        goFood = true
+                        
+                    case .school:
+                        goSchool = true
+                        
+                    case .clothing:
+                        goClothing = true
+                        
+                    case .toys:
+                        goToys = true
+                        
+                    default:
+                        break
                     }
                 }
                 .disabled(selectedOption == nil)
+                .font(.system(size: 20, weight: .bold))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(selectedOption == nil ? Color.gray : Color(red: 0.13, green: 0.49, blue: 0.69))
+                .background(
+                    selectedOption == nil
+                    ? Color.gray
+                    : Color(
+                        red: 0.13,
+                        green: 0.49,
+                        blue: 0.69
+                    )
+                )
                 .cornerRadius(12)
                 .padding(.horizontal)
                 .padding(.bottom, 40)
             }
-            .background(Color(red: 0.92, green: 0.94, blue: 0.89))
+            .background(
+                Color(red: 0.92, green: 0.94, blue: 0.89)
+            )
             
-            .navigationDestination(isPresented: $goFood) { FindQuizFood() }
-            .navigationDestination(isPresented: $goSchool) { FindQuizSS() }
-            .navigationDestination(isPresented: $goClothing) { FindQuizClothes() }
-            .navigationDestination(isPresented: $goToys) { FindQuizToys() }
+            // Navigation
+            .navigationDestination(isPresented: $goFood) {
+                FindQuizFood()
+            }
+            
+            .navigationDestination(isPresented: $goSchool) {
+                FindQuizSS()
+            }
+            
+            .navigationDestination(isPresented: $goClothing) {
+                FindQuizClothes()
+            }
+            
+            .navigationDestination(isPresented: $goToys) {
+                FindQuizToys()
+            }
         }
     }
 }
