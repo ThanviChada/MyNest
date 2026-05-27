@@ -5,92 +5,134 @@ struct DonateQuizComplete: View {
     var donationType: String
     var selectedItems: [String]
     
-    // ✅ ADDED (only change needed)
     @State private var goHome = false
+    @State private var goProgress = false
     
     var body: some View {
-        ZStack {
+        
+        NavigationStack {
             
-            // Background color
-            Color(red: 0.90, green: 0.96, blue: 0.99)
-                .ignoresSafeArea()
-            
-            VStack {
+            ZStack {
                 
-                VStack(spacing: 25) {
+                // Background
+                Color(red: 0.92, green: 0.94, blue: 0.89)
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 20) {
                     
-                    Text("Completed!")
-                        .font(.system(size: 32, weight: .bold))
-                        .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-                        .padding(.top, 40)
+                    // Top card
+                    ZStack {
+                        Rectangle()
+                            .foregroundColor(.white)
+                            .frame(height: 200)
+                            .cornerRadius(10)
+                        
+                        VStack(spacing: 10) {
+                            
+                            Text("Donation Submitted!")
+                                .font(.system(size: 28, weight: .bold))
+                                .foregroundColor(
+                                    Color(red: 0.13, green: 0.49, blue: 0.69)
+                                )
+                            
+                            Text("Thank you for your donation")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(
+                                    Color(red: 1, green: 0.68, blue: 0.15)
+                                )
+                        }
+                    }
+                    .padding(.top, 40)
+                    .padding(.horizontal)
                     
-                    Text("Your donation has been submitted!")
-                        .font(.system(size: 40, weight: .semibold))
-                        .foregroundColor(.orange)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                    
+                    // Donation summary
                     VStack(alignment: .leading, spacing: 12) {
                         
-                        Text("Order Summary")
-                            .font(.system(size: 40, weight: .bold))
-                            .foregroundColor(Color(red: 0.47, green: 0.69, blue: 0.19))
+                        Text("Donate Summary")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(
+                                Color(red: 0.47, green: 0.69, blue: 0.19)
+                            )
                         
+                        // FIXED
                         Text("Category: \(donationType)")
                             .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(
+                                Color(red: 0.13, green: 0.49, blue: 0.69)
+                            )
                         
                         Text("Items:")
                             .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(
+                                Color(red: 0.13, green: 0.49, blue: 0.69)
+                            )
                         
-                        ForEach(selectedItems, id: \.self) { item in
-                            Text("• \(item)")
-                                .font(.system(size: 16))
+                        if selectedItems.isEmpty {
+                            Text("No items selected")
+                                .foregroundColor(.gray)
+                        } else {
+                            ForEach(selectedItems, id: \.self) { item in
+                                Text("• \(item)")
+                                    .foregroundColor(
+                                        Color(red: 0.13, green: 0.49, blue: 0.69)
+                                    )
+                            }
                         }
                     }
                     .padding()
                     .background(Color.white)
-                    .cornerRadius(12)
+                    .cornerRadius(10)
                     .padding(.horizontal)
                     
                     Spacer()
                     
                     Text("Stay tuned for updates!")
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                        .foregroundColor(
+                            Color(red: 0.13, green: 0.49, blue: 0.69)
+                        )
+                        .padding(.bottom, 30)
+                    
+                    // Navigation bar
+                    HStack {
+                        Spacer()
+                        
+                        Text("Settings")
+                        
+                        Spacer()
+                        
+                        Text("Home")
+                            .onTapGesture {
+                                goHome = true
+                            }
+                        
+                        Spacer()
+                        
+                        Text("Progress")
+                            .onTapGesture {
+                                goProgress = true
+                            }
+                        
+                        Spacer()
+                    }
+                    .font(.custom("Instrument Sans", size: 22).weight(.bold))
+                    .foregroundColor(
+                        Color(red: 0.17, green: 0.60, blue: 0.80)
+                    )
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(20)
+                    .padding(.horizontal)
+                    .padding(.bottom, 10)
+                    .shadow(radius: 5)
                 }
-                
-                // Bottom Nav Bar (UI unchanged)
-                HStack {
-                    Spacer()
-                    
-                    Text("Setting")
-                    
-                    Spacer()
-                    
-                    Text("Home")
-                        .onTapGesture {
-                            goHome = true   // ✅ FIXED NAVIGATION
-                        }
-                    
-                    Spacer()
-                    
-                    Text("Progress")
-                    
-                    Spacer()
-                }
-                .font(.custom("Instrument Sans", size: 22).weight(.bold))
-                .foregroundColor(Color(red: 0.17, green: 0.60, blue: 0.80))
-                .padding()
-                .background(Color.white)
-                .cornerRadius(20)
-                .padding(.horizontal)
-                .padding(.bottom, 10)
-                .shadow(radius: 5)
             }
-        }
-        // ✅ FORCES HOME SCREEN NAVIGATION
-        .navigationDestination(isPresented: $goHome) {
-            HomeScreen(isNewUser: false)
+            .navigationDestination(isPresented: $goHome) {
+                HomeScreen(isNewUser: false)
+            }
+            .navigationDestination(isPresented: $goProgress) {
+                ProgressScreen()
+            }
         }
     }
 }

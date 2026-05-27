@@ -32,32 +32,54 @@ struct DonateQuiz1: View {
                 
                 VStack(spacing: 20) {
                     ForEach(DonationType.allCases, id: \.self) { option in
-                        HStack {
-                            
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(Color.gray, lineWidth: 1)
-                                    .frame(width: 20, height: 20)
-                                
-                                if selectedOption == option {
-                                    RoundedRectangle(cornerRadius: 4)
-                                        .fill(Color(red: 0.47, green: 0.69, blue: 0.19))
-                                        .frame(width: 20, height: 20)
-                                }
-                            }
-                            
-                            Text(option.rawValue)
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-                            
-                            Spacer()
-                        }
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .onTapGesture {
+                        
+                        Button(action: {
                             selectedOption = option
+                        }) {
+                            HStack {
+                                
+                                ZStack {
+                                    Circle()
+                                        .stroke(
+                                            selectedOption == option
+                                            ? Color(red: 0.47, green: 0.69, blue: 0.19)
+                                            : Color.gray,
+                                            lineWidth: 2
+                                        )
+                                        .frame(width: 24, height: 24)
+                                    
+                                    if selectedOption == option {
+                                        Circle()
+                                            .fill(Color(red: 0.47, green: 0.69, blue: 0.19))
+                                            .frame(width: 12, height: 12)
+                                    }
+                                }
+                                
+                                Text(option.rawValue)
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                                
+                                Spacer()
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                selectedOption == option
+                                ? Color(red: 0.87, green: 0.94, blue: 0.84)
+                                : Color.white
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(
+                                        selectedOption == option
+                                        ? Color(red: 0.47, green: 0.69, blue: 0.19)
+                                        : Color.clear,
+                                        lineWidth: 2
+                                    )
+                            )
+                            .cornerRadius(12)
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .padding(.horizontal)
@@ -101,7 +123,7 @@ struct DonateQuiz1: View {
                 DonateQuizFood()
             }
             .navigationDestination(isPresented: $goToSchool) {
-                DonateQuizSchool()
+                DonateQuizSS()
             }
             .navigationDestination(isPresented: $goToClothing) {
                 DonateQuizClothes()
