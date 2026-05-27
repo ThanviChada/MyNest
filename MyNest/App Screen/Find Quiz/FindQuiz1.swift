@@ -11,14 +11,14 @@ struct FindQuiz1: View {
     
     @State private var selectedOption: RequestType? = nil
     
-    @State private var goFood = false
-    @State private var goSchool = false
-    @State private var goClothing = false
-    @State private var goToys = false
+    @State private var goToFood = false
+    @State private var goToSchool = false
+    @State private var goToClothing = false
+    @State private var goToToys = false
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 25) {
+            VStack(spacing: 30) {
                 
                 Text("What are you looking for?")
                     .font(.system(size: 28, weight: .bold))
@@ -27,116 +27,135 @@ struct FindQuiz1: View {
                     )
                     .padding(.top, 40)
                 
-                // Progress Bar
+                // Progress bar
                 ProgressView(value: 0.1)
                     .tint(
                         Color(red: 0.47, green: 0.69, blue: 0.19)
                     )
                     .padding(.horizontal)
                 
-                VStack(spacing: 15) {
+                VStack(spacing: 20) {
                     
                     ForEach(RequestType.allCases, id: \.self) { option in
                         
-                        HStack {
+                        Button(action: {
+                            selectedOption = option
+                        }) {
                             
-                            // Checkbox
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(Color.gray, lineWidth: 1)
-                                    .frame(width: 20, height: 20)
+                            HStack {
                                 
-                                if selectedOption == option {
-                                    RoundedRectangle(cornerRadius: 4)
-                                        .fill(
-                                            Color(
+                                ZStack {
+                                    Circle()
+                                        .stroke(
+                                            selectedOption == option
+                                            ? Color(
                                                 red: 0.47,
                                                 green: 0.69,
                                                 blue: 0.19
                                             )
+                                            : Color.gray,
+                                            lineWidth: 2
                                         )
-                                        .frame(width: 20, height: 20)
+                                        .frame(width: 24, height: 24)
+                                    
+                                    if selectedOption == option {
+                                        Circle()
+                                            .fill(
+                                                Color(
+                                                    red: 0.47,
+                                                    green: 0.69,
+                                                    blue: 0.19
+                                                )
+                                            )
+                                            .frame(width: 12, height: 12)
+                                    }
                                 }
+                                
+                                Text(option.rawValue)
+                                    .font(
+                                        .system(
+                                            size: 20,
+                                            weight: .semibold
+                                        )
+                                    )
+                                    .foregroundColor(
+                                        Color(
+                                            red: 0.13,
+                                            green: 0.49,
+                                            blue: 0.69
+                                        )
+                                    )
+                                
+                                Spacer()
                             }
-                            
-                            Text(option.rawValue)
-                                .font(
-                                    .system(
-                                        size: 20,
-                                        weight: .semibold
-                                    )
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                selectedOption == option
+                                ? Color(
+                                    red: 0.87,
+                                    green: 0.94,
+                                    blue: 0.84
                                 )
-                                .foregroundColor(
-                                    selectedOption == option
-                                    ? .white
-                                    : Color(
-                                        red: 0.13,
-                                        green: 0.49,
-                                        blue: 0.69
-                                    )
-                                )
-                            
-                            Spacer()
-                        }
-                        .padding()
-                        .background(
-                            selectedOption == option
-                            ? Color(
-                                red: 0.47,
-                                green: 0.69,
-                                blue: 0.19
+                                : Color.white
                             )
-                            : Color.white
-                        )
-                        .cornerRadius(10)
-                        .shadow(
-                            color: Color.black.opacity(0.05),
-                            radius: 3,
-                            x: 0,
-                            y: 2
-                        )
-                        .onTapGesture {
-                            selectedOption = option
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(
+                                        selectedOption == option
+                                        ? Color(
+                                            red: 0.47,
+                                            green: 0.69,
+                                            blue: 0.19
+                                        )
+                                        : Color.clear,
+                                        lineWidth: 2
+                                    )
+                            )
+                            .cornerRadius(12)
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .padding(.horizontal)
                 
                 Spacer()
                 
-                Button("Next") {
+                Button(action: {
                     switch selectedOption {
                     case .food:
-                        goFood = true
+                        goToFood = true
                         
                     case .school:
-                        goSchool = true
+                        goToSchool = true
                         
                     case .clothing:
-                        goClothing = true
+                        goToClothing = true
                         
                     case .toys:
-                        goToys = true
+                        goToToys = true
                         
-                    default:
+                    case .none:
                         break
                     }
+                }) {
+                    Text("Next")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(
+                            selectedOption == nil
+                            ? Color.gray
+                            : Color(
+                                red: 0.13,
+                                green: 0.49,
+                                blue: 0.69
+                            )
+                        )
+                        .cornerRadius(12)
                 }
                 .disabled(selectedOption == nil)
-                .font(.system(size: 20, weight: .bold))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    selectedOption == nil
-                    ? Color.gray
-                    : Color(
-                        red: 0.13,
-                        green: 0.49,
-                        blue: 0.69
-                    )
-                )
-                .cornerRadius(12)
                 .padding(.horizontal)
                 .padding(.bottom, 40)
             }
@@ -145,19 +164,19 @@ struct FindQuiz1: View {
             )
             
             // Navigation
-            .navigationDestination(isPresented: $goFood) {
+            .navigationDestination(isPresented: $goToFood) {
                 FindQuizFood()
             }
             
-            .navigationDestination(isPresented: $goSchool) {
+            .navigationDestination(isPresented: $goToSchool) {
                 FindQuizSS()
             }
             
-            .navigationDestination(isPresented: $goClothing) {
+            .navigationDestination(isPresented: $goToClothing) {
                 FindQuizClothes()
             }
             
-            .navigationDestination(isPresented: $goToys) {
+            .navigationDestination(isPresented: $goToToys) {
                 FindQuizToys()
             }
         }
@@ -169,4 +188,3 @@ struct FindQuiz1_Previews: PreviewProvider {
         FindQuiz1()
     }
 }
-
