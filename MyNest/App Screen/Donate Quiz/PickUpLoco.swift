@@ -1,10 +1,13 @@
+// MARK: - PickUpLoco.swift
+
 import SwiftUI
 
 struct PickUpLoco: View {
     
-    var donationType: String = "Pick Up Time and Location"
+    var donationType: String
+    var selectedItems: [String]
     
-    @State private var selectedItems: Set<String> = []
+    @State private var selectedLocation: String? = nil
     @State private var pickupTime = Date()
     
     let options = [
@@ -16,63 +19,71 @@ struct PickUpLoco: View {
     ]
     
     var body: some View {
+        
         NavigationStack {
+            
             VStack(spacing: 25) {
                 
-                // Title
                 Text("Pick Up Details")
                     .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                    .foregroundColor(
+                        Color(red: 0.13, green: 0.49, blue: 0.69)
+                    )
                     .padding(.top, 40)
                 
-                // Progress Bar
-                ProgressView(value: 0.5)
+                ProgressView(value: 0.66)
                     .tint(Color(red: 0.47, green: 0.69, blue: 0.19))
                     .padding(.horizontal)
                 
-                // Location Options
                 VStack(spacing: 15) {
+                    
                     ForEach(options, id: \.self) { option in
+                        
                         HStack {
                             
                             ZStack {
+                                
                                 RoundedRectangle(cornerRadius: 4)
-                                    .stroke(Color.gray, lineWidth: 1)
+                                    .stroke(
+                                        selectedLocation == option
+                                        ? Color.green
+                                        : Color.gray,
+                                        lineWidth: 1
+                                    )
                                     .frame(width: 20, height: 20)
                                 
-                                if selectedItems.contains(option) {
+                                if selectedLocation == option {
                                     RoundedRectangle(cornerRadius: 4)
-                                        .fill(Color(red: 0.47, green: 0.69, blue: 0.19))
+                                        .fill(Color.green)
                                         .frame(width: 20, height: 20)
                                 }
                             }
                             
                             Text(option)
                                 .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                                .foregroundColor(
+                                    Color(red: 0.13, green: 0.49, blue: 0.69)
+                                )
                             
                             Spacer()
                         }
                         .padding()
                         .background(Color.white)
-                        .cornerRadius(10)
+                        .cornerRadius(12)
                         .onTapGesture {
-                            if selectedItems.contains(option) {
-                                selectedItems.remove(option)
-                            } else {
-                                selectedItems.insert(option)
-                            }
+                            selectedLocation = option
                         }
                     }
                 }
                 .padding(.horizontal)
                 
-                // Pickup Time
                 VStack(alignment: .leading, spacing: 10) {
                     
                     Text("Pick Up Time")
                         .font(.system(size: 22, weight: .bold))
-                        .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                        .foregroundColor(
+                            Color(red: 0.13, green: 0.49, blue: 0.69)
+                        )
                     
                     DatePicker(
                         "Select Time",
@@ -82,7 +93,6 @@ struct PickUpLoco: View {
                     .datePickerStyle(.wheel)
                     .labelsHidden()
                     .frame(maxHeight: 150)
-                    .clipped()
                     .background(Color.white)
                     .cornerRadius(12)
                 }
@@ -90,37 +100,43 @@ struct PickUpLoco: View {
                 
                 Spacer()
                 
-                // Next Button
                 NavigationLink(
                     destination: DonateQuizComplete(
                         donationType: donationType,
-                        selectedItems: Array(selectedItems),
-               
+                        selectedItems: selectedItems,
+                        pickupLocation: selectedLocation ?? "",
+                        pickupTime: pickupTime.formatted(
+                            date: .omitted,
+                            time: .shortened
+                        )
                     )
                 ) {
-                    Text("Next")
+                    
+                    Text("Submit")
                         .font(.system(size: 20, weight: .bold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(
-                            selectedItems.isEmpty
+                            selectedLocation == nil
                             ? Color.gray
-                            : Color(red: 0.13, green: 0.49, blue: 0.69)
+                            : Color.blue
                         )
                         .cornerRadius(12)
                 }
-                .disabled(selectedItems.isEmpty)
-                .padding(.horizontal)
-                .padding(.bottom, 40)
+                .disabled(selectedLocation == nil)
+                .padding()
             }
-            .background(Color(red: 0.97, green: 0.94, blue: 0.88))
+            .background(
+                Color(red: 0.97, green: 0.94, blue: 0.88)
+            )
         }
     }
 }
 
-struct PickUpLoco_Previews: PreviewProvider {
-    static var previews: some View {
-        PickUpLoco()
-    }
+#Preview {
+    PickUpLoco(
+        donationType: "Food",
+        selectedItems: ["Fruit", "Protein"]
+    )
 }
