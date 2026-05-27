@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "25A98A2B2F854AB200A154C9"
-               BuildableName = "MyNest.app"
-               BlueprintName = "MyNest"
+               BuildableName = "\\\\\\\\\\\.app"
+               BlueprintName = "\\\\\\\\\\\"
                ReferencedContainer = "container:MyNest.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -69,8 +69,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "25A98A2B2F854AB200A154C9"
-            BuildableName = "MyNest.app"
-            BlueprintName = "MyNest"
+            BuildableName = "\\\\\\\\\\\.app"
+            BlueprintName = "\\\\\\\\\\\"
             ReferencedContainer = "container:MyNest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -86,8 +86,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "25A98A2B2F854AB200A154C9"
-            BuildableName = "MyNest.app"
-            BlueprintName = "MyNest"
+            BuildableName = "\\\\\\\\\\\.app"
+            BlueprintName = "\\\\\\\\\\\"
             ReferencedContainer = "container:MyNest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -22,7 +22,7 @@ let samplePosts: [Post] = [
         location: "Eden Prairie",
         time: "4 PM",
         date: "Today",
-        message: "Giving away a desk lamp in great condition!",
+        message: "Category: Food Type: Protein",
         comments: ["Is this still available?", "Can pick up today!"]
     ),
     
@@ -33,7 +33,7 @@ let samplePosts: [Post] = [
         location: "Minnetonka",
         time: "6 PM",
         date: "May 10",
-        message: "Free winter jacket size M 😊",
+        message: "Category: Clothes  Type: Winter Clothing",
         comments: []
     )
 ]

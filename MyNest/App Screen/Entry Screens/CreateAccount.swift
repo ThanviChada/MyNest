@@ -2,6 +2,8 @@ import SwiftUI
 
 struct CreateAccount: View {
     
+    @EnvironmentObject var authManager: AuthManager
+    
     @State private var fullName = ""
     @State private var username = ""
     @State private var password = ""
@@ -10,8 +12,8 @@ struct CreateAccount: View {
     @State private var showPassword = false
     @State private var showConfirmPassword = false
     @State private var showError = false
-    @State private var goToHome = false
-    @State private var isNewUser = false
+    
+    @State private var goToPhone = false
     
     
     var passwordValid: Bool {
@@ -111,14 +113,15 @@ struct CreateAccount: View {
                     Spacer()
 
                     Button(action: {
+                        
                         if password != confirmPassword || !passwordValid {
                             showError = true
                             return
                         }
 
                         showError = false
-                        isNewUser = true
-                        goToHome = true
+                        goToPhone = true
+                        
                     }) {
                         Text("Create Account")
                             .font(.system(size: 19, weight: .bold))
@@ -138,8 +141,13 @@ struct CreateAccount: View {
                     .padding(.bottom, 30)
                 }
             }
-            .navigationDestination(isPresented: $goToHome) {
-                HomeScreen(isNewUser: isNewUser)
+            .navigationDestination(isPresented: $goToPhone) {
+                
+                PhoneNumScreen(
+                    fullName: fullName,
+                    username: username,
+                    password: password
+                )
             }
             .navigationBarBackButtonHidden(true)
         }
@@ -198,14 +206,10 @@ struct CreateAccount: View {
                         TextField("", text: text)
                             .foregroundColor(.black)
                             .font(.system(size: 16))
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled(true)
                     } else {
                         SecureField("", text: text)
                             .foregroundColor(.black)
                             .font(.system(size: 16))
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled(true)
                     }
                 }
                 
