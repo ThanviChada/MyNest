@@ -10,6 +10,7 @@ struct PhoneNumScreen: View {
     
     @State private var phoneNumber = ""
     @State private var goToVerification = false
+    @State private var isSendingCode = false
     
     @StateObject var otpManager = OTPManager()
     
@@ -55,20 +56,43 @@ struct PhoneNumScreen: View {
                         Text("Enter a valid phone number")
                             .foregroundColor(.red)
                     }
+
+                    if let errorMessage = otpManager.lastErrorMessage {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                            .font(.caption)
+                    }
                     
                     Spacer()
                     
-                    Button("Next") {
-                        otpManager.sendOTP(to: digitsOnly)
-                        goToVerification = true
+                    Button {
+                        isSendingCode = true
+
+                        Task {
+                            let sent = await otpManager.sendOTP(to: digitsOnly)
+                            isSendingCode = false
+
+                            if sent {
+                                goToVerification = true
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            if isSendingCode {
+                                ProgressView()
+                                    .tint(.white)
+                            }
+
+                            Text(isSendingCode ? "Sending..." : "Next")
+                        }
                     }
                     .font(.custom("Instrument Sans", size: 22).weight(.bold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(formValid ? Color.green : Color.gray)
+                    .background(formValid && !isSendingCode ? Color.green : Color.gray)
                     .cornerRadius(18)
-                    .disabled(!formValid)
+                    .disabled(!formValid || isSendingCode)
                 }
                 .padding(28)
             }

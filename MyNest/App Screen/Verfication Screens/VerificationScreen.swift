@@ -14,8 +14,7 @@ struct VerificationScreen: View {
     @State private var code2 = ""
     @State private var code3 = ""
     @State private var code4 = ""
-    
-    @State private var wrongCode = false
+    @State private var isSubmitting = false
     
     var enteredCode: String {
         code1 + code2 + code3 + code4
@@ -52,39 +51,63 @@ struct VerificationScreen: View {
                         otpBox(text: $code3)
                         otpBox(text: $code4)
                     }
-                    
-                    if wrongCode {
-                        Text("Incorrect code. Try again.")
+
+                    if let errorMessage = otpManager.lastErrorMessage ?? authManager.lastErrorMessage {
+                        Text(errorMessage)
                             .foregroundColor(.red)
                     }
                     
                     Spacer()
                     
-                    Button("Continue") {
-                        if otpManager.verify(code: enteredCode) {
-                            authManager.createAccount(
+                    Button {
+                        guard let verificationID = otpManager.verificationID else {
+                            authManager.lastErrorMessage = "Missing verification session. Please resend the code."
+                            return
+                        }
+                        
+                        isSubmitting = true
+                        
+                        Task {
+                            let success = await authManager.createAccount(
                                 fullName: fullName,
                                 username: username,
                                 password: password,
-                                phoneNumber: phoneNumber
+                                phoneNumber: phoneNumber,
+                                verificationID: verificationID,
+                                verificationCode: enteredCode
                             )
-                        } else {
-                            wrongCode = true
+                            
+                            isSubmitting = false
+                            
+                            if success {
+                                otpManager.clearVerificationState()
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            if isSubmitting {
+                                ProgressView()
+                                    .tint(.white)
+                            }
+                            
+                            Text(isSubmitting ? "Saving..." : "Continue")
                         }
                     }
                     .font(.custom("Instrument Sans", size: 22).weight(.bold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(codeComplete ? Color.green : Color.gray)
+                    .background(codeComplete && !isSubmitting ? Color.green : Color.gray)
                     .cornerRadius(18)
-                    .disabled(!codeComplete)
+                    .disabled(!codeComplete || isSubmitting)
                     
                     VStack {
                         Text("Didn’t receive a code?")
                         
                         Button("RESEND") {
-                            otpManager.resend()
+                            Task {
+                                _ = await otpManager.resend()
+                            }
                         }
                         .foregroundColor(.green)
                     }

@@ -1,31 +1,55 @@
 import Foundation
+#if canImport(FirebaseAuth)
+import FirebaseAuth
+#endif
 
-class OTPManager: ObservableObject {
-    
+@MainActor
+final class OTPManager: ObservableObject {
     @Published var phoneNumber = ""
-    
-    private var generatedCode = ""
-    
-    // SEND OTP
-    
-    func sendOTP(to number: String) {
-        
+    @Published var verificationID: String?
+    @Published var lastErrorMessage: String?
+
+    private let verificationKey = "authVerificationID"
+
+    init() {
+        verificationID = UserDefaults.standard.string(forKey: verificationKey)
+    }
+
+    func sendOTP(to number: String) async -> Bool {
         phoneNumber = number
-        
-        generatedCode = String(Int.random(in: 1000...9999))
-        
-        print("✅ OTP CODE: \(generatedCode)")
+        lastErrorMessage = nil
+
+#if canImport(FirebaseAuth)
+        return await withCheckedContinuation { continuation in
+            PhoneAuthProvider.provider().verifyPhoneNumber(number, uiDelegate: nil) { verificationID, error in
+                if let verificationID {
+                    self.verificationID = verificationID
+                    UserDefaults.standard.set(verificationID, forKey: self.verificationKey)
+                    continuation.resume(returning: true)
+                    return
+                }
+
+                self.lastErrorMessage = error?.localizedDescription ?? "Unable to send verification code."
+                continuation.resume(returning: false)
+            }
+        }
+#else
+        lastErrorMessage = "FirebaseAuth is not linked to the MyNest target yet."
+        return false
+#endif
     }
-    
-    // VERIFY OTP
-    
-    func verify(code: String) -> Bool {
-        return code == generatedCode
+
+    func resend() async -> Bool {
+        guard !phoneNumber.isEmpty else {
+            lastErrorMessage = "Missing phone number."
+            return false
+        }
+
+        return await sendOTP(to: phoneNumber)
     }
-    
-    // RESEND
-    
-    func resend() {
-        sendOTP(to: phoneNumber)
+
+    func clearVerificationState() {
+        verificationID = nil
+        UserDefaults.standard.removeObject(forKey: verificationKey)
     }
 }

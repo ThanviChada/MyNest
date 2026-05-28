@@ -10,6 +10,7 @@ struct SignInScreen: View {
     @State private var showPassword = false
     @State private var rememberMe = false
     @State private var showError = false
+    @State private var isSigningIn = false
     
     // validation
     var canLogin: Bool {
@@ -150,27 +151,39 @@ struct SignInScreen: View {
                     .padding(.horizontal, 25)
                     
                     // LOGIN BUTTON
-                    Button(action: {
-                        let success = authManager.login(username: username, password: password)
-                        showError = !success
-                    }) {
-                        Text("Login")
-                            .font(Font.custom("Instrument Sans", size: 25).weight(.bold))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 60)
-                            .background(
-                                canLogin
-                                ? Color(red: 0.459, green: 0.694, blue: 0.184)
-                                : Color.gray.opacity(0.5)
-                            )
-                            .cornerRadius(15)
+                    Button {
+                        isSigningIn = true
+
+                        Task {
+                            let success = await authManager.login(username: username, password: password)
+                            showError = !success
+                            isSigningIn = false
+                        }
+                    } label: {
+                        HStack {
+                            if isSigningIn {
+                                ProgressView()
+                                    .tint(.white)
+                            }
+
+                            Text(isSigningIn ? "Signing In..." : "Login")
+                        }
+                        .font(Font.custom("Instrument Sans", size: 25).weight(.bold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 60)
+                        .background(
+                            canLogin && !isSigningIn
+                            ? Color(red: 0.459, green: 0.694, blue: 0.184)
+                            : Color.gray.opacity(0.5)
+                        )
+                        .cornerRadius(15)
                     }
-                    .disabled(!canLogin)
+                    .disabled(!canLogin || isSigningIn)
                     .padding(.horizontal, 60)
                     
-                    if showError {
-                        Text("Invalid username or password.")
+                    if showError || authManager.lastErrorMessage != nil {
+                        Text(authManager.lastErrorMessage ?? "Invalid username or password.")
                             .font(.caption)
                             .foregroundColor(.red)
                     }
