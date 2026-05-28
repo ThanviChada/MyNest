@@ -192,16 +192,19 @@ struct SettingScreen: View {
                     .shadow(radius: 5)
                 }
             }
-            
+            .navigationBarBackButtonHidden(true)
+
             // Navigation
             .navigationDestination(isPresented: $goHome) {
                 HomeScreen(isNewUser: false)
+                    .navigationBarBackButtonHidden(true)
             }
-            
+
             .navigationDestination(isPresented: $goProgress) {
                 ProgressScreen()
+                    .navigationBarBackButtonHidden(true)
             }
-            
+
             .navigationDestination(isPresented: $goAccount) {
                 Text("Account & Preferences Screen")
             }

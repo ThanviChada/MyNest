@@ -159,16 +159,20 @@ struct ProgressScreen: View {
                     .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 4)
                 }
             }
+            .navigationBarBackButtonHidden(true)
             
             // navigation
             .navigationDestination(isPresented: $goHome) {
                 HomeScreen(isNewUser: false)
+                    .navigationBarBackButtonHidden(true)
             }
             .navigationDestination(isPresented: $goProgress) {
                 ProgressScreen()
+                    .navigationBarBackButtonHidden(true)
             }
             .navigationDestination(isPresented: $goSettings) {
                 SettingScreen()
+                    .navigationBarBackButtonHidden(true)
             }
         }
     }
@@ -235,14 +239,6 @@ struct ProgressCard: View {
                         Text("Cancel")
                             .font(.system(size: 11, weight: .bold))
                             .foregroundColor(.red.opacity(0.8))
-                    }
-                    
-                    Button(action: {
-                        // later: hook up contact
-                    }) {
-                        Text("Contact")
-                            .font(.system(size: 11, weight: .bold))
-                            .foregroundColor(badgeColor)
                     }
                 }
             }

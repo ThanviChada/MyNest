@@ -178,15 +178,19 @@ struct HomeScreen: View {
             }
             .navigationDestination(isPresented: $goDiscuss) {
                 DiscussionScreen()
+                    .navigationBarBackButtonHidden(true)
             }
             .navigationDestination(isPresented: $goHome) {
                 HomeScreen(isNewUser: false)
+                    .navigationBarBackButtonHidden(true)
             }
             .navigationDestination(isPresented: $goProgress) {
                 ProgressScreen()
+                    .navigationBarBackButtonHidden(true)
             }
             .navigationDestination(isPresented: $goSettings) {
                 SettingScreen()
+                    .navigationBarBackButtonHidden(true)
             }
             
             .onAppear {

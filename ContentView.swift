@@ -1,18 +1,10 @@
 import SwiftUI
 
-struct ContentView: View {
-    @EnvironmentObject var authManager: AuthManager
-    
-    var body: some View {
-        if authManager.currentUser != nil {
-            MainTabView()
-        } else {
+@main
+struct MyNest: App {
+    var body: some Scene {
+        WindowGroup {
             EntryScreen()
         }
     }
-}
-
-#Preview {
-    ContentView()
-        .environmentObject(AuthManager())
 }

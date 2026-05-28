@@ -171,7 +171,7 @@ struct DiscussionScreen: View {
         case request = "Request"
     }
     
-    // Location options (your real locations)
+    // Location options
     private let locationOptions = [
         "All",
         "Eden Prairie High School",
@@ -181,7 +181,7 @@ struct DiscussionScreen: View {
         "Target"
     ]
     
-    // Category options (your categories)
+    // Category options
     private let categoryOptions = [
         "All",
         "Clothing",
@@ -193,7 +193,6 @@ struct DiscussionScreen: View {
     // Filtered posts
     private var filteredPosts: [Post] {
         samplePosts.filter { post in
-            // Kind filter – placeholder logic; later add a real field on Post
             let isDonate = post.message.lowercased().contains("category")
             let matchesKind: Bool = {
                 switch kindFilter {
@@ -209,15 +208,12 @@ struct DiscussionScreen: View {
             let matchesLocation = (locationFilter == "All") || (post.location == locationFilter)
             let matchesCategory = (categoryFilter == "All") || (post.category == categoryFilter)
             
-            // Date + time filter using DatePickers
             let matchesDateTime: Bool = {
                 guard enableDateTimeFilter, let postDate = post.dateTime else {
                     return !enableDateTimeFilter
                 }
                 
                 let calendar = Calendar.current
-                
-                // Combine selectedDate's Y/M/D with selectedTime's hour/minute
                 let dateComponents = calendar.dateComponents([.year, .month, .day], from: selectedDate)
                 let timeComponents = calendar.dateComponents([.hour, .minute], from: selectedTime)
                 
@@ -232,7 +228,6 @@ struct DiscussionScreen: View {
                     return true
                 }
                 
-                // Match same day and roughly same hour
                 let sameDay = calendar.isDate(postDate, inSameDayAs: selectedDateTime)
                 let sameHour = calendar.component(.hour, from: postDate) == calendar.component(.hour, from: selectedDateTime)
                 
@@ -309,7 +304,7 @@ struct DiscussionScreen: View {
                         .padding()
                     }
                     
-                    // Bottom Nav (matching other screens)
+                    // Bottom Nav
                     HStack {
                         
                         Spacer()
