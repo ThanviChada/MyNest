@@ -1,9 +1,6 @@
-//
-//  MyNestApp.swift
-//  MyNest
-//
+
 //  Created by 64021960 on 4/7/26.
-//
+
 
 import SwiftUI
 

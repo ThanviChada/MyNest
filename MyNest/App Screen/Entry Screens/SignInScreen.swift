@@ -3,13 +3,13 @@ import SwiftUI
 struct SignInScreen: View {
     
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var authManager: AuthManager
     
     @State private var username = ""
     @State private var password = ""
     @State private var showPassword = false
     @State private var rememberMe = false
-    
-    @State private var goToHome = false
+    @State private var showError = false
     
     // validation
     var canLogin: Bool {
@@ -18,9 +18,7 @@ struct SignInScreen: View {
     }
     
     var body: some View {
-        
         NavigationStack {
-            
             ZStack {
                 Color(red: 0.87, green: 0.9, blue: 0.9)
                     .ignoresSafeArea()
@@ -48,12 +46,12 @@ struct SignInScreen: View {
                     
                     Spacer().frame(height: 5)
                     
-                    // USERNAME (LINE STYLE like CreateAccount)
+                    // USERNAME
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Username")
                             .font(Font.custom("Instrument Sans", size: 25).weight(.bold))
-                            .foregroundColor(.black)   // ✅ FIXED
-                    
+                            .foregroundColor(.black)
+                        
                         ZStack(alignment: .leading) {
                             if username.isEmpty {
                                 Text("Enter username")
@@ -77,16 +75,14 @@ struct SignInScreen: View {
                     }
                     .padding(.horizontal, 25)
                     
-                    // PASSWORD (LINE STYLE like CreateAccount)
+                    // PASSWORD
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Password")
                             .font(Font.custom("Instrument Sans", size: 25).weight(.bold))
-                            .foregroundColor(.black)   // ✅ FIXED
-                    
+                            .foregroundColor(.black)
+                        
                         ZStack(alignment: .trailing) {
-                            
                             ZStack(alignment: .leading) {
-                                
                                 if password.isEmpty {
                                     Text("Enter password")
                                         .foregroundColor(.gray.opacity(0.6))
@@ -140,7 +136,7 @@ struct SignInScreen: View {
                                 
                                 Text("Remember Me")
                                     .font(Font.custom("Instrument Sans", size: 15).weight(.bold))
-                                    .foregroundColor(.black) // ✅ FIXED
+                                    .foregroundColor(.black)
                             }
                         }
                         .buttonStyle(.plain)
@@ -149,15 +145,14 @@ struct SignInScreen: View {
                         
                         Text("Forgot Password?")
                             .font(Font.custom("Instrument Sans", size: 15).weight(.bold))
-                            .foregroundColor(.black) // ✅ FIXED
+                            .foregroundColor(.black)
                     }
                     .padding(.horizontal, 25)
                     
                     // LOGIN BUTTON
                     Button(action: {
-                        if canLogin {
-                            goToHome = true
-                        }
+                        let success = authManager.login(username: username, password: password)
+                        showError = !success
                     }) {
                         Text("Login")
                             .font(Font.custom("Instrument Sans", size: 25).weight(.bold))
@@ -174,19 +169,21 @@ struct SignInScreen: View {
                     .disabled(!canLogin)
                     .padding(.horizontal, 60)
                     
+                    if showError {
+                        Text("Invalid username or password.")
+                            .font(.caption)
+                            .foregroundColor(.red)
+                    }
+                    
                     Spacer()
                 }
             }
             .navigationBarBackButtonHidden(true)
-            
-            .navigationDestination(isPresented: $goToHome) {
-                HomeScreen(isNewUser: false)
-            }
         }
     }
 }
 
 #Preview {
     SignInScreen()
+        .environmentObject(AuthManager())
 }
-

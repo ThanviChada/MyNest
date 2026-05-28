@@ -52,7 +52,6 @@ struct PhoneNumScreen: View {
                         .cornerRadius(14)
                     
                     if !phoneNumber.isEmpty && !formValid {
-                        
                         Text("Enter a valid phone number")
                             .foregroundColor(.red)
                     }
@@ -60,31 +59,20 @@ struct PhoneNumScreen: View {
                     Spacer()
                     
                     Button("Next") {
-                        
                         otpManager.sendOTP(to: digitsOnly)
-                        
                         goToVerification = true
                     }
-                    .font(
-                        .custom("Instrument Sans", size: 22)
-                        .weight(.bold)
-                    )
+                    .font(.custom("Instrument Sans", size: 22).weight(.bold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(
-                        formValid
-                        ? Color.green
-                        : Color.gray
-                    )
+                    .background(formValid ? Color.green : Color.gray)
                     .cornerRadius(18)
                     .disabled(!formValid)
                 }
                 .padding(28)
             }
-            
             .navigationDestination(isPresented: $goToVerification) {
-                
                 VerificationScreen(
                     fullName: fullName,
                     username: username,
@@ -99,14 +87,12 @@ struct PhoneNumScreen: View {
 }
 
 struct PhoneNumScreen_Previews: PreviewProvider {
-    
     static var previews: some View {
-        
         PhoneNumScreen(
             fullName: "",
             username: "",
             password: ""
         )
+        .environmentObject(AuthManager())
     }
 }
-
