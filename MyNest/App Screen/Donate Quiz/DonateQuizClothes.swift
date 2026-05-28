@@ -105,12 +105,8 @@ struct DonateQuizClothes: View {
                                 if selectedItems.contains(option) {
                                     
                                     TextField(
-                                        "Specify clothing item...",
-                                        text: Binding(
-                                            get: { itemDetails[option] ?? "" },
-                                            set: { itemDetails[option] = $0 }
-                                        )
-                                    )
+                                        "Specify clothing item...", text: Binding( get: { itemDetails[option] ?? "" }, set: { itemDetails[option] = $0 } ) )
+                        
                                     .padding()
                                     .background(Color.white)
                                     .cornerRadius(10)
