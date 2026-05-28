@@ -28,75 +28,106 @@ struct HomeScreen: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                
-                // Background
                 LinearGradient(
                     colors: [
-                        Color(red: 0.90, green: 0.93, blue: 0.88),
-                        Color(red: 0.85, green: 0.90, blue: 0.84)
+                        Color(red: 0.92, green: 0.95, blue: 0.92),
+                        Color(red: 0.86, green: 0.91, blue: 0.88),
+                        Color(red: 0.82, green: 0.88, blue: 0.86)
                     ],
                     startPoint: .top,
                     endPoint: .bottom
                 )
                 .ignoresSafeArea()
+
+                Circle()
+                    .fill(Color.white.opacity(0.18))
+                    .frame(width: 260, height: 260)
+                    .blur(radius: 18)
+                    .offset(x: 110, y: -260)
+
+                Circle()
+                    .fill(Color(red: 0.83, green: 0.92, blue: 0.89).opacity(0.55))
+                    .frame(width: 220, height: 220)
+                    .blur(radius: 22)
+                    .offset(x: -120, y: 230)
                 
                 VStack(spacing: 0) {
-                    
-                    Spacer().frame(height: 20)
+                    Spacer().frame(height: 14)
                     
                     ScrollView(showsIndicators: false) {
-                        VStack(spacing: 24) {
-                            
-                            // Logo + greeting
-                            ZStack {
-                                Circle()
-                                    .fill(Color(red: 0.94, green: 0.94, blue: 0.96))
-                                    .frame(width: 260, height: 260)
-                                
-                                Image("myNest_logo")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 225)
+                        VStack(spacing: 22) {
+                            VStack(spacing: 14) {
+                                ZStack {
+                                    Circle()
+                                        .fill(.white.opacity(0.85))
+                                        .frame(width: 272, height: 272)
+                                        .shadow(color: .black.opacity(0.08), radius: 18, x: 0, y: 8)
+
+                                    Circle()
+                                        .stroke(Color.white.opacity(0.75), lineWidth: 1)
+                                        .frame(width: 250, height: 250)
+
+                                    Image("myNest_logo")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 250)
+                                        .padding(.leading, 4)
+                                }
+                                .padding(.top, 6)
+
+                                VStack(spacing: 6) {
+                                    Text("Welcome back")
+                                        .font(.custom("Instrument Sans", size: 15).weight(.semibold))
+                                        .tracking(1.5)
+                                        .foregroundColor(Color(red: 0.18, green: 0.34, blue: 0.30).opacity(0.72))
+
+                                    Text("Hello, Nestie!")
+                                        .font(.custom("Kumbh Sans", size: 34).weight(.semibold))
+                                        .foregroundColor(Color(red: 0.08, green: 0.20, blue: 0.18))
+
+                                    Text("What do you want to do today?")
+                                        .font(.custom("Instrument Sans", size: 18).weight(.medium))
+                                        .foregroundColor(Color(red: 0.28, green: 0.38, blue: 0.36))
+                                        .multilineTextAlignment(.center)
+                                }
                             }
-                            .padding(.top, 4)
-                            
-                            VStack(spacing: 4) {
-                                Text("Hello, Nestie!")
-                                    .font(.custom("Kumbh Sans", size: 34).weight(.semibold))
-                                
-                                Text("What do you want to do today?")
-                                    .font(.custom("Times New Roman", size: 20).weight(.bold))
-                                    .foregroundColor(.gray)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack(spacing: 12) {
+                                    HomeActionButton(
+                                        imageName: "order",
+                                        title: "Request",
+                                        bgColor: Color.white.opacity(0.92)
+                                    )
+                                    .onTapGesture { goFindQuiz = true }
+
+                                    HomeActionButton(
+                                        imageName: "donate",
+                                        title: "Donate",
+                                        bgColor: Color.white.opacity(0.92)
+                                    )
+                                    .onTapGesture { goDonateQuiz = true }
+
+                                    HomeActionButton(
+                                        imageName: "discuss",
+                                        title: "Discuss",
+                                        bgColor: Color.white.opacity(0.92)
+                                    )
+                                    .onTapGesture { goDiscuss = true }
+                                }
                             }
-                            
-                            Spacer().frame(height: 24)
-                            
-                            // Action buttons
-                            HStack(spacing: 14) {
-                                
-                                HomeActionButton(
-                                    imageName: "order",
-                                    title: "Request",
-                                    bgColor: Color(red: 0.97, green: 0.94, blue: 0.88)
-                                )
-                                .onTapGesture { goFindQuiz = true }
-                                
-                                HomeActionButton(
-                                    imageName: "donate",
-                                    title: "Donate",
-                                    bgColor: Color(red: 0.92, green: 0.94, blue: 0.89)
-                                )
-                                .onTapGesture { goDonateQuiz = true }
-                                
-                                HomeActionButton(
-                                    imageName: "discuss",
-                                    title: "Discuss",
-                                    bgColor: Color(red: 0.90, green: 0.94, blue: 0.95)
-                                )
-                                .onTapGesture { goDiscuss = true }
-                            }
-                            
-                            Spacer().frame(height: 80)
+                            .padding(18)
+                            .background(.white.opacity(0.45))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 26)
+                                    .stroke(Color.white.opacity(0.6), lineWidth: 1)
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
+                            .shadow(color: .black.opacity(0.08), radius: 18, x: 0, y: 10)
+
+                            Spacer().frame(height: 62)
                         }
                         .padding(.horizontal, 20)
                     }
@@ -245,14 +276,16 @@ struct HomeActionButton: View {
     }
     
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 2) {
             Image(imageName)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 80, height: 80)
+                .frame(width: 104, height: 104)
+                .padding(.top, 2)
             
             Text(title)
                 .font(.system(size: 15, weight: .semibold))
+                .foregroundColor(Color(red: 0.14, green: 0.23, blue: 0.22))
             
             if let subtitle = subtitle {
                 Text(subtitle)
@@ -260,10 +293,15 @@ struct HomeActionButton: View {
                     .foregroundColor(.gray)
             }
         }
-        .frame(width: 110, height: 130)
+        .frame(maxWidth: .infinity)
+        .frame(height: 138)
         .background(bgColor)
-        .cornerRadius(20)
-        .shadow(color: .black.opacity(0.12), radius: 5, x: 0, y: 1)
+        .overlay(
+            RoundedRectangle(cornerRadius: 22)
+                .stroke(Color.black.opacity(0.04), lineWidth: 1)
+        )
+        .cornerRadius(22)
+        .shadow(color: .black.opacity(0.10), radius: 10, x: 0, y: 4)
     }
 }
 

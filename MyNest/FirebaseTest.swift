@@ -1,13 +1,13 @@
-//
-//  FirebaseTest.swift
-//  MyNest
-//
-//  Created by Trayi Kopparapu on 5/28/26.
-//
+#if canImport(FirebaseCore)
+import FirebaseCore
+#endif
 
-import FirebaseDatabase
-
-struct FirebaseTest {
-    
+enum FirebaseBootstrap {
+    static func configure() {
+#if canImport(FirebaseCore)
+        if FirebaseApp.app() == nil {
+            FirebaseApp.configure()
+        }
+#endif
+    }
 }
-
