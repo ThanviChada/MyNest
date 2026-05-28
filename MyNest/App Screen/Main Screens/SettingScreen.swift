@@ -4,40 +4,31 @@ struct SettingScreen: View {
     
     @State private var goHome = false
     @State private var goProgress = false
-    
     @State private var goAccount = false
-    @State private var goAbout = false   // we will still use this for navigation-style behavior if needed
-    
     @State private var showAboutCard = false
     
+    private let lightTabColor = Color(red: 0.17, green: 0.60, blue: 0.80)
+    private let darkTabColor = Color(red: 0.04, green: 0.38, blue: 0.57)
+    
     var body: some View {
-        
         NavigationStack {
-            
             ZStack {
-                
-                // Background
                 Color(red: 0.92, green: 0.94, blue: 0.89)
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
                     
-                    // Title
                     HStack {
                         Text("Settings")
                             .font(.system(size: 34, weight: .bold))
-                            .foregroundColor(
-                                Color(red: 0.13, green: 0.49, blue: 0.69)
-                            )
+                            .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
                         
                         Spacer()
                     }
                     .padding(.horizontal)
                     .padding(.top, 20)
                     
-                    // Settings Cards
                     VStack(spacing: 15) {
-                        
                         SettingRow(
                             icon: "person.fill",
                             title: "Account & Preferences"
@@ -51,7 +42,6 @@ struct SettingScreen: View {
                             title: "About MyNest"
                         )
                         .onTapGesture {
-                            // instead of going to a new screen, toggle the About card
                             withAnimation(.easeInOut) {
                                 showAboutCard.toggle()
                             }
@@ -60,24 +50,17 @@ struct SettingScreen: View {
                     .padding(.horizontal)
                     .padding(.top, 25)
                     
-                    // Conditionally show the About card
                     if showAboutCard {
                         VStack(alignment: .leading, spacing: 14) {
-                            
                             Text("About MyNest")
                                 .font(.system(size: 24, weight: .bold))
-                                .foregroundColor(
-                                    Color(red: 0.47, green: 0.69, blue: 0.19)
-                                )
+                                .foregroundColor(Color(red: 0.47, green: 0.69, blue: 0.19))
                             
                             Text("MyNest is a community donation hub where people can request support and offer what they have to share, all in one simple place.")
                                 .font(.system(size: 17, weight: .medium))
-                                .foregroundColor(
-                                    Color(red: 0.13, green: 0.49, blue: 0.69)
-                                )
+                                .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
                             
                             VStack(alignment: .leading, spacing: 10) {
-                                
                                 Label(
                                     "Request essentials like food, clothing, toys, and school supplies",
                                     systemImage: "heart.fill"
@@ -99,9 +82,7 @@ struct SettingScreen: View {
                                 )
                             }
                             .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(
-                                Color(red: 0.13, green: 0.49, blue: 0.69)
-                            )
+                            .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
                         }
                         .padding()
                         .background(Color.white)
@@ -119,68 +100,43 @@ struct SettingScreen: View {
                     
                     Spacer()
                     
-                    // Bottom Navigation Bar
                     HStack {
-                        
                         Spacer()
                         
                         VStack(spacing: 4) {
                             Image(systemName: "gearshape.fill")
-                            
                             Text("Settings")
-                                .font(
-                                    .custom(
-                                        "Instrument Sans",
-                                        size: 14
-                                    )
-                                    .weight(.bold)
-                                )
+                                .font(.custom("Instrument Sans", size: 14).weight(.bold))
                         }
-                        .foregroundColor(
-                            Color(red: 0.17, green: 0.60, blue: 0.80)
-                        )
+                        .foregroundColor(darkTabColor)
                         
                         Spacer()
                         
-                        VStack(spacing: 4) {
-                            Image(systemName: "house.fill")
-                            
-                            Text("Home")
-                                .font(
-                                    .custom(
-                                        "Instrument Sans",
-                                        size: 14
-                                    )
-                                    .weight(.bold)
-                                )
-                        }
-                        .foregroundColor(
-                            Color(red: 0.17, green: 0.60, blue: 0.80)
-                        )
-                        .onTapGesture {
+                        Button {
                             goHome = true
+                        } label: {
+                            VStack(spacing: 4) {
+                                Image(systemName: "house.fill")
+                                Text("Home")
+                                    .font(.custom("Instrument Sans", size: 14).weight(.bold))
+                            }
+                            .foregroundColor(lightTabColor)
                         }
+                        .buttonStyle(.plain)
                         
                         Spacer()
                         
-                        VStack(spacing: 4) {
-                            Image(systemName: "chart.bar.fill")
-                            
-                            Text("Progress")
-                                .font(
-                                    .custom(
-                                        "Instrument Sans",
-                                        size: 14
-                                    )
-                                    .weight(.bold)
-                                )
-                        }
-                        .foregroundColor(
-                            Color(red: 0.17, green: 0.60, blue: 0.80)
-                        )
-                        .onTapGesture {
+                        Button {
                             goProgress = true
+                        } label: {
+                            VStack(spacing: 4) {
+                                Image(systemName: "chart.bar.fill")
+                                Text("Progress")
+                                    .font(.custom("Instrument Sans", size: 14).weight(.bold))
+                            }
+                            .foregroundColor(lightTabColor)
                         }
+                        .buttonStyle(.plain)
                         
                         Spacer()
                     }
@@ -193,18 +149,14 @@ struct SettingScreen: View {
                 }
             }
             .navigationBarBackButtonHidden(true)
-
-            // Navigation
             .navigationDestination(isPresented: $goHome) {
                 HomeScreen(isNewUser: false)
                     .navigationBarBackButtonHidden(true)
             }
-
             .navigationDestination(isPresented: $goProgress) {
                 ProgressScreen()
                     .navigationBarBackButtonHidden(true)
             }
-
             .navigationDestination(isPresented: $goAccount) {
                 Text("Account & Preferences Screen")
             }
@@ -217,28 +169,21 @@ struct SettingScreen: View {
 }
 
 // MARK: - Setting Row
-
 struct SettingRow: View {
     
     var icon: String
     var title: String
     
     var body: some View {
-        
         HStack(spacing: 18) {
-            
             Image(systemName: icon)
                 .font(.system(size: 22))
                 .frame(width: 28)
-                .foregroundColor(
-                    Color(red: 0.13, green: 0.49, blue: 0.69)
-                )
+                .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
             
             Text(title)
                 .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(
-                    Color(red: 0.13, green: 0.49, blue: 0.69)
-                )
+                .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
             
             Spacer()
             

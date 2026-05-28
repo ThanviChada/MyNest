@@ -7,12 +7,11 @@ struct Post: Identifiable {
     let item: String
     let category: String
     let location: String
-    let time: String      // e.g. "4:00 PM"
-    let date: String      // e.g. "May 27, 2026"
+    let time: String
+    let date: String
     let message: String
     var comments: [String]
     
-    // Helper: combine date + time strings into a real Date
     var dateTime: Date? {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM d, yyyy h:mm a"
@@ -52,7 +51,6 @@ struct CommentSection: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            
             ForEach(comments, id: \.self) { comment in
                 Text(comment)
                     .font(.subheadline)
@@ -84,8 +82,6 @@ struct PostCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            
-            // Header
             HStack(alignment: .top) {
                 Circle()
                     .fill(Color.green.opacity(0.3))
@@ -107,16 +103,13 @@ struct PostCard: View {
                     .foregroundColor(.gray)
             }
             
-            // Post Text
             Text(post.message)
                 .font(.subheadline)
             
-            // Location + pickup
             Text("📍 \(post.location) • ⏰ \(post.time)")
                 .font(.caption)
                 .foregroundColor(.blue)
             
-            // Buttons row
             HStack {
                 Button("➕ Connect") { }
                     .font(.caption)
@@ -132,7 +125,6 @@ struct PostCard: View {
                 .font(.caption)
             }
             
-            // Expandable comments
             if showComments {
                 CommentSection(comments: $post.comments)
             }
@@ -151,7 +143,6 @@ struct DiscussionScreen: View {
     @State private var goProgress = false
     @State private var goSettings = false
     
-    // Filters
     @State private var kindFilter: KindFilter = .all
     @State private var locationFilter: String = "All"
     @State private var categoryFilter: String = "All"
@@ -171,7 +162,6 @@ struct DiscussionScreen: View {
         case request = "Request"
     }
     
-    // Location options
     private let locationOptions = [
         "All",
         "Eden Prairie High School",
@@ -181,7 +171,6 @@ struct DiscussionScreen: View {
         "Target"
     ]
     
-    // Category options
     private let categoryOptions = [
         "All",
         "Clothing",
@@ -190,18 +179,14 @@ struct DiscussionScreen: View {
         "Food"
     ]
     
-    // Filtered posts
     private var filteredPosts: [Post] {
         samplePosts.filter { post in
             let isDonate = post.message.lowercased().contains("category")
             let matchesKind: Bool = {
                 switch kindFilter {
-                case .all:
-                    return true
-                case .donate:
-                    return isDonate
-                case .request:
-                    return !isDonate
+                case .all: return true
+                case .donate: return isDonate
+                case .request: return !isDonate
                 }
             }()
             
@@ -234,10 +219,7 @@ struct DiscussionScreen: View {
                 return sameDay && sameHour
             }()
             
-            return matchesKind
-            && matchesLocation
-            && matchesCategory
-            && (enableDateTimeFilter ? matchesDateTime : true)
+            return matchesKind && matchesLocation && matchesCategory && (enableDateTimeFilter ? matchesDateTime : true)
         }
     }
     
@@ -255,8 +237,6 @@ struct DiscussionScreen: View {
                 .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    
-                    // Header
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Discussion Board")
@@ -294,7 +274,6 @@ struct DiscussionScreen: View {
                     .background(Color.white.opacity(0.95))
                     .shadow(color: .black.opacity(0.06), radius: 6, x: 0, y: 3)
                     
-                    // Feed
                     ScrollView {
                         VStack(spacing: 15) {
                             ForEach(filteredPosts) { post in
@@ -304,9 +283,7 @@ struct DiscussionScreen: View {
                         .padding()
                     }
                     
-                    // Bottom Nav
                     HStack {
-                        
                         Spacer()
                         
                         VStack(spacing: 4) {
@@ -352,6 +329,7 @@ struct DiscussionScreen: View {
             }
             .navigationDestination(isPresented: $goHome) {
                 HomeScreen(isNewUser: false)
+                    .navigationBarBackButtonHidden(true)
             }
             .navigationDestination(isPresented: $goProgress) {
                 ProgressScreen()
@@ -362,7 +340,6 @@ struct DiscussionScreen: View {
         }
     }
     
-    // MARK: - Filter Sheet
     private var filterSheet: some View {
         NavigationStack {
             Form {
@@ -396,7 +373,6 @@ struct DiscussionScreen: View {
                     
                     if enableDateTimeFilter {
                         DatePicker("Date", selection: $selectedDate, displayedComponents: .date)
-                        
                         DatePicker("Time", selection: $selectedTime, displayedComponents: .hourAndMinute)
                     }
                 }
@@ -421,7 +397,6 @@ struct DiscussionScreen: View {
     }
 }
 
-// Preview
 #Preview {
     DiscussionScreen()
 }

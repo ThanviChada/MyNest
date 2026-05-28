@@ -3,27 +3,23 @@ import SwiftUI
 // MARK: - Main Screen
 struct ProgressScreen: View {
     
-    // navigation
     @State private var goHome = false
-    @State private var goProgress = false
     @State private var goSettings = false
     
-    // shared layout
     private let columns = [
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
     ]
     
-    // core palette to match Home/Settings
     private let primaryBlue = Color(red: 0.13, green: 0.49, blue: 0.69)
     private let accentGreen = Color(red: 0.47, green: 0.69, blue: 0.19)
     
+    private let lightTabColor = Color(red: 0.17, green: 0.60, blue: 0.80)
+    private let darkTabColor = Color(red: 0.04, green: 0.38, blue: 0.57)
+    
     var body: some View {
-        
         NavigationStack {
-            
             ZStack {
-                // background
                 LinearGradient(
                     colors: [
                         Color(red: 0.93, green: 0.96, blue: 0.90),
@@ -35,11 +31,9 @@ struct ProgressScreen: View {
                 .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    
                     ScrollView {
                         VStack(alignment: .leading, spacing: 22) {
                             
-                            // Title
                             Text("Progress")
                                 .font(.custom("Kumbh Sans", size: 40).weight(.bold))
                                 .foregroundColor(primaryBlue)
@@ -50,13 +44,11 @@ struct ProgressScreen: View {
                                 .foregroundColor(.gray)
                                 .padding(.bottom, 4)
                             
-                            // Donations section
                             Text("Your donations")
                                 .font(.custom("Kumbh Sans", size: 24).weight(.semibold))
                                 .foregroundColor(primaryBlue)
                             
                             LazyVGrid(columns: columns, spacing: 16) {
-                                // placeholder cards – later these will be driven by real data
                                 ProgressCard(
                                     type: .donation,
                                     date: "May 27",
@@ -80,7 +72,6 @@ struct ProgressScreen: View {
                                 )
                             }
                             
-                            // Requests section
                             Text("Your requests")
                                 .font(.custom("Kumbh Sans", size: 24).weight(.semibold))
                                 .foregroundColor(accentGreen)
@@ -108,32 +99,34 @@ struct ProgressScreen: View {
                         .padding(.horizontal, 20)
                     }
                     
-                    // Bottom Navigation Bar (matches Home & Settings)
                     HStack {
-                        
                         Spacer()
                         
-                        VStack(spacing: 4) {
-                            Image(systemName: "gearshape.fill")
-                            Text("Settings")
-                                .font(.custom("Instrument Sans", size: 14).weight(.bold))
-                        }
-                        .foregroundColor(primaryBlue)
-                        .onTapGesture {
+                        Button {
                             goSettings = true
+                        } label: {
+                            VStack(spacing: 4) {
+                                Image(systemName: "gearshape.fill")
+                                Text("Settings")
+                                    .font(.custom("Instrument Sans", size: 14).weight(.bold))
+                            }
+                            .foregroundColor(lightTabColor)
                         }
+                        .buttonStyle(.plain)
                         
                         Spacer()
                         
-                        VStack(spacing: 4) {
-                            Image(systemName: "house.fill")
-                            Text("Home")
-                                .font(.custom("Instrument Sans", size: 14).weight(.bold))
-                        }
-                        .foregroundColor(primaryBlue)
-                        .onTapGesture {
+                        Button {
                             goHome = true
+                        } label: {
+                            VStack(spacing: 4) {
+                                Image(systemName: "house.fill")
+                                Text("Home")
+                                    .font(.custom("Instrument Sans", size: 14).weight(.bold))
+                            }
+                            .foregroundColor(lightTabColor)
                         }
+                        .buttonStyle(.plain)
                         
                         Spacer()
                         
@@ -142,12 +135,7 @@ struct ProgressScreen: View {
                             Text("Progress")
                                 .font(.custom("Instrument Sans", size: 14).weight(.bold))
                         }
-                        .foregroundColor(primaryBlue.opacity(0.95))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(primaryBlue.opacity(0.25), lineWidth: 1.2)
-                                .padding(.horizontal, -10)
-                        )
+                        .foregroundColor(darkTabColor)
                         
                         Spacer()
                     }
@@ -160,14 +148,8 @@ struct ProgressScreen: View {
                 }
             }
             .navigationBarBackButtonHidden(true)
-            
-            // navigation
             .navigationDestination(isPresented: $goHome) {
                 HomeScreen(isNewUser: false)
-                    .navigationBarBackButtonHidden(true)
-            }
-            .navigationDestination(isPresented: $goProgress) {
-                ProgressScreen()
                     .navigationBarBackButtonHidden(true)
             }
             .navigationDestination(isPresented: $goSettings) {
@@ -178,9 +160,7 @@ struct ProgressScreen: View {
     }
 }
 
-//
 // MARK: - Reusable Card
-//
 struct ProgressCard: View {
     
     enum ProgressType {
@@ -197,20 +177,19 @@ struct ProgressCard: View {
     private var badgeText: String {
         switch type {
         case .donation: return "Donation"
-        case .request:  return "Request"
+        case .request: return "Request"
         }
     }
     
     private var badgeColor: Color {
         switch type {
-        case .donation: return Color(red: 0.47, green: 0.69, blue: 0.19) // accentGreen
-        case .request:  return Color(red: 0.13, green: 0.49, blue: 0.69) // primaryBlue
+        case .donation: return Color(red: 0.47, green: 0.69, blue: 0.19)
+        case .request: return Color(red: 0.13, green: 0.49, blue: 0.69)
         }
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(date)
@@ -234,7 +213,6 @@ struct ProgressCard: View {
                         .cornerRadius(10)
                     
                     Button(action: {
-                        // later: hook up cancel
                     }) {
                         Text("Cancel")
                             .font(.system(size: 11, weight: .bold))
@@ -260,9 +238,6 @@ struct ProgressCard: View {
     }
 }
 
-//
-// MARK: - Preview
-//
 struct ProgressScreen_Previews: PreviewProvider {
     static var previews: some View {
         ProgressScreen()
