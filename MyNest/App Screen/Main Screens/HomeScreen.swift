@@ -77,7 +77,6 @@ struct HomeScreen: View {
                                 HomeActionButton(
                                     imageName: "order",
                                     title: "Request",
-                                    subtitle: "Find support",
                                     bgColor: Color(red: 0.97, green: 0.94, blue: 0.88)
                                 )
                                 .onTapGesture { goFindQuiz = true }
@@ -85,7 +84,6 @@ struct HomeScreen: View {
                                 HomeActionButton(
                                     imageName: "donate",
                                     title: "Donate",
-                                    subtitle: "Give through quizzes",
                                     bgColor: Color(red: 0.92, green: 0.94, blue: 0.89)
                                 )
                                 .onTapGesture { goDonateQuiz = true }
@@ -93,7 +91,6 @@ struct HomeScreen: View {
                                 HomeActionButton(
                                     imageName: "discuss",
                                     title: "Discuss",
-                                    subtitle: "Join the board",
                                     bgColor: Color(red: 0.90, green: 0.94, blue: 0.95)
                                 )
                                 .onTapGesture { goDiscuss = true }
