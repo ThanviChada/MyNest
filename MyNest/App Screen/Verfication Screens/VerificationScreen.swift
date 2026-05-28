@@ -16,7 +16,6 @@ struct VerificationScreen: View {
     @State private var code4 = ""
     
     @State private var wrongCode = false
-    @State private var goToHome = false
     
     var enteredCode: String {
         code1 + code2 + code3 + code4
@@ -62,18 +61,13 @@ struct VerificationScreen: View {
                     Spacer()
                     
                     Button("Continue") {
-                        
                         if otpManager.verify(code: enteredCode) {
-                            
                             authManager.createAccount(
                                 fullName: fullName,
                                 username: username,
                                 password: password,
                                 phoneNumber: phoneNumber
                             )
-                            
-                            goToHome = true
-                            
                         } else {
                             wrongCode = true
                         }
@@ -98,9 +92,6 @@ struct VerificationScreen: View {
                 }
                 .padding(28)
             }
-            .navigationDestination(isPresented: $goToHome) {
-                HomeScreen(isNewUser: true)
-            }
         }
     }
 }
@@ -123,4 +114,3 @@ func otpBox(text: Binding<String>) -> some View {
             text.wrappedValue = text.wrappedValue.filter { $0.isNumber }
         }
 }
-

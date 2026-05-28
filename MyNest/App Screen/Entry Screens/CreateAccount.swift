@@ -15,7 +15,6 @@ struct CreateAccount: View {
     
     @State private var goToPhone = false
     
-    
     var passwordValid: Bool {
         let uppercase = NSPredicate(format: "SELF MATCHES %@", ".*[A-Z]+.*")
         let lowercase = NSPredicate(format: "SELF MATCHES %@", ".*[a-z]+.*")
@@ -41,7 +40,6 @@ struct CreateAccount: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                
                 LinearGradient(
                     colors: [
                         Color(red: 0.94, green: 0.96, blue: 0.92),
@@ -113,7 +111,6 @@ struct CreateAccount: View {
                     Spacer()
 
                     Button(action: {
-                        
                         if password != confirmPassword || !passwordValid {
                             showError = true
                             return
@@ -142,17 +139,16 @@ struct CreateAccount: View {
                 }
             }
             .navigationDestination(isPresented: $goToPhone) {
-                
                 PhoneNumScreen(
                     fullName: fullName,
                     username: username,
                     password: password
                 )
+                .environmentObject(authManager)
             }
             .navigationBarBackButtonHidden(true)
         }
     }
-    
     
     func lineField(title: String, text: Binding<String>, placeholder: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -178,7 +174,6 @@ struct CreateAccount: View {
         }
     }
 
-    
     func passwordField(
         title: String,
         text: Binding<String>,
@@ -223,7 +218,6 @@ struct CreateAccount: View {
         }
     }
     
-    
     func requirementRow(text: String, valid: Bool) -> some View {
         HStack(spacing: 6) {
             Image(systemName: valid ? "checkmark.circle.fill" : "circle")
@@ -239,5 +233,6 @@ struct CreateAccount: View {
 struct CreateAccount_Previews: PreviewProvider {
     static var previews: some View {
         CreateAccount()
+            .environmentObject(AuthManager())
     }
 }

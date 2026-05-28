@@ -6,7 +6,9 @@ struct SettingScreen: View {
     @State private var goProgress = false
     
     @State private var goAccount = false
-    @State private var goAbout = false
+    @State private var goAbout = false   // we will still use this for navigation-style behavior if needed
+    
+    @State private var showAboutCard = false
     
     var body: some View {
         
@@ -38,7 +40,7 @@ struct SettingScreen: View {
                         
                         SettingRow(
                             icon: "person.fill",
-                            title: "Account"
+                            title: "Account & Preferences"
                         )
                         .onTapGesture {
                             goAccount = true
@@ -46,68 +48,74 @@ struct SettingScreen: View {
                         
                         SettingRow(
                             icon: "heart.text.square.fill",
-                            title: "About DonateConnect"
+                            title: "About MyNest"
                         )
                         .onTapGesture {
-                            goAbout = true
+                            // instead of going to a new screen, toggle the About card
+                            withAnimation(.easeInOut) {
+                                showAboutCard.toggle()
+                            }
                         }
                     }
                     .padding(.horizontal)
                     .padding(.top, 25)
                     
-                    // About App Card
-                    VStack(alignment: .leading, spacing: 14) {
-                        
-                        Text("About DonateConnect")
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(
-                                Color(red: 0.47, green: 0.69, blue: 0.19)
-                            )
-                        
-                        Text("DonateConnect helps connect donors with people in need through a simple and organized platform.")
-                            .font(.system(size: 17, weight: .medium))
+                    // Conditionally show the About card
+                    if showAboutCard {
+                        VStack(alignment: .leading, spacing: 14) {
+                            
+                            Text("About MyNest")
+                                .font(.system(size: 24, weight: .bold))
+                                .foregroundColor(
+                                    Color(red: 0.47, green: 0.69, blue: 0.19)
+                                )
+                            
+                            Text("MyNest is a community donation hub where people can request support and offer what they have to share, all in one simple place.")
+                                .font(.system(size: 17, weight: .medium))
+                                .foregroundColor(
+                                    Color(red: 0.13, green: 0.49, blue: 0.69)
+                                )
+                            
+                            VStack(alignment: .leading, spacing: 10) {
+                                
+                                Label(
+                                    "Request essentials like food, clothing, toys, and school supplies",
+                                    systemImage: "heart.fill"
+                                )
+                                
+                                Label(
+                                    "Donate through short quizzes that match you with meaningful requests",
+                                    systemImage: "checkmark.circle.fill"
+                                )
+                                
+                                Label(
+                                    "Browse the discussion board to see offers, needs, and community updates",
+                                    systemImage: "bubble.left.and.bubble.right.fill"
+                                )
+                                
+                                Label(
+                                    "Track your giving and requests on the progress screen",
+                                    systemImage: "chart.bar.fill"
+                                )
+                            }
+                            .font(.system(size: 15, weight: .semibold))
                             .foregroundColor(
                                 Color(red: 0.13, green: 0.49, blue: 0.69)
                             )
-                        
-                        VStack(alignment: .leading, spacing: 10) {
-                            
-                            Label(
-                                "Donate food, clothing, toys, and school supplies",
-                                systemImage: "heart.fill"
-                            )
-                            
-                            Label(
-                                "Track donations and requests through the progress screen",
-                                systemImage: "chart.bar.fill"
-                            )
-                            
-                            Label(
-                                "Quick matching system for donors and recipients",
-                                systemImage: "person.2.fill"
-                            )
-                            
-                            Label(
-                                "Easy-to-use quizzes to organize requests",
-                                systemImage: "checkmark.circle.fill"
-                            )
                         }
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundColor(
-                            Color(red: 0.13, green: 0.49, blue: 0.69)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(18)
+                        .padding(.horizontal)
+                        .padding(.top, 30)
+                        .shadow(
+                            color: Color.black.opacity(0.05),
+                            radius: 4,
+                            x: 0,
+                            y: 3
                         )
+                        .transition(.opacity.combined(with: .move(edge: .top)))
                     }
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(18)
-                    .padding(.horizontal)
-                    .padding(.top, 30)
-                    .shadow(
-                        color: Color.black.opacity(0.05),
-                        radius: 4,
-                        x: 0,
-                        y: 3
-                    )
                     
                     Spacer()
                     
@@ -195,11 +203,7 @@ struct SettingScreen: View {
             }
             
             .navigationDestination(isPresented: $goAccount) {
-                Text("Account Screen")
-            }
-            
-            .navigationDestination(isPresented: $goAbout) {
-                Text("About DonateConnect")
+                Text("Account & Preferences Screen")
             }
         }
     }
