@@ -1,40 +1,24 @@
 import SwiftUI
 
 struct CreateAccount: View {
-    
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var authManager: AuthManager
-    
+
     @State private var fullName = ""
     @State private var username = ""
+    @State private var phoneNumber = ""
     @State private var password = ""
     @State private var confirmPassword = ""
-    
+
     @State private var showPassword = false
     @State private var showConfirmPassword = false
-    @State private var showError = false
-    
-    @State private var goToPhone = false
-    
-    var passwordValid: Bool {
-        let uppercase = NSPredicate(format: "SELF MATCHES %@", ".*[A-Z]+.*")
-        let lowercase = NSPredicate(format: "SELF MATCHES %@", ".*[a-z]+.*")
-        let number = NSPredicate(format: "SELF MATCHES %@", ".*[0-9]+.*")
-        let symbol = NSPredicate(format: "SELF MATCHES %@", ".*[^A-Za-z0-9]+.*")
-
-        return password.count >= 8 &&
-        uppercase.evaluate(with: password) &&
-        lowercase.evaluate(with: password) &&
-        number.evaluate(with: password) &&
-        symbol.evaluate(with: password)
-    }
 
     var formValid: Bool {
-        !fullName.isEmpty &&
-        !username.isEmpty &&
-        !password.isEmpty &&
-        !confirmPassword.isEmpty &&
-        password == confirmPassword &&
-        passwordValid
+        !fullName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !username.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !phoneNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !password.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !confirmPassword.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     var body: some View {
@@ -50,119 +34,129 @@ struct CreateAccount: View {
                 )
                 .ignoresSafeArea()
 
-                VStack(spacing: 22) {
-
-                    HStack {
-                        Button(action: {
-                            print("Back tapped")
-                        }) {
-                            HStack(spacing: 4) {
-                                Image(systemName: "chevron.left")
-                                Text("Back")
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 22) {
+                        HStack {
+                            Button(action: {
+                                dismiss()
+                            }) {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "chevron.left")
+                                    Text("Back")
+                                }
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundColor(.gray)
                             }
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundColor(.gray)
+
+                            Spacer()
                         }
-                        Spacer()
-                    }
-                    .padding(.horizontal, 28)
+                        .padding(.horizontal, 28)
+                        .padding(.top, 18)
 
-                    Spacer(minLength: 10)
+                        Spacer(minLength: 8)
 
-                    Image("myNest_logo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 200)
-                        .shadow(color: .black.opacity(0.08), radius: 20, x: 20, y: 12)
+                        Image("myNest_logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 180)
+                            .shadow(color: .black.opacity(0.08), radius: 20, x: 0, y: 10)
 
-                    VStack(spacing: 5) {
-                        Text("Create Account")
-                            .font(.system(size: 30, weight: .bold))
-                            .foregroundColor(Color(red: 0.35, green: 0.20, blue: 0.12))
-                    }
-                    
-                    VStack(spacing: 15) {
+                        VStack(spacing: 6) {
+                            Text("Create Account")
+                                .font(.system(size: 32, weight: .bold))
+                                .foregroundColor(Color(red: 0.35, green: 0.20, blue: 0.12))
 
-                        lineField(title: "Name", text: $fullName, placeholder: "Full Name")
-                        lineField(title: "Username", text: $username, placeholder: "Username")
-
-                        passwordField(title: "Password", text: $password, isVisible: $showPassword, placeholder: "Password")
-
-                        passwordField(title: "Confirm Password", text: $confirmPassword, isVisible: $showConfirmPassword, placeholder: "Re-enter Password")
-
-                        VStack(alignment: .leading, spacing: 5) {
-                            requirementRow(text: "8+ chars", valid: password.count >= 8)
-                            requirementRow(text: "Uppercase", valid: password.range(of: "[A-Z]", options: .regularExpression) != nil)
-                            requirementRow(text: "Lowercase", valid: password.range(of: "[a-z]", options: .regularExpression) != nil)
-                            requirementRow(text: "Number", valid: password.range(of: "[0-9]", options: .regularExpression) != nil)
-                            requirementRow(text: "Symbol", valid: password.range(of: "[^A-Za-z0-9]", options: .regularExpression) != nil)
+                            Text("Enter anything to get started. The app will take you right to Home.")
+                                .font(.custom("Instrument Sans", size: 16).weight(.medium))
+                                .foregroundColor(Color(red: 0.34, green: 0.39, blue: 0.37))
+                                .multilineTextAlignment(.center)
                         }
-                        .font(.caption2)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                    }
-                    .padding(.horizontal, 30)
+                        .padding(.horizontal, 24)
 
-                    if showError {
-                        Text("Passwords do not match")
-                            .font(.caption)
-                            .foregroundColor(.red)
-                    }
+                        VStack(spacing: 15) {
+                            lineField(title: "Name", text: $fullName, placeholder: "Full Name")
+                            lineField(title: "Username", text: $username, placeholder: "Username")
+                            lineField(title: "Phone", text: $phoneNumber, placeholder: "Phone Number")
 
-                    Spacer()
+                            passwordField(title: "Password", text: $password, isVisible: $showPassword, placeholder: "Password")
+                            passwordField(title: "Confirm Password", text: $confirmPassword, isVisible: $showConfirmPassword, placeholder: "Re-enter Password")
+                        }
+                        .padding(.horizontal, 30)
+                        .padding(.vertical, 18)
+                        .background(.white.opacity(0.72))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 26)
+                                .stroke(Color.white.opacity(0.7), lineWidth: 1)
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
+                        .shadow(color: .black.opacity(0.08), radius: 18, x: 0, y: 10)
+                        .padding(.horizontal, 18)
 
-                    Button(action: {
-                        if password != confirmPassword || !passwordValid {
-                            showError = true
-                            return
+                        if let errorMessage = authManager.lastErrorMessage {
+                            Text(errorMessage)
+                                .font(.caption)
+                                .foregroundColor(.red)
                         }
 
-                        showError = false
-                        goToPhone = true
-                        
-                    }) {
-                        Text("Create Account")
-                            .font(.system(size: 19, weight: .bold))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(
-                                formValid
-                                ? Color(red: 0.13, green: 0.49, blue: 0.69)
-                                : Color.gray.opacity(0.5)
+                        Button(action: {
+                            let success = authManager.createAccount(
+                                fullName: fullName,
+                                username: username,
+                                password: password,
+                                phoneNumber: phoneNumber
                             )
-                            .cornerRadius(16)
-                            .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 4)
+
+                            if success {
+                                dismiss()
+                            }
+                        }) {
+                            Text("Create Account")
+                                .font(.system(size: 19, weight: .bold))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(
+                                    formValid
+                                    ? LinearGradient(
+                                        colors: [
+                                            Color(red: 0.13, green: 0.49, blue: 0.69),
+                                            Color(red: 0.10, green: 0.38, blue: 0.55)
+                                        ],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                    : LinearGradient(
+                                        colors: [Color.gray.opacity(0.6), Color.gray.opacity(0.45)],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                .shadow(color: .black.opacity(0.14), radius: 10, x: 0, y: 5)
+                        }
+                        .disabled(!formValid)
+                        .padding(.horizontal, 30)
+                        .padding(.bottom, 30)
                     }
-                    .disabled(!formValid)
-                    .padding(.horizontal, 30)
-                    .padding(.bottom, 30)
                 }
-            }
-            .navigationDestination(isPresented: $goToPhone) {
-                PhoneNumScreen(
-                    fullName: fullName,
-                    username: username,
-                    password: password
-                )
-                .environmentObject(authManager)
             }
             .navigationBarBackButtonHidden(true)
         }
     }
-    
+
     func lineField(title: String, text: Binding<String>, placeholder: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-            
+
             ZStack(alignment: .leading) {
                 if text.wrappedValue.isEmpty {
                     Text(placeholder)
                         .foregroundColor(.gray.opacity(0.75))
                         .font(.system(size: 16))
                 }
-                
+
                 TextField("", text: text)
                     .foregroundColor(.black)
                     .font(.system(size: 16))
@@ -180,23 +174,19 @@ struct CreateAccount: View {
         isVisible: Binding<Bool>,
         placeholder: String
     ) -> some View {
-        
         VStack(alignment: .leading, spacing: 8) {
-            
             Text(title)
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
-            
+
             HStack {
-                
                 ZStack(alignment: .leading) {
-                    
                     if text.wrappedValue.isEmpty {
                         Text(placeholder)
                             .foregroundColor(.gray.opacity(0.75))
                             .font(.system(size: 16))
                     }
-                    
+
                     if isVisible.wrappedValue {
                         TextField("", text: text)
                             .foregroundColor(.black)
@@ -207,7 +197,7 @@ struct CreateAccount: View {
                             .font(.system(size: 16))
                     }
                 }
-                
+
                 Button(action: { isVisible.wrappedValue.toggle() }) {
                     Image(systemName: isVisible.wrappedValue ? "eye.slash.fill" : "eye.fill")
                         .foregroundColor(.gray)
@@ -217,22 +207,9 @@ struct CreateAccount: View {
             .overlay(Rectangle().frame(height: 1.2).foregroundColor(Color.gray.opacity(0.4)), alignment: .bottom)
         }
     }
-    
-    func requirementRow(text: String, valid: Bool) -> some View {
-        HStack(spacing: 6) {
-            Image(systemName: valid ? "checkmark.circle.fill" : "circle")
-                .font(.system(size: 10))
-                .foregroundColor(valid ? .green : .gray.opacity(0.5))
-            
-            Text(text)
-                .foregroundColor(valid ? .green : .gray)
-        }
-    }
 }
 
-struct CreateAccount_Previews: PreviewProvider {
-    static var previews: some View {
-        CreateAccount()
-            .environmentObject(AuthManager())
-    }
+#Preview {
+    CreateAccount()
+        .environmentObject(AuthManager())
 }
