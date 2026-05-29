@@ -15,7 +15,7 @@ struct PickUpLoco: View {
         "Central Middle School",
         "Oak Point Elementary School",
         "Community Center",
-        "Target"
+        "Target Center"
     ]
     
     var body: some View {
