@@ -1,16 +1,32 @@
 import SwiftUI
 
+// MARK: - Comment Model
+struct Comment: Identifiable {
+    let id = UUID()
+    let author: String
+    let text: String
+    let timestamp: String
+    let isCurrentUser: Bool
+}
+
 // MARK: - Post Model
 struct Post: Identifiable {
     let id = UUID()
     let userName: String
+    let postType: PostType
     let item: String
     let category: String
+    let quantity: String
     let location: String
-    let time: String
     let date: String
+    let time: String
     let message: String
-    var comments: [String]
+    var comments: [Comment]
+    
+    enum PostType: String, CaseIterable {
+        case donation = "Donation"
+        case request = "Request"
+    }
     
     var dateTime: Date? {
         let formatter = DateFormatter()
@@ -22,41 +38,47 @@ struct Post: Identifiable {
 // MARK: - Sample Data
 let samplePosts: [Post] = [
     Post(
-        userName: "Alex Johnson",
-        item: "Desk Lamp",
-        category: "Clothing",
-        location: "Eden Prairie High School",
-        time: "4:00 PM",
-        date: "May 27, 2026",
-        message: "Category: Food   Type: Protein",
-        comments: ["Is this still available?", "Can pick up today!"]
-    ),
-    
-    Post(
-        userName: "Maya Patel",
+        userName: "Thanvi Chada",
+        postType: .donation,
         item: "Winter Jacket",
         category: "Clothing",
+        quantity: "2",
         location: "Community Center",
+        date: "May 29, 2026",
         time: "6:00 PM",
-        date: "May 10, 2026",
-        message: "Category: Clothes   Type: Winter Clothing",
-        comments: []
+        message: "Category: Clothes\nWinter Clothes - \"Winter Jacket\"\n(Qty: 2)",
+        comments: [
+            Comment(
+                author: "Ava Johnson",
+                text: "Hi! Is this still available?",
+                timestamp: "May 29, 2026 at 7:15 PM",
+                isCurrentUser: false
+            )
+        ]
     )
 ]
 
 // MARK: - Comment Section
 struct CommentSection: View {
     @State private var newComment = ""
-    @Binding var comments: [String]
+    @Binding var comments: [Comment]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            ForEach(comments, id: \.self) { comment in
-                Text(comment)
-                    .font(.subheadline)
-                    .padding(8)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(8)
+        VStack(alignment: .leading, spacing: 10) {
+            ForEach(comments) { comment in
+                VStack(alignment: comment.isCurrentUser ? .trailing : .leading, spacing: 4) {
+                    Text("\(comment.author) • \(comment.timestamp)")
+                        .font(.caption2)
+                        .foregroundColor(.gray)
+                    
+                    Text(comment.text)
+                        .font(.subheadline)
+                        .padding(10)
+                        .background(comment.isCurrentUser ? Color.blue.opacity(0.85) : Color.gray.opacity(0.18))
+                        .foregroundColor(comment.isCurrentUser ? .white : .black)
+                        .cornerRadius(12)
+                }
+                .frame(maxWidth: .infinity, alignment: comment.isCurrentUser ? .trailing : .leading)
             }
             
             HStack {
@@ -64,8 +86,18 @@ struct CommentSection: View {
                     .textFieldStyle(.roundedBorder)
                 
                 Button("Post") {
-                    if !newComment.isEmpty {
-                        comments.append(newComment)
+                    if !newComment.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        let formatter = DateFormatter()
+                        formatter.dateFormat = "MMMM d, yyyy 'at' h:mm a"
+                        
+                        let userComment = Comment(
+                            author: "You",
+                            text: newComment,
+                            timestamp: formatter.string(from: Date()),
+                            isCurrentUser: true
+                        )
+                        
+                        comments.append(userComment)
                         newComment = ""
                     }
                 }
@@ -80,14 +112,17 @@ struct PostCard: View {
     @State var post: Post
     @State private var showComments = false
     
+    private var badgeColor: Color {
+        post.postType == .donation
+        ? Color(red: 0.47, green: 0.69, blue: 0.19)
+        : Color(red: 0.13, green: 0.49, blue: 0.69)
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            
             HStack(alignment: .top) {
-                Circle()
-                    .fill(Color.green.opacity(0.3))
-                    .frame(width: 45, height: 45)
-                
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(post.userName)
                         .fontWeight(.bold)
                     
@@ -103,21 +138,31 @@ struct PostCard: View {
                     .foregroundColor(.gray)
             }
             
+            Text(post.postType.rawValue)
+                .font(.caption)
+                .fontWeight(.bold)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background(badgeColor.opacity(0.15))
+                .foregroundColor(badgeColor)
+                .cornerRadius(10)
+            
             Text(post.message)
                 .font(.subheadline)
+                .fixedSize(horizontal: false, vertical: true)
             
-            Text("📍 \(post.location) • ⏰ \(post.time)")
+            Text("Location: \(post.location)")
+                .font(.caption)
+                .foregroundColor(.blue)
+            
+            Text("Date: \(post.date) • Time: \(post.time)")
                 .font(.caption)
                 .foregroundColor(.blue)
             
             HStack {
-                Button("➕ Connect") { }
-                    .font(.caption)
-                    .foregroundColor(.green)
-                
                 Spacer()
                 
-                Button("💬 Comment") {
+                Button("Comment") {
                     withAnimation {
                         showComments.toggle()
                     }
@@ -143,9 +188,10 @@ struct DiscussionScreen: View {
     @State private var goProgress = false
     @State private var goSettings = false
     
-    @State private var kindFilter: KindFilter = .all
+    @State private var typeFilter: String = "All"
     @State private var locationFilter: String = "All"
     @State private var categoryFilter: String = "All"
+    @State private var quantityFilter: String = "All"
     
     @State private var enableDateTimeFilter = false
     @State private var selectedDate = Date()
@@ -156,11 +202,9 @@ struct DiscussionScreen: View {
     private let primaryBlue = Color(red: 0.13, green: 0.49, blue: 0.69)
     private let accentGreen = Color(red: 0.47, green: 0.69, blue: 0.19)
     
-    enum KindFilter: String, CaseIterable {
-        case all = "All"
-        case donate = "Donate"
-        case request = "Request"
-    }
+    private let lightTabColor = Color(red: 0.17, green: 0.60, blue: 0.80)
+    
+    private let typeOptions = ["All", "Donation", "Request"]
     
     private let locationOptions = [
         "All",
@@ -179,47 +223,37 @@ struct DiscussionScreen: View {
         "Food"
     ]
     
+    private let quantityOptions = [
+        "All",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5+"
+    ]
+    
     private var filteredPosts: [Post] {
         samplePosts.filter { post in
-            let isDonate = post.message.lowercased().contains("category")
-            let matchesKind: Bool = {
-                switch kindFilter {
-                case .all: return true
-                case .donate: return isDonate
-                case .request: return !isDonate
-                }
-            }()
-            
-            let matchesLocation = (locationFilter == "All") || (post.location == locationFilter)
-            let matchesCategory = (categoryFilter == "All") || (post.category == categoryFilter)
+            let matchesType = typeFilter == "All" || post.postType.rawValue == typeFilter
+            let matchesLocation = locationFilter == "All" || post.location == locationFilter
+            let matchesCategory = categoryFilter == "All" || post.category == categoryFilter
+            let matchesQuantity = quantityFilter == "All" || post.quantity == quantityFilter
             
             let matchesDateTime: Bool = {
-                guard enableDateTimeFilter, let postDate = post.dateTime else {
-                    return !enableDateTimeFilter
-                }
+                if !enableDateTimeFilter { return true }
+                guard let postDate = post.dateTime else { return false }
                 
                 let calendar = Calendar.current
-                let dateComponents = calendar.dateComponents([.year, .month, .day], from: selectedDate)
-                let timeComponents = calendar.dateComponents([.hour, .minute], from: selectedTime)
+                let selectedDay = calendar.startOfDay(for: selectedDate)
+                let postDay = calendar.startOfDay(for: postDate)
                 
-                var combined = DateComponents()
-                combined.year = dateComponents.year
-                combined.month = dateComponents.month
-                combined.day = dateComponents.day
-                combined.hour = timeComponents.hour
-                combined.minute = timeComponents.minute
+                let selectedHour = calendar.component(.hour, from: selectedTime)
+                let postHour = calendar.component(.hour, from: postDate)
                 
-                guard let selectedDateTime = calendar.date(from: combined) else {
-                    return true
-                }
-                
-                let sameDay = calendar.isDate(postDate, inSameDayAs: selectedDateTime)
-                let sameHour = calendar.component(.hour, from: postDate) == calendar.component(.hour, from: selectedDateTime)
-                
-                return sameDay && sameHour
+                return selectedDay == postDay && selectedHour == postHour
             }()
             
-            return matchesKind && matchesLocation && matchesCategory && (enableDateTimeFilter ? matchesDateTime : true)
+            return matchesType && matchesLocation && matchesCategory && matchesQuantity && matchesDateTime
         }
     }
     
@@ -237,6 +271,7 @@ struct DiscussionScreen: View {
                 .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
+                    
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Discussion Board")
@@ -259,7 +294,6 @@ struct DiscussionScreen: View {
                             showFilters = true
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "line.3.horizontal.decrease.circle")
                                 Text("Filters")
                             }
                             .font(.system(size: 14, weight: .semibold))
@@ -276,8 +310,15 @@ struct DiscussionScreen: View {
                     
                     ScrollView {
                         VStack(spacing: 15) {
-                            ForEach(filteredPosts) { post in
-                                PostCard(post: post)
+                            if filteredPosts.isEmpty {
+                                Text("No posts match your filters.")
+                                    .font(.headline)
+                                    .foregroundColor(.gray)
+                                    .padding(.top, 40)
+                            } else {
+                                ForEach(filteredPosts) { post in
+                                    PostCard(post: post)
+                                }
                             }
                         }
                         .padding()
@@ -286,33 +327,42 @@ struct DiscussionScreen: View {
                     HStack {
                         Spacer()
                         
-                        VStack(spacing: 4) {
-                            Image(systemName: "gearshape.fill")
-                            Text("Settings")
-                                .font(.custom("Instrument Sans", size: 14).weight(.bold))
+                        Button {
+                            goSettings = true
+                        } label: {
+                            VStack(spacing: 4) {
+                                Text("Settings")
+                                    .font(.custom("Instrument Sans", size: 14).weight(.bold))
+                            }
+                            .foregroundColor(lightTabColor)
                         }
-                        .foregroundColor(primaryBlue)
-                        .onTapGesture { goSettings = true }
+                        .buttonStyle(.plain)
                         
                         Spacer()
                         
-                        VStack(spacing: 4) {
-                            Image(systemName: "house.fill")
-                            Text("Home")
-                                .font(.custom("Instrument Sans", size: 14).weight(.bold))
+                        Button {
+                            goHome = true
+                        } label: {
+                            VStack(spacing: 4) {
+                                Text("Home")
+                                    .font(.custom("Instrument Sans", size: 14).weight(.bold))
+                            }
+                            .foregroundColor(lightTabColor)
                         }
-                        .foregroundColor(primaryBlue)
-                        .onTapGesture { goHome = true }
+                        .buttonStyle(.plain)
                         
                         Spacer()
                         
-                        VStack(spacing: 4) {
-                            Image(systemName: "chart.bar.fill")
-                            Text("Progress")
-                                .font(.custom("Instrument Sans", size: 14).weight(.bold))
+                        Button {
+                            goProgress = true
+                        } label: {
+                            VStack(spacing: 4) {
+                                Text("Progress")
+                                    .font(.custom("Instrument Sans", size: 14).weight(.bold))
+                            }
+                            .foregroundColor(lightTabColor)
                         }
-                        .foregroundColor(primaryBlue)
-                        .onTapGesture { goProgress = true }
+                        .buttonStyle(.plain)
                         
                         Spacer()
                     }
@@ -324,6 +374,7 @@ struct DiscussionScreen: View {
                     .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 4)
                 }
             }
+            .navigationBarBackButtonHidden(true)
             .sheet(isPresented: $showFilters) {
                 filterSheet
             }
@@ -333,9 +384,11 @@ struct DiscussionScreen: View {
             }
             .navigationDestination(isPresented: $goProgress) {
                 ProgressScreen()
+                    .navigationBarBackButtonHidden(true)
             }
             .navigationDestination(isPresented: $goSettings) {
                 SettingScreen()
+                    .navigationBarBackButtonHidden(true)
             }
         }
     }
@@ -344,26 +397,33 @@ struct DiscussionScreen: View {
         NavigationStack {
             Form {
                 Section("Type") {
-                    Picker("Type", selection: $kindFilter) {
-                        ForEach(KindFilter.allCases, id: \.self) { kind in
-                            Text(kind.rawValue)
+                    Picker("Type", selection: $typeFilter) {
+                        ForEach(typeOptions, id: \.self) { type in
+                            Text(type)
                         }
                     }
-                    .pickerStyle(.segmented)
                 }
                 
                 Section("Location") {
                     Picker("Location", selection: $locationFilter) {
-                        ForEach(locationOptions, id: \.self) { loc in
-                            Text(loc)
+                        ForEach(locationOptions, id: \.self) { location in
+                            Text(location)
                         }
                     }
                 }
                 
                 Section("Category") {
                     Picker("Category", selection: $categoryFilter) {
-                        ForEach(categoryOptions, id: \.self) { cat in
-                            Text(cat)
+                        ForEach(categoryOptions, id: \.self) { category in
+                            Text(category)
+                        }
+                    }
+                }
+                
+                Section("Quantity") {
+                    Picker("Quantity", selection: $quantityFilter) {
+                        ForEach(quantityOptions, id: \.self) { quantity in
+                            Text(quantity)
                         }
                     }
                 }
@@ -381,12 +441,14 @@ struct DiscussionScreen: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Clear") {
-                        kindFilter = .all
+                        typeFilter = "All"
                         locationFilter = "All"
                         categoryFilter = "All"
+                        quantityFilter = "All"
                         enableDateTimeFilter = false
                     }
                 }
+                
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
                         showFilters = false
