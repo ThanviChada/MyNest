@@ -102,6 +102,7 @@ struct DonateQuizSS: View {
                                             set: { itemDetails[option] = $0 }
                                         )
                                     )
+                                    .foregroundColor(.black)
                                     .padding()
                                     .background(Color.white)
                                     .cornerRadius(10)

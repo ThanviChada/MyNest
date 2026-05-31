@@ -107,6 +107,7 @@ struct DonateQuizClothes: View {
                                     TextField(
                                         "Specify clothing item...", text: Binding( get: { itemDetails[option] ?? "" }, set: { itemDetails[option] = $0 } ) )
                         
+                                    .foregroundColor(.black)
                                     .padding()
                                     .background(Color.white)
                                     .cornerRadius(10)

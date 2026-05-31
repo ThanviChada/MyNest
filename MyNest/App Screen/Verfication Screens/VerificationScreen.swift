@@ -60,27 +60,21 @@ struct VerificationScreen: View {
                     Spacer()
                     
                     Button {
-                        guard let verificationID = otpManager.verificationID else {
-                            authManager.lastErrorMessage = "Missing verification session. Please resend the code."
-                            return
-                        }
-                        
                         isSubmitting = true
                         
                         Task {
-                            let success = await authManager.createAccount(
+                            let success = authManager.createAccount(
                                 fullName: fullName,
                                 username: username,
                                 password: password,
-                                phoneNumber: phoneNumber,
-                                verificationID: verificationID,
-                                verificationCode: enteredCode
+                                phoneNumber: phoneNumber
                             )
                             
                             isSubmitting = false
                             
                             if success {
                                 otpManager.clearVerificationState()
+                                dismissToHome()
                             }
                         }
                     } label: {
@@ -116,6 +110,10 @@ struct VerificationScreen: View {
                 .padding(28)
             }
         }
+    }
+
+    private func dismissToHome() {
+        // The verification flow is retained only for compatibility.
     }
 }
 

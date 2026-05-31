@@ -120,6 +120,7 @@ struct FindQuizClothes: View {
                                             }
                                         )
                                     )
+                                   .foregroundColor(.black)
                                    
                                     .padding()
                                     .background(Color.white)

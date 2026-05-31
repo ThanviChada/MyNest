@@ -119,9 +119,7 @@ struct FindQuizToys: View {
                                             }
                                         )
                                     )
-                                    .foregroundColor(
-                                        Color.gray.opacity(0.85)
-                                    )
+                                    .foregroundColor(.black)
                                     .padding()
                                     .background(Color.white)
                                     .cornerRadius(10)

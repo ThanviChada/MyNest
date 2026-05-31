@@ -11,7 +11,9 @@ final class AuthManager: ObservableObject {
     private let loggedInKey = "logged_in_user"
 
     init() {
-        loadLoggedInUser()
+        // Always start the app at the entry screen instead of restoring the last session.
+        currentUser = nil
+        UserDefaults.standard.removeObject(forKey: loggedInKey)
     }
 
     func createAccount(
@@ -117,14 +119,4 @@ final class AuthManager: ObservableObject {
         }
     }
 
-    private func loadLoggedInUser() {
-        guard
-            let data = UserDefaults.standard.data(forKey: loggedInKey),
-            let decoded = try? JSONDecoder().decode(User.self, from: data)
-        else {
-            return
-        }
-
-        currentUser = decoded
-    }
 }

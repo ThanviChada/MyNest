@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct HomeScreen: View {
     
@@ -23,6 +24,10 @@ struct HomeScreen: View {
         var y: CGFloat
         var color: Color
         var size: CGFloat
+        var symbol: String
+        var rotation: Angle
+        var drift: CGFloat
+        var opacity: Double
     }
     
     var body: some View {
@@ -181,22 +186,38 @@ struct HomeScreen: View {
                 // Welcome overlay
                 if showWelcome {
                     ZStack {
-                        Color.black.opacity(0.2)
+                        Color.black.opacity(0.16)
                             .ignoresSafeArea()
                         
-                        Text("YAY YOU’RE A NESTIE!! 🎉")
-                            .font(.title.bold())
-                            .foregroundColor(.white)
-                            .scaleEffect(1.1)
+                        VStack(spacing: 8) {
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(Color(red: 0.98, green: 0.78, blue: 0.42))
+
+                            Text("Yay, you're a Nestie!")
+                                .font(.system(size: 24, weight: .bold, design: .rounded))
+                                .foregroundColor(Color(red: 0.30, green: 0.17, blue: 0.11))
+                        }
+                        .padding(.horizontal, 26)
+                        .padding(.vertical, 18)
+                        .background(.white.opacity(0.94))
+                        .clipShape(Capsule())
+                        .shadow(color: .black.opacity(0.10), radius: 14, x: 0, y: 8)
+                        .offset(y: showWelcome ? -120 : -160)
+                        .opacity(showWelcome ? 1 : 0)
+                        .animation(.spring(response: 0.45, dampingFraction: 0.88), value: showWelcome)
                     }
                 }
                 
                 // Confetti
                 ForEach(confetti) { piece in
-                    Circle()
-                        .fill(piece.color)
-                        .frame(width: piece.size, height: piece.size)
+                    Image(systemName: piece.symbol)
+                        .font(.system(size: piece.size, weight: .bold))
+                        .foregroundStyle(piece.color)
+                        .opacity(piece.opacity)
                         .position(x: piece.x, y: piece.y)
+                        .rotationEffect(piece.rotation)
+                        .shadow(color: .white.opacity(0.45), radius: 1, x: 0, y: 0)
                 }
             }
             
@@ -233,32 +254,55 @@ struct HomeScreen: View {
     }
     
     func triggerWelcome() {
-        showWelcome = true
+        withAnimation(.spring(response: 0.45, dampingFraction: 0.88)) {
+            showWelcome = true
+        }
         spawnConfetti()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            showWelcome = false
-            confetti.removeAll()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) {
+            withAnimation(.easeOut(duration: 0.22)) {
+                showWelcome = false
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.18) {
+                confetti.removeAll()
+            }
         }
     }
     
     func spawnConfetti() {
-        let colors: [Color] = [.red, .blue, .green, .yellow, .purple, .orange]
+        let colors: [Color] = [
+            Color(red: 0.99, green: 0.75, blue: 0.84),
+            Color(red: 0.76, green: 0.90, blue: 0.99),
+            Color(red: 0.82, green: 0.95, blue: 0.86),
+            Color(red: 0.99, green: 0.88, blue: 0.64),
+            Color(red: 0.90, green: 0.84, blue: 0.99),
+            Color(red: 0.99, green: 0.83, blue: 0.73),
+            Color(red: 0.96, green: 0.92, blue: 0.66)
+        ]
+        let symbols = ["heart.fill", "star.fill", "circle.fill", "sparkles", "moon.stars.fill"]
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
         
-        for _ in 0..<40 {
+        for _ in 0..<110 {
             confetti.append(
                 Confetti(
-                    x: CGFloat.random(in: 0...350),
-                    y: -50,
-                    color: colors.randomElement()!,
-                    size: CGFloat.random(in: 6...10)
+                    x: CGFloat.random(in: 0...screenWidth),
+                    y: CGFloat.random(in: -240 ... -60),
+                    color: colors.randomElement() ?? .blue,
+                    size: CGFloat.random(in: 5...10),
+                    symbol: symbols.randomElement() ?? "circle.fill",
+                    rotation: .degrees(Double.random(in: 0...360)),
+                    drift: CGFloat.random(in: -42...42),
+                    opacity: Double.random(in: 0.82...1.0)
                 )
             )
         }
         
-        withAnimation(.easeIn(duration: 2)) {
+        withAnimation(.easeOut(duration: 2.0)) {
             for i in confetti.indices {
-                confetti[i].y = 800
+                confetti[i].y = screenHeight + 80
+                confetti[i].x += confetti[i].drift
+                confetti[i].rotation = .degrees(Double.random(in: 180...480))
             }
         }
     }

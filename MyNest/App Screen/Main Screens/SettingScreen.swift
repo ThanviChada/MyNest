@@ -4,7 +4,7 @@ struct SettingScreen: View {
     
     @State private var goHome = false
     @State private var goProgress = false
-    @State private var goAccount = false
+    @State private var showAccountDropdown = false
     @State private var showAboutCard = false
     
     private let lightTabColor = Color(red: 0.17, green: 0.60, blue: 0.80)
@@ -34,7 +34,9 @@ struct SettingScreen: View {
                             title: "Account & Preferences"
                         )
                         .onTapGesture {
-                            goAccount = true
+                            withAnimation(.easeInOut) {
+                                showAccountDropdown.toggle()
+                            }
                         }
                         
                         SettingRow(
@@ -49,6 +51,39 @@ struct SettingScreen: View {
                     }
                     .padding(.horizontal)
                     .padding(.top, 25)
+
+                    if showAccountDropdown {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Account & Preferences")
+                                .font(.system(size: 22, weight: .bold))
+                                .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+
+                            Text("This is a simple dropdown for account settings.")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(Color(red: 0.25, green: 0.33, blue: 0.31))
+
+                            VStack(alignment: .leading, spacing: 10) {
+                                Label("Profile details", systemImage: "person.crop.circle")
+                                Label("Password and security", systemImage: "lock.fill")
+                                Label("Notifications", systemImage: "bell.fill")
+                            }
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundColor(Color(red: 0.13, green: 0.49, blue: 0.69))
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.white)
+                        .cornerRadius(18)
+                        .padding(.horizontal)
+                        .padding(.top, 8)
+                        .shadow(
+                            color: Color.black.opacity(0.05),
+                            radius: 4,
+                            x: 0,
+                            y: 3
+                        )
+                        .transition(.opacity.combined(with: .move(edge: .top)))
+                    }
                     
                     if showAboutCard {
                         VStack(alignment: .leading, spacing: 14) {
@@ -156,9 +191,6 @@ struct SettingScreen: View {
             .navigationDestination(isPresented: $goProgress) {
                 ProgressScreen()
                     .navigationBarBackButtonHidden(true)
-            }
-            .navigationDestination(isPresented: $goAccount) {
-                Text("Account & Preferences Screen")
             }
         }
     }

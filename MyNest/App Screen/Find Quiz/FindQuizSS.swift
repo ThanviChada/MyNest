@@ -120,6 +120,7 @@ struct FindQuizSS: View {
                                             }
                                         )
                                     )
+                                    .foregroundColor(.black)
                                     
                                     .padding()
                                     .background(Color.white)

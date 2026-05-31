@@ -120,6 +120,7 @@ struct FindQuizFood: View {
                                             }
                                         )
                                     )
+                                   .foregroundColor(.black)
                                    
                                     .padding()
                                     .background(Color.white)

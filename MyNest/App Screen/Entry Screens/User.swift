@@ -10,6 +10,7 @@ struct User: Codable, Identifiable {
     var id: String
     var fullName: String
     var username: String
+    var password: String
     var email: String
     var phoneNumber: String
     var phoneVerified: Bool
